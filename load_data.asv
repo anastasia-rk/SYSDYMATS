@@ -7,6 +7,13 @@ numFiles    = 10;
 
 dataset = 'D'; % 'C'; %
 
+% switch dataset
+%     case 'C'
+%         % paste procedure from below
+%     case 'D'
+%          % paste procedure from below
+% end
+
 for iFile=1:numFiles
     fileName = ['FOAM',num2str(iFile),dataset,'.txt']; % read all as strings
     D = textread(fileName, '%s','delimiter','\n'); % read full file as strings
@@ -31,9 +38,10 @@ for iFile=1:5
     id = id + 1;
 end
 
+%%
 figure;
 id = 1;
-for iFile=6:10
+for iFile=6:5
     subplot(5,2,id)
     plot(data_foam{iFile}(:,1),data_foam{iFile}(:,2)); hold on;
     names(iFile) = {[dataset,num2str(iFile)]};
@@ -46,3 +54,24 @@ for iFile=6:10
     ylabel('Disp')
     id = id + 1;
 end
+
+%%
+figure;
+for iFile=6:10
+    subplot(5,2,iFile)
+    plot(data_foam{iFile}(:,1),data_foam{iFile}(:,2)); hold on;
+    names(iFile) = {[dataset,num2str(iFile)]};
+    title(names(iFile));
+    ylabel('Load')
+end
+title('Loads')
+legend(names(6:10));
+
+figure;
+for iFile=6:10
+    subplot(5,2,iFile)
+    plot(data_foam{iFile}(:,1),data_foam{iFile}(:,3)); hold on;
+    title(names(iFile));
+    ylabel('Disp')
+end
+

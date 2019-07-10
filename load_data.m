@@ -12,8 +12,12 @@ for iFile=1:numFiles
     D = textread(fileName, '%s','delimiter','\n'); % read full file as strings
     V = cellfun(@(s) sscanf(s,'%f').',D, 'un', 0); % read each string in D as numbers
     data_foam{iFile} = vertcat(V{:}); % concentrate arrays
+    fileName = [num2str(iFile),dataset];
+    fileData = data_foam{iFile};
+    save(fileName, 'fileData');
 end
-
+fileAll = ['all_data_',dataset]
+save(fileAll,'data_foam');
 %% Plots
 figure;
 id = 1;

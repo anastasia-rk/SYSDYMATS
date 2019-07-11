@@ -5,7 +5,7 @@ firstLine   = 6;
 numColumns  = 3;
 numFiles    = 10;
 
-dataset = 'D'; % 'C'; %
+dataset = 'C'; %'D'; % 
 
 for iFile=1:numFiles
     fileName = ['FOAM',num2str(iFile),dataset,'.txt']; % read all as strings

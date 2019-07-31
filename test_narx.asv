@@ -9,7 +9,10 @@ d       = n_u + n_y;                                                        % si
 lambda  = 4;                                                                % order of polynomial
 a       = sym('a',[1 d]);                                                   % associated symbolic vector
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Prelimianries
+for iFile=1:K
 %% Upload data
+clear Input Output 
 fileName = [num2str(iFile),dataset];
 load(fileName);
 Input  = fileData(:,2);
@@ -60,15 +63,26 @@ for iLambda = 1:lambda
         for iNarx = 1:nNarx 
             term{iFile}(iNarx,iTerm) = regressor(x_narx{iFile}(:,iNarx),indeces{iLambda}(k,:));         % compute the regressor
         end
-        symb_term{iFile,iTerm} = a(indeces{iLambda}(k,:));               % dictionary of regressors
+        symb_term{iFile,iTerm} = a(indeces{iLambda}(k,:));                  % dictionary of regressors
     end
 end
-nTerms = iTerm;                                                         % total number of regressors
+nTerms = iTerm;                                                              % total number of regressors
+end                                                                         % loop over files
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Select significant terms
+%% Select significant terms for all datasets
 % Compute correlation coefficients
-for iTerm = 1:nTerms 
-    coef(iFile,iTerm) = cor_sqr(y_narx{iFile},term{iFile}(:,iTerm));
+for iTerm = 1:nTerms                                                        % over all polynomial terms in the dictionary
+    AEER{iTerm} = zeros(nTerm,1);                                           % placeholder for AERR criteria
+    for iFile=1:K                                                           % over all datasets
+        for jTerm = 1:nTerms                                                % over all polynomial terms in the dictionary
+            cf(iFile,jTerm) = cor_sqr(y_narx{iFile},term{iFile}(:,jTerm));
+            AEER{iTerm}(jTerm) = AEER{iTerm}(jTerm) + cf(iFile,jTerm);
+        end
+    end
+    [AEER_max,iMax] = max(AEER{iTerm});
+    S{iTerm} = iMax;
+    phi{iTerm} = term{iFile}(:,iMax);
+    
 end
 
 %

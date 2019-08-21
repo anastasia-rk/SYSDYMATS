@@ -4,9 +4,9 @@ dataset = 'C'; % 'D'; %                                                     % na
 iFile   = 1;                                                                % id of the sample
 K       = 5;                                                                % number of datasets
 % Length of input and output lags
-n_u     = 2;                                                                % input signal lag length
-n_y     = 2;                                                                % output signal lag length
-d       = n_u + n_y;                                                        % size of input vector x
+n_u     = 5;                                                                % input signal lag length
+n_y     = 5;                                                                % output signal lag length
+d       = n_y + n_u;                                                        % size of input vector x
 lambda  = 4;                                                                % order of polynomial
 a       = sym('a',[1 d]);                                                   % associated symbolic vector
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -38,7 +38,7 @@ end
 iNarx = 0;                                                                  % batch index of the input vector in AR model
 for t=t_0:T
     iNarx = iNarx + 1;
-    x_narx{iFile}(:,iNarx) = [Input(t-n_u:t-1,1);Output(t-n_y:t-1,1)];      % NARX input
+    x_narx{iFile}(:,iNarx) = [Output(t-n_y:t-1,1);Input(t-n_u:t-1,1)];      % NARX input
     y_narx{iFile}(:,iNarx) = Output(t,1);                                   % NARX output
 end
 nNarx = iNarx;                                                              % length of NARX input batch
@@ -68,12 +68,13 @@ for iLambda = 1:lambda                                                      % iL
             term{iFile}(iNarx,iTerm) = regressor(x_narx{iFile}...
                                        (:,iNarx),indeces{iLambda}(k,:));    % compute the regressor (numeric)
         end
-        symb_term{iFile,iTerm} = a(indeces{iLambda}(k,:));                  % dictionary of regressors (symbolic)
-    end
+        symb_term{iTerm} = a(indeces{iLambda}(k,:));                      % dictionary of regressors (symbolic)
+    end    
 end
-nTerms = iTerm;                                                             % total number of regressors in the polynomial
 disp('Dictionary of candidate model terms')
 end                                                                         % end loop over files
+nTerms = iTerm;                                                             % total number of regressors in the polynomial
+dict_terms = [1:nTerms];                                                    % dictionary of all terms
 %% check inputs and output in a figure
 figure;
 id = 1;
@@ -93,52 +94,60 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Select first significant basis vector for all datasets
-clear residual alpha phi AEER AAMDL iTerm
 iTerm = 1;                                                                  % the first significant term
 AEER{iTerm} = zeros(nTerms,1);                                              % placeholder for AERR criteria
 for iFile=1:K                                                               % over all datasets
     residual_init{iFile} =  y_narx{iFile}';                                 % initial residual
-    for jTerm = 1:nTerms                                                    % over all polynomial terms in the dictionary
+    for jTerm = dict_terms                                                  % over all polynomial terms in the dictionary
         cf(iFile,jTerm) = cor_sqr(y_narx{iFile}',term{iFile}(:,jTerm));     % squared correlation coefficient for the dataset and the polynomial term
         AEER{iTerm}(jTerm) = AEER{iTerm}(jTerm) + cf(iFile,jTerm);          % Average error reduction ration over all datasets
     end
 end
 [AEER_max,iMax] = max(AEER{iTerm});                                         % Find the index of the term with the highest criterion across all datasets
-S{iTerm} = iMax;                                                            % Save index of the term
+S(iTerm) = iMax;                                                            % Save index of the term
+dict_terms(iMax) = [];                                                      % Reduce the dictionary of available terms
 for iFile=1:K                                                               % over all datasets
     alpha{iFile}(:,iTerm) = term{iFile}(:,iMax);                            % the corresponding basis candidate term    
     phi{iFile}(:,iTerm)   = term{iFile}(:,iMax);                            % The corresponding basis vector 
     residual{iFile}(:,iTerm) = residual_update(residual_init{iFile},...     % the corresponding model residual
                                    phi{iFile}(:,iTerm));
 end
-
+disp(['Significant term ', num2str(iTerm),':'])
+significant_term{iTerm} = symb_term{S(iTerm)}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Main loop - forward selection
-maxSign     = 10;                                                           % Maximum significant terms (if the algorithm is not terminated by the criterion)
+maxSign     = 30;                                                           % Maximum significant terms (if the algorithm is not terminated by the criterion)
 converged   = false;
 iTerm       = 2;
 while(iTerm < maxSign) && ~converged                                        % loop over the number of significant terms
     AEER{iTerm} = zeros(nTerms,1);                                          % placeholder for AERR criteria
     for iFile=1:K                                                           % over all datasets
-        for jTerm = 1:nTerms                                                % over all polynomial terms in the dictionary
+        for jTerm = dict_terms                                              % over all polynomial terms in the dictionary
             p{iTerm,iFile}(:,jTerm) = orthogonalise(term{iFile}(:,jTerm),phi{iFile},iTerm);
             cf(iFile,jTerm) = cor_sqr(y_narx{iFile}',p{iTerm,iFile}(:,jTerm)); % squared correlation coefficient for the dataset and the polynomial term
             AEER{iTerm}(jTerm) = AEER{iTerm}(jTerm) + cf(iFile,jTerm);      % Average error reduction ration over all datasets
         end
     end
     [AEER_max,iMax] = max(AEER{iTerm});                                     % Find the index of the term with the highest criterion across all datasets
-    S{iTerm} = iMax;                                                        % Save index of the term                              
+    S(iTerm) = iMax;                                                        % Save index of the term  
+    index = find(dict_terms == iMax);
+    dict_terms(index) = [];                                                 % Reduce the dictionary of available terms
     AMDL_sum = 1;
     for iFile=1:K
-        alpha{iFile}(:,iTerm) = term{iFile}(:,iMax);                        % the corresponding basis candidate term    
-        phi{iFile}(:,iTerm)   = term{iFile}(:,iMax);                        % The corresponding basis vector 
+        alpha{iFile}(:,iTerm) = term{iFile}(:,S(iTerm));                        % the corresponding basis candidate term    
+        phi{iFile}(:,iTerm)   = p{iTerm,iFile}(:,S(iTerm));                        % The corresponding basis vector 
         residual{iFile}(:,iTerm) = residual_update(residual{iFile}(:,iTerm-1),phi{iFile}(:,iTerm)); % the corresponding model residual                                 
         AMDL_sum = AMDL_sum + AMDL(residual{iFile}(:,iTerm),nNarx,iTerm);   % AMDL for the iFile dataset
     end
+    significant_term{iTerm} = symb_term{S(iTerm)};
+    disp(['Significant term ', num2str(iTerm),':'])
+    significant_term{iTerm}
     AAMDL(iTerm) = AMDL_sum/K;                                              % average AMDL over all sets
     converged = (AAMDL(iTerm) < -10);                                       % check convergence PLACEHOLDER
     iTerm = iTerm + 1;                                                      % increase the number of significant terms
 end
-
-figure;
+%%
+figure('Name','AAMDL','NumberTitle','off'); 
 plot(AAMDL(2:end),'o');
+
+%% Paremeter estimation

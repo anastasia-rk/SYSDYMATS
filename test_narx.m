@@ -1,6 +1,6 @@
 my_init;
 %% Set up global parameters
-dataset = 'C'; % 'D'; %                                                     % name of dataset
+dataset =  'C'; % 'D'; %                                                    % name of dataset
 iFile   = 1;                                                                % id of the sample
 K       = 5;                                                                % number of datasets
 % Length of input and output lags
@@ -76,7 +76,7 @@ end                                                                         % en
 nTerms = iTerm;                                                             % total number of regressors in the polynomial
 dict_terms = [1:nTerms];                                                    % dictionary of all terms
 %% check inputs and output in a figure
-figure;
+figure('Name','Data','NumberTitle','off'); 
 id = 1;
 for iFile=1:5
     subplot(5,2,id)
@@ -112,8 +112,9 @@ for iFile=1:K                                                               % ov
     residual{iFile}(:,iTerm) = residual_update(residual_init{iFile},...     % the corresponding model residual
                                    phi{iFile}(:,iTerm));
 end
-disp(['Significant term ', num2str(iTerm),':'])
 significant_term{iTerm} = symb_term{S(iTerm)}
+disp(['Significant term ', num2str(iTerm),':'])
+significant_term{iTerm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Main loop - forward selection
 maxSign     = 30;                                                           % Maximum significant terms (if the algorithm is not terminated by the criterion)
@@ -132,7 +133,7 @@ while(iTerm < maxSign) && ~converged                                        % lo
     S(iTerm) = iMax;                                                        % Save index of the term  
     index = find(dict_terms == iMax);
     dict_terms(index) = [];                                                 % Reduce the dictionary of available terms
-    AMDL_sum = 1;
+    AMDL_sum = 0;
     for iFile=1:K
         alpha{iFile}(:,iTerm) = term{iFile}(:,S(iTerm));                        % the corresponding basis candidate term    
         phi{iFile}(:,iTerm)   = p{iTerm,iFile}(:,S(iTerm));                        % The corresponding basis vector 
@@ -150,4 +151,14 @@ end
 figure('Name','AAMDL','NumberTitle','off'); 
 plot(AAMDL(2:end),'o');
 
-%% Paremeter estimation
+%% Parameter estimation
+[min_aamdl,i_min] = min(AAMDL);
+finalTerm = i_min;
+
+for iFile=1:K
+    iTerm = 1;                                                              % for the first term
+    g{iFile}(iTerm) = (residual_init{iFile}'*phi{iFile}(:,iTerm))/(phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));
+    for iTerm = 2:finalTerm                                                 % loop over significant terms
+        g{iFile}(iTerm,1) = (residual{iFile}(:,iTerm-1)'*phi{iFile}(:,iTerm))/(phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));
+    end
+end

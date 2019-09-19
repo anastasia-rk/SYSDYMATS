@@ -1,6 +1,6 @@
 my_init;
 
-dataset =  'D'; %  'C'; %                                                   % name of dataset
+dataset = 'D'; % 'C'; %                                                     % name of dataset
 metaFileName = ['Meta_',dataset];
 load(metaFileName);
 d       = n_y + n_u;                                                        % size of input vector x
@@ -14,25 +14,30 @@ index = (1:2000);
 AEER{iTerm} = zeros(nTerms,1);                                              % placeholder for AERR criteria
 for iFile=1:K                                                               % over all datasets
     File = matfile(char(fileNames(iFile)),'Writable',true);
-    residual_init{iFile} =  File.y_narx(index,1);                                    % initial residual
+    residual_init{iFile} =  File.y_narx(index,1);                           % initial residual
     for jTerm = dict_terms                                                  % over all polynomial terms in the dictionary
-        cf(iFile,jTerm) = cor_sqr(residual_init{iFile},File.term(index,jTerm)); % squared correlation coefficient for the dataset and the polynomial term
+        term0 = File.term(index,jTerm);
+        cf(iFile,jTerm) = cor_sqr(residual_init{iFile},term0); % squared correlation coefficient for the dataset and the polynomial term
         AEER{iTerm}(jTerm) = AEER{iTerm}(jTerm) + cf(iFile,jTerm);          % Average error reduction ration over all datasets
+        clear term0
     end
     clear File
 end
-[AEER_max,iMax] = max(AEER{iTerm});                                         % Find the index of the term with the highest criterion across all datasets
-S(iTerm) = iMax;                                                            % Save index of the term
-dict_terms(iMax) = [];                                                      % Reduce the dictionary of available terms
+[AEER_max,iMax] = max(AEER{iTerm});                                         % find the index of the term with the highest criterion across all datasets
+S(iTerm) = iMax;                                                            % save index of the term
+dict_terms(iMax) = [];                                                      % reduce the dictionary of available terms
+AMDL_sum = 0;
 for iFile=1:K                                                               % over all datasets
     File = matfile(char(fileNames(iFile)),'Writable',true);
-    alpha{iFile}(:,iTerm) = File.term(index,iMax);                              % the corresponding basis candidate term    
-    phi{iFile}(:,iTerm)   = File.term(index,iMax);                              % The corresponding basis vector 
+    alpha{iFile}(:,iTerm) = File.term(index,iMax);                          % the corresponding basis candidate term    
+    phi{iFile}(:,iTerm)   = File.term(index,iMax);                          % the corresponding basis vector 
     residual{iFile}(:,iTerm) = residual_update(residual_init{iFile},...     % the corresponding model residual
-                                   phi{iFile}(:,iTerm));
+                                   phi{iFile}(:,iTerm));                                                        
+    AMDL_sum = AMDL_sum + AMDL(residual{iFile}(:,iTerm),nNarx,iTerm);       % AMDL for the iFile dataset 
     clear File
 end
-significant_term{iTerm} = File.symb_term{S(iTerm)}
+AAMDL(iTerm) = AMDL_sum/K;                                                  % average AMDL over all sets
+significant_term{iTerm} =  symb_term{S(iTerm)};
 disp(['Significant term ', num2str(iTerm),':'])
 significant_term{iTerm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -55,8 +60,8 @@ while(iTerm < maxSign) && ~converged                                        % lo
     end
     [AEER_max,iMax] = max(AEER{iTerm});                                     % Find the index of the term with the highest criterion across all datasets
     S(iTerm) = iMax;                                                        % Save index of the term  
-    index = find(dict_terms == iMax);
-    dict_terms(index) = [];                                                 % Reduce the dictionary of available terms
+    ind = find(dict_terms == iMax);
+    dict_terms(ind) = [];                                                   % Reduce the dictionary of available terms
     AMDL_sum = 0;
     for iFile=1:K
         File = matfile(char(fileNames(iFile)),'Writable',true);
@@ -74,26 +79,34 @@ while(iTerm < maxSign) && ~converged                                        % lo
     converged = (AAMDL(iTerm) < -10);                                       % check convergence PLACEHOLDER
     iTerm = iTerm + 1;                                                      % increase the number of significant terms
 end
-%%
-figure('Name','AAMDL','NumberTitle','off'); 
-plot(AAMDL(2:end),'o');
-
-%% Parameter estimation
+%% Select optimal number of terms
 [min_aamdl,i_min] = min(AAMDL);
+figure('Name','AAMDL','NumberTitle','off');
+plot(AAMDL,'o'); hold on;
+plot(i_min,min_aamdl,'*','LineWidth',5);
+xlabel('Number of terms');
+ylabel('AAMDL')
+%% Parameter estimation
 finalTerm = i_min;
 
 for iFile=1:K
     U{iFile} = zeros(finalTerm,finalTerm);                                  % placeholder for upper-trig unit matrix
     iTerm = 1;                                                              % for the first term
     g{iFile}(iTerm) = (residual_init{iFile}'*phi{iFile}(:,iTerm))/...
-                       norm(phi{iFile}(:,iTerm));                           % Top raw of the  
+                      (phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));           % top raw of the rotation matrix
     for jTerm =iTerm:finalTerm
-        U{iFile}(iTerm,jTerm) = alpha{iFile}(:,jTerm)'*phi{iFile}(:,iTerm)/(phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));
+        U{iFile}(iTerm,jTerm) = alpha{iFile}(:,jTerm)'*phi{iFile}(:,iTerm)/...
+                       (phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));
     end
     for iTerm = 2:finalTerm                                                 % loop over significant terms
-        g{iFile}(iTerm,1) = (residual{iFile}(:,iTerm-1)'*phi{iFile}(:,iTerm))/(phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));
+        g{iFile}(iTerm,1) = (residual{iFile}(:,iTerm-1)'*phi{iFile}...
+                    (:,iTerm))/(phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));  % righthand side (normalised)
         for jTerm =iTerm:finalTerm
-            U{iFile}(iTerm,jTerm) = alpha{iFile}(:,jTerm)'*phi{iFile}(:,iTerm)/norm(phi{iFile}(:,iTerm));
+            U{iFile}(iTerm,jTerm) = alpha{iFile}(:,jTerm)'*phi{iFile}...
+                     (:,iTerm)/(phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));  % upper triangular unit matrix
         end
     end
+    Dets = det(U{iFile})
+    Theta(:,iFile) = linsolve(U{iFile},g{iFile},struct('UT', true));        % solve upper triangular system via backward substitution
 end
+

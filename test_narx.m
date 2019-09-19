@@ -1,14 +1,14 @@
 my_init;
 %% Set up global parameters
-dataset =  'C'; % 'D'; %                                                    % name of dataset
+dataset = 'D'; % 'C'; %                                                     % name of dataset
 iFile   = 1;                                                                % id of the sample
-K       = 5;                                                                % number of datasets
+K       = 10;                                                                % number of datasets
 % Length of input and output lags
 n_u     = 5;                                                                % input signal lag length
 n_y     = 5;                                                                % output signal lag length
 d       = n_y + n_u;                                                        % size of input vector x
-lambda  = 4;                                                                % order of polynomial
-a       = sym('a',[1 d]);                                                   % associated symbolic vector
+lambda  = 2;                                                                % order of polynomial
+a       = sym('x',[1 d]);                                                   % associated symbolic vector
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Prelimianries
 for iFile=1:K
@@ -19,7 +19,7 @@ fileName = [num2str(iFile),dataset];
 load(fileName);
 Input  = fileData(:,2);
 Output = fileData(:,3);
-T = length(Input); % length of the observation sequence
+T = 4000; % length(Input); % length of the observation sequence
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Create the batch of input vectors
 diff = n_u - n_y;                                                           % difference between lags
@@ -42,9 +42,9 @@ for t=t_0:T
     y_narx{iFile}(:,iNarx) = Output(t,1);                                   % NARX output
 end
 nNarx = iNarx;                                                              % length of NARX input batch
-inp{iFile} = Input;
-out{iFile} = Output;
-time = fileData(:,1);
+inp{iFile} = Input(1:T);
+out{iFile} = Output(1:T);
+time = fileData((1:T),1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Create sum index permutations
 indeces{1} = [1:d]';
@@ -76,19 +76,34 @@ end                                                                         % en
 nTerms = iTerm;                                                             % total number of regressors in the polynomial
 dict_terms = [1:nTerms];                                                    % dictionary of all terms
 %% check inputs and output in a figure
-figure('Name','Data','NumberTitle','off'); 
+figure('Name','Data 1','NumberTitle','off'); 
 id = 1;
 for iFile=1:5
     subplot(5,2,id)
     plot(time,inp{iFile}); hold on;
     names(iFile) = {[dataset,num2str(iFile)]};
     title(names(iFile));
-    ylabel('Load')
+    ylabel('Load, kN')
     id = id + 1;
     subplot(5,2,id)
     plot(time,out{iFile}); hold on;
     title(names(iFile));
-    ylabel('Disp')
+    ylabel('Disp, mm')
+    id = id + 1;
+end
+figure('Name','Data 2','NumberTitle','off'); 
+id = 1;
+for iFile=6:10
+    subplot(5,2,id)
+    plot(time,inp{iFile}); hold on;
+    names(iFile) = {[dataset,num2str(iFile)]};
+    title(names(iFile));
+    ylabel('Load, kN')
+    id = id + 1;
+    subplot(5,2,id)
+    plot(time,out{iFile}); hold on;
+    title(names(iFile));
+    ylabel('Disp, mm')
     id = id + 1;
 end
 
@@ -147,18 +162,35 @@ while(iTerm < maxSign) && ~converged                                        % lo
     converged = (AAMDL(iTerm) < -10);                                       % check convergence PLACEHOLDER
     iTerm = iTerm + 1;                                                      % increase the number of significant terms
 end
-%%
-figure('Name','AAMDL','NumberTitle','off'); 
-plot(AAMDL(2:end),'o');
-
-%% Parameter estimation
+%% Number of terms
 [min_aamdl,i_min] = min(AAMDL);
-finalTerm = i_min;
+figure('Name','AAMDL','NumberTitle','off');
+plot(AAMDL(2:end),'o'); hold on;
+plot(i_min,min_aamdl,'*','LineWidth',5);
+xlabel('Number of terms');
+ylabel('AAMDL')
+%% Parameter estimation
+
+finalTerm = i_min-1;
 
 for iFile=1:K
+    U{iFile} = zeros(finalTerm,finalTerm);                                  % placeholder for upper-trig unit matrix
     iTerm = 1;                                                              % for the first term
-    g{iFile}(iTerm) = (residual_init{iFile}'*phi{iFile}(:,iTerm))/(phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));
-    for iTerm = 2:finalTerm                                                 % loop over significant terms
-        g{iFile}(iTerm,1) = (residual{iFile}(:,iTerm-1)'*phi{iFile}(:,iTerm))/(phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));
+    g{iFile}(iTerm) = (residual_init{iFile}'*phi{iFile}(:,iTerm))/...
+                      (phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));           % top raw of the rotation matrix
+    for jTerm =iTerm:finalTerm
+        U{iFile}(iTerm,jTerm) = alpha{iFile}(:,jTerm)'*phi{iFile}(:,iTerm)/...
+                       (phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));
     end
+    for iTerm = 2:finalTerm                                                 % loop over significant terms
+        g{iFile}(iTerm,1) = (residual{iFile}(:,iTerm-1)'*phi{iFile}...
+                    (:,iTerm))/(phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));  % righthand side (normalised)
+        for jTerm =iTerm:finalTerm
+            U{iFile}(iTerm,jTerm) = alpha{iFile}(:,jTerm)'*phi{iFile}...
+                     (:,iTerm)/(phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));  % upper triangular unit matrix
+        end
+    end
+    Dets = det(U{iFile})
+    Theta(:,iFile) = linsolve(U{iFile},g{iFile},struct('UT', true));        % solve upper triangular system via backward substitution
 end
+

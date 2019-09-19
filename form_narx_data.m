@@ -1,13 +1,13 @@
 my_init;
 %% Set up global parameters
-dataset =    'C'; %   'D'; %                                                % name of dataset
+dataset = 'D'; % 'C'; %                                                     % name of dataset
 iFile   = 1;                                                                % id of the sample
 K       = 10;                                                               % number of datasets
 % Length of input and output lags
 n_u     = 5;                                                                % input signal lag length
 n_y     = 5;                                                                % output signal lag length
 d       = n_y + n_u;                                                        % size of input vector x
-lambda  = 5;                                                                % order of polynomial
+lambda  = 2;                                                                % order of polynomial
 a       = sym('a',[1 d]);                                                   % associated symbolic vector
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Identify difference in lag
@@ -44,7 +44,7 @@ fileName = [num2str(iFile),dataset];
 load(fileName);
 Input  = fileData(:,2);
 Output = fileData(:,3);
-T = length(Input); % length of the observation sequence
+T = 4000; %length(Input); % length of the observation sequence
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Create the batch of input vectors
 iNarx = 0;                                                                  % batch index of the input vector in AR model
@@ -82,10 +82,10 @@ else
 end
 disp('Dictionary complete')
 fileName = ['dict_',dataset,num2str(iFile),'.mat'];
-save(fileName, 'term','symb_term','x_narx','y_narx','nNarx','-v7.3');
-clear term0 x_narx y_narx nNarx
+save(fileName, 'term','x_narx','y_narx','nNarx','-v7.3');
+clear term0 x_narx y_narx
 end                                                                         % end loop over files
 nTerms = iTerm;                                                             % total number of regressors in the polynomial
 dict_terms = [1:nTerms];                                                    % dictionary of all terms
 fileMeta = ['Meta_',dataset];
-save(fileMeta, 'nTerms','dict_terms','indeces','lambda','n_y','n_u','K');   % save metadata
+save(fileMeta, 'nTerms','nNarx','symb_term','dict_terms','indeces','lambda','n_y','n_u','K','-v7.3');   % save metadata

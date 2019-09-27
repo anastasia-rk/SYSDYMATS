@@ -1,0 +1,59 @@
+% This file was created by matlab2tikz.
+% Minimal pgfplots version: 1.3
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=5.821824cm,
+height=6cm,
+at={(0cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=30,
+xlabel={Number of terms},
+ymin=-4,
+ymax=-2,
+ylabel={AAMDL},
+legend style={legend cell align=left,align=left,draw=white!15!black}
+]
+\addplot [color=mycolor1,only marks,mark=o,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+1	-2.28458511035609\\
+2	-2.44460323499518\\
+3	-2.49625475071411\\
+4	-2.57391453779845\\
+5	-3.60152476233871\\
+6	-3.81943600948188\\
+7	-3.81679653625091\\
+8	-3.81351807585015\\
+9	-3.81022345180805\\
+10	-3.82391454547799\\
+11	-3.81972881324054\\
+12	-3.81581398986515\\
+13	-3.81164298964647\\
+14	-3.80744519303203\\
+15	-3.80348432998644\\
+16	-3.79903802177556\\
+17	-3.79526425687517\\
+18	-3.79091446440302\\
+19	-3.78651687689039\\
+20	-3.78244528949706\\
+21	-3.77846251970385\\
+22	-3.7739957939789\\
+23	-3.76953711060292\\
+24	-3.76528363220847\\
+25	-3.76079843129402\\
+26	-3.75640043957364\\
+27	-3.75215439144777\\
+28	-3.74790400026527\\
+29	-3.74440742751099\\
+};
+\addplot [color=mycolor2,line width=5.0pt,only marks,mark=asterisk,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+10	-3.82391454547799\\
+};
+\end{axis}
+\end{tikzpicture}%

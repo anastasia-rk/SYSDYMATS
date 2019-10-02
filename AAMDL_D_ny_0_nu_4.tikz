@@ -1,0 +1,44 @@
+% This file was created by matlab2tikz.
+% Minimal pgfplots version: 1.3
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=7.97251cm,
+height=6cm,
+at={(0cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=15,
+xlabel={Number of terms},
+ymin=-1.9,
+ymax=-1.3,
+ylabel={AAMDL},
+legend style={legend cell align=left,align=left,draw=white!15!black}
+]
+\addplot [color=mycolor1,only marks,mark=o,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+1	-1.31466644718563\\
+2	-1.43033990360547\\
+3	-1.45114420850236\\
+4	-1.48159640696079\\
+5	-1.68400375413193\\
+6	-1.73907675668174\\
+7	-1.81637420885192\\
+8	-1.831386493565\\
+9	-1.82786147101366\\
+10	-1.82463176333557\\
+11	-1.82297850269551\\
+12	-1.82010469153512\\
+13	-1.81752153753643\\
+14	-1.81639386113291\\
+};
+\addplot [color=mycolor2,line width=5.0pt,only marks,mark=asterisk,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+8	-1.831386493565\\
+};
+\end{axis}
+\end{tikzpicture}%

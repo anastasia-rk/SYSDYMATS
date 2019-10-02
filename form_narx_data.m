@@ -1,14 +1,14 @@
 my_init;
 %% Set up global parameters
-dataset = 'D'; % 'C'; %                                                     % name of dataset
+dataset =  'D'; %'C'; %                                                     % name of dataset
 iFile   = 1;                                                                % id of the sample
 K       = 10;                                                               % number of datasets
 % Length of input and output lags
-n_u     = 5;                                                                % input signal lag length
-n_y     = 5;                                                                % output signal lag length
+n_u     = 4;                                                                % input signal lag length
+n_y     = 0;                                                                % output signal lag length
 d       = n_y + n_u;                                                        % size of input vector x
 lambda  = 2;                                                                % order of polynomial
-a       = sym('a',[1 d]);                                                   % associated symbolic vector
+a       = sym('x_',[1 d]);                                                   % associated symbolic vector
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Identify difference in lag
 diff = n_u - n_y;                                                           % difference between lags
@@ -42,15 +42,15 @@ disp(['Dataset_',num2str(iFile)])
 clear Input Output 
 fileName = [num2str(iFile),dataset];
 load(fileName);
-Input  = fileData(:,2);
-Output = fileData(:,3);
+Input  = fileData(:,3);
+Output = fileData(:,2);
 T = 4000; %length(Input); % length of the observation sequence
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Create the batch of input vectors
 iNarx = 0;                                                                  % batch index of the input vector in AR model
 for t=t_0:T
     iNarx = iNarx + 1;
-    x_narx(:,iNarx) = [Output(t-n_y:t-1,1);Input(t-n_u:t-1,1)];      % NARX input
+    x_narx(:,iNarx) = [Input(t-n_u+1:t,1)]; %     Output(t-n_y:t-1,1);      % NARX input
 end
 nNarx = iNarx;                                                              % length of NARX input batch
 y_narx(:,:) = Output(t_0:end);                                       % NARX output

@@ -1,0 +1,199 @@
+\documentclass[a4paper,11pt,twoside]{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Packages
+\usepackage[final]{pdfpages}
+\usepackage{verbatim}
+\usepackage{inputenc}
+\usepackage{graphicx} 
+\usepackage{amsmath,amssymb,mathrsfs,amsfonts}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{calrsfs}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{eucal}    
+\usepackage{amssymb}  
+\usepackage{pifont}
+\usepackage{color} 
+\usepackage{cancel}
+\usepackage[toc,page]{appendix}
+%\usepackage[usenames,dvipsnames,table]{xcolor}
+\usepackage{pgfplots}
+\pgfplotsset{every axis/.append style={line width=0.5pt},label style={font=\scriptsize},tick label style={font=\scriptsize},x tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={}}}
+\usetikzlibrary{shapes,shadows,arrows,backgrounds,patterns,positioning,automata,calc,decorations.markings,decorations.pathreplacing,bayesnet,arrows.meta}
+\usepackage{varwidth}
+\usepackage{lscape}
+\usepackage{array} 
+\usepackage[colorlinks=false,pdfborder={0 0 0}]{hyperref}
+\usepackage{tabularx}
+\usepackage{textcomp}
+\usepackage{multicol} 
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage[font=small,labelfont=bf]{caption}                                                           
+\usepackage{textcase}
+\usepackage{bbm} 
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{soul}
+%\usepackage[british]{babel}
+\usepackage{wrapfig}
+%\usepackage{glossaries}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.5em}
+\renewcommand{\baselinestretch}{1.2}
+\usepackage[left=3cm, right=2cm, top=2.5cm, bottom=3cm, headheight=13.6pt]{geometry}
+\allowdisplaybreaks 
+% Bibliography
+%\usepackage[backend=bibtex,style=ieee,sorting=none]{biblatex} 
+%\bibliography{Bibliography-thesis}
+%\renewcommand*{\bibfont}{\scriptsize}
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\newcommand{\ie}{\textit{i.e.} }
+\newcommand{\eg}{\textit{e.g.} }
+\makeatother
+\newcommand\id{\ensuremath{\mathbbm{1}}} 
+\DeclareMathOperator{\E}{\mathbb{E}}
+\DeclareMathOperator{\eye}{\mathbb{I}}
+\DeclareMathOperator{\zeros}{\mathbb{O}}
+\DeclareMathOperator{\tr}{\textrm{tr}}
+\DeclareMathOperator{\vvec}{\textrm{vec}}
+\DeclareMathOperator{\ik}{\mathrm{k}}
+\DeclareMathOperator{\ip}{\mathrm{p}}
+\DeclareMathOperator{\inn}{\mathrm{n}}
+\DeclareMathOperator{\im}{\mathrm{m}}
+\DeclareMathOperator{\td}{\mathrm{t}}
+\DeclareMathOperator{\kd}{\mathrm{k}}
+\DeclareMathOperator{\T}{\mathrm{T}}
+\DeclareMathOperator{\K}{\mathrm{K}}
+\DeclareSymbolFontAlphabet{\mathcal} {symbols}
+\DeclareSymbolFont{symbols}{OMS}{cm}{m}{n}
+\DeclareMathAlphabet{\mathbfit}{OML}{cmm}{b}{it}
+
+% Number equations
+%\numberwithin{equation}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Theorems
+\newtheoremstyle{mytheoremstyle} % name
+{.5em}                    % Space above
+{.8em}                    % Space below
+{\itshape}                % Body font
+{1em}                           % Indent amount
+{\bfseries}                   % Theorem head font
+{:}                          % Punctuation after theorem head
+{.5em}                       % Space after theorem head
+{}  % Theorem head spec (can be left empty, meaning ‘normal’)
+
+\theoremstyle{mytheoremstyle}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{condition}{Condition}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{property}{Property}[section]
+\newtheorem{corollary}{Corollary}[section]
+\renewcommand\qedsymbol{$\blacksquare$}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nomenclature
+\usepackage[intoc]{nomencl}
+\makenomenclature
+
+%\usepackage[ruled,chapter]{algorithm}
+%\usepackage{float}
+
+%\usepackage{algorithmic}
+%\algsetup{linenosize=\scriptsize}
+%\usepackage{etoolbox}
+%\AtBeginEnvironment{algorithmic}{\scriptsize}
+%\renewcommand{\thealgorithm}{\thechapter.\arabic{algorithm}} 
+%\usepackage{chngcntr}
+%\counterwithin{algorithm}{section}
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Captions
+%\newcommand{\xLanguage}{british}          % <-- Added this command
+%
+%\usepackage[\xLanguage]{babel}             % <-- Implemented here
+%
+%\expandafter\addto\csname captions\xLanguage\endcsname{% <-- and here
+%	\renewcommand{\tableshortname}{Table}%
+%	\renewcommand{\figureshortname}{Figure}%
+%}
+%
+%\captionsetup[table]{format=plain,indention=1.15cm,justification=justified}
+%\captionsetup[figure]{format=plain,indention=1.25cm,justification=justified}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[explicit]{titlesec}
+\usepackage{titletoc}
+%\titleformat{\section}[block]{\normalfont\Large\rm\filright\bfseries}{\thesection}{1em}{#1}
+%\titlecontents{chapter}[1.5em]{}{\scshape\contentslabel{2.3em}}{}{\titlerule*[1pc]{}\contentspage}
+%\definecolor{gray75}{gray}{0.5}
+%\newcommand{\hsp}{\hspace{20pt}}
+%\titleformat{\chapter}[hang]{\huge\scshape\filright\bfseries}{\color{gray75}\thechapter}{20pt}{\begin{tabular}[t]{@{\color{gray75}\vrule width 2pt\hsp}p{0.85\textwidth}}\raggedright#1\end{tabular}}
+%\titleformat{name=\chapter,numberless}[display]{}{}{0pt}{\normalfont\huge\bfseries #1} % format for numberless chapters
+%\titleformat{\subsection}[block]{\normalfont\large\rm\filright\bfseries}{\thesubsection}{1em}{#1}
+%\renewcommand{\sectionmark}[1]{\markright{\thesection ~ \ #1}}
+%%\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter ~ \ #1}{}} 
+%\pagestyle{fancy}
+%%\fancyhf{}
+%\fancyhead[RO,LE]{\thepage}
+%\fancyhead[RE]{\itshape \nouppercase \rightmark}       % chaptertitle left
+%\fancyhead[LO]{\itshape \nouppercase \leftmark}       % sectiontitle right
+%\renewcommand{\headrulewidth}{0.5pt} % no rule
+%\cfoot{}
+\interfootnotelinepenalty=10000
+
+\title{Structure and parameter identification of au}
+
+
+\begin{document}
+	\maketitle
+%	\section{Experimental setup}
+%	
+	\section{Experimental data}
+		\begin{figure}[!h]
+		\centering
+		\scalebox{0.8}{\input{data_C_1to5.tikz}}
+		\caption{Experimental data.}
+	\end{figure}	
+\begin{figure}[!h]
+	\centering
+	\scalebox{0.8}{\input{data_C_6to10.tikz}}
+	\caption{Experimental data.}
+\end{figure}
+	\section{Structure identification}
+	\par The following model structure is assumed. The output of the NARX model $\mathbfit{y}(t)$ is the measured load. The input vector is composed as
+	\begin{equation}
+	\mathbfit{x}(t) = \{x_i(t)\}^{d}_{i=1} = \left[\{y(t - k + 1)\}^{n_y}_{k=1} \quad \{u(t - k + n_y + 1)\}^{n_y + n_u}_{k= n_y + 1} \right] \top,
+	\end{equation}
+	where $n_u$ is the length of the input lag and $n_y$ is the length of the output lag in discrete time, and where $d = n_u + n_y$. In this case, the identification is performed under the following assumptions:
+	\begin{itemize}[noitemsep,topsep=0.3pt,parsep=0.3pt,partopsep=0.2pt,labelindent=1cm] 
+		\item only the input signal affects the output ($n_y = 0$).
+		\item the input signal has a lag of length $n_u = 4$.
+	\end{itemize}
+  The unknown model is approximated with a sum of polynomial basis functions up to second degree ($\lambda = 2$), rendering the following structure
+	\begin{equation}
+	\mathbfit{y}(t) = \theta^0 + \sum_{i=1}^{d} \theta_i x_i(t) + \sum_{i=1}^{d} \sum_{j=1}^{d} \theta_{i,j} x_i(t) x_j(t) + e(t).
+	\end{equation}
+	The number and order of significant terms are identified within the EFOR-CMSS algorithm based on the data from 8 out of 10 datasets. Figure \ref{fig:aamdl} illustrates the relationship between the number of model terms and the selected criterion of significance, AAMDL.
+	\begin{figure}[!h]
+		\centering
+		\input{AAMDL_C_ny_0_nu_4.tikz}
+		\caption{AAMDL evolution with the growing number of terms.}\label{fig:aamdl}
+	\end{figure}	
+		
+	\section{Parameter estimation}
+	\begin{table}[!h]
+	\centering
+	\caption{Tuning parameters of the dynamical model.}
+	\input{Thetas_C_ny_0_nu_4.tex}
+	\end{table}
+\end{document}

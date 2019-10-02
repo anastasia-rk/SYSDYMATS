@@ -1,0 +1,10 @@
+This is BibTeX, Version 0.99dThe top-level auxiliary file: report_narmax.aux
+The style file: biblatex.bst
+I couldn't open database file Bibliography-thesis.bib
+---line 20 of file report_narmax.aux
+ : \bibdata{report_narmax-blx,Bibliography-thesis
+ :                                               }
+I'm skipping whatever remains of this command
+Database file #1: report_narmax-blx.bib
+Biblatex version: 3.3
+(There was 1 error message)

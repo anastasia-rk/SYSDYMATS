@@ -1,6 +1,6 @@
 my_init;
 %% Set up global parameters
-dataset =  'D'; %'C'; %                                                     % name of dataset
+dataset =  'C'; %  'D'; %                                                   % name of dataset
 iFile   = 1;                                                                % id of the sample
 K       = 10;                                                               % number of datasets
 % Length of input and output lags
@@ -23,6 +23,8 @@ switch sign(diff)
         disp('positive')
         t_0 = n_u+1;
 end
+% t_0 = 1000;
+T   = 10000; %length(Input); % length of the observation sequence
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Create sum index permutations
 indeces{1} = [1:d]';
@@ -44,11 +46,10 @@ fileName = [num2str(iFile),dataset];
 load(fileName);
 Input  = fileData(:,3);
 Output = fileData(:,2);
-T = 4000; %length(Input); % length of the observation sequence
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Create the batch of input vectors
 iNarx = 0;                                                                  % batch index of the input vector in AR model
-for t=t_0:T
+for t=t_0:t_0+T
     iNarx = iNarx + 1;
     x_narx(:,iNarx) = [Input(t-n_u+1:t,1)]; %     Output(t-n_y:t-1,1);      % NARX input
 end
@@ -65,7 +66,7 @@ if (iFile > 1)
                 term(iNarx,iTerm) = regressor(x_narx(:,iNarx),...
                                               indeces{iLambda}(k,:));       % compute the regressor (numeric)
             end
-        end    
+        end
     end
 else
     for iLambda = 1:lambda                                                  % iLambda - order of polynomial term
@@ -76,14 +77,16 @@ else
                                               indeces{iLambda}(k,:));       % compute the regressor (numeric)
             end
             symb_term{iTerm} = a(indeces{iLambda}(k,:));                    % dictionary of regressors (symbolic)
-        end    
+        end
     end
-
 end
+iTerm = iTerm + 1;
+term(:,iTerm) = 1;
+symb_term{iTerm} = sym('c');
 disp('Dictionary complete')
 fileName = ['dict_',dataset,num2str(iFile),'.mat'];
 save(fileName, 'term','x_narx','y_narx','nNarx','-v7.3');
-clear term0 x_narx y_narx
+clear term x_narx y_narx
 end                                                                         % end loop over files
 nTerms = iTerm;                                                             % total number of regressors in the polynomial
 dict_terms = [1:nTerms];                                                    % dictionary of all terms

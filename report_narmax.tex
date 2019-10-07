@@ -44,7 +44,7 @@
 \setlength{\parindent}{2em}
 \setlength{\parskip}{0.5em}
 \renewcommand{\baselinestretch}{1.2}
-\usepackage[left=3cm, right=2cm, top=2.5cm, bottom=3cm, headheight=13.6pt]{geometry}
+\usepackage[left=2cm, right=2cm, top=2.5cm, bottom=3cm, headheight=13.6pt]{geometry}
 \allowdisplaybreaks 
 % Bibliography
 %\usepackage[backend=bibtex,style=ieee,sorting=none]{biblatex} 
@@ -161,18 +161,18 @@
 	\section{Experimental data}
 		\begin{figure}[!h]
 		\centering
-		\scalebox{0.8}{\input{data_C_1to5.tikz}}
-		\caption{Experimental data.}
+		\input{data_C_input.tikz}
+		\caption{The input for the set C.}
 	\end{figure}	
 \begin{figure}[!h]
 	\centering
-	\scalebox{0.8}{\input{data_C_6to10.tikz}}
+	\input{data_C_outputs.tikz}
 	\caption{Experimental data.}
 \end{figure}
 	\section{Structure identification}
 	\par The following model structure is assumed. The output of the NARX model $\mathbfit{y}(t)$ is the measured load. The input vector is composed as
 	\begin{equation}
-	\mathbfit{x}(t) = \{x_i(t)\}^{d}_{i=1} = \left[\{y(t - k + 1)\}^{n_y}_{k=1} \quad \{u(t - k + n_y + 1)\}^{n_y + n_u}_{k= n_y + 1} \right] \top,
+	\mathbfit{x}(t) = \{x_i(t)\}^{d}_{i=1} = \left[\{y(t - k + 1)\}^{n_y}_{k=1} \quad \{u(t - k + n_y + 1)\}^{n_y + n_u}_{k= n_y + 1} \right]^{\top},
 	\end{equation}
 	where $n_u$ is the length of the input lag and $n_y$ is the length of the output lag in discrete time, and where $d = n_u + n_y$. In this case, the identification is performed under the following assumptions:
 	\begin{itemize}[noitemsep,topsep=0.3pt,parsep=0.3pt,partopsep=0.2pt,labelindent=1cm] 
@@ -186,14 +186,22 @@
 	The number and order of significant terms are identified within the EFOR-CMSS algorithm based on the data from 8 out of 10 datasets. Figure \ref{fig:aamdl} illustrates the relationship between the number of model terms and the selected criterion of significance, AAMDL.
 	\begin{figure}[!h]
 		\centering
-		\input{AAMDL_C_ny_0_nu_4.tikz}
-		\caption{AAMDL evolution with the growing number of terms.}\label{fig:aamdl}
+		\subfloat[Sample size 2000.]{\input{AAMDL_C_ny_0_nu_4_size_2000.tikz}}
+		\subfloat[Sample size 4000.]{\input{AAMDL_C_ny_0_nu_4_size_4000.tikz}}
+		\caption{AAMDL evolution with the growing number of terms for samples of different size.}\label{fig:aamdl}
 	\end{figure}	
 		
 	\section{Parameter estimation}
 	\begin{table}[!h]
 	\centering
-	\caption{Tuning parameters of the dynamical model.}
-	\input{Thetas_C_ny_0_nu_4.tex}
+	\caption{Estimated parameters for the sample length 2000.}
+	\small
+	\input{Thetas_C_ny_0_nu_4_size_2000.tex}
+	\end{table}
+		\begin{table}[!h]
+		\centering
+		\caption{Estimated parameters for the sample length 4000.}
+		\small
+		\input{Thetas_C_ny_0_nu_4_size_4000.tex}
 	\end{table}
 \end{document}

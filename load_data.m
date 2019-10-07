@@ -5,7 +5,7 @@ firstLine   = 6;
 numColumns  = 3;
 numFiles    = 10;
 
-dataset =  'C'; % 'D'; %
+dataset =  'D'; %  'C'; %
 
 for iFile=1:numFiles
     fileName = ['FOAM',num2str(iFile),dataset,'.txt']; % read all as strings
@@ -22,55 +22,32 @@ end
 indSample = [1000:1500];
 figure;
 id = 1;
-for iFile=1:5
-    subplot(5,2,id)
-    plot(indSample,data_foam{iFile}(indSample,3),'LineWidth',0.5); hold on;           %data_foam{iFile}(indSample,1),
-    names(iFile) = {[dataset,num2str(iFile)]};
-    xlim([1000 1500]);
-    ylim([-7 -4.999]);
-%     title(names(iFile));
-    xlabel('Time, sec')
-    ylabel('$\Delta x$, mm')
-    id = id + 1;
+for iFile=1:numFiles
     subplot(5,2,id)
     plot(indSample,data_foam{iFile}(indSample,2),'LineWidth',0.5); hold on;           %data_foam{iFile}(indSample,1),
-%     title(names(iFile));
+    names(iFile) = {[dataset,num2str(iFile), ' load, kN']};
     xlim([1000 1500]);
-    ylim([-60 0]);
-    xlabel(' Time, sec')
-    ylabel(' Load, kN')
+    xlabel('Sample index')
+    ylabel(names(iFile));
     id = id + 1;
 end
 %%
-tikzName = ['data_',dataset,'_1to5.tikz'];
+tikzName = ['data_',dataset,'_outputs.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
             false, 'height', '18cm', 'width','12cm','checkForUpdates',false);
 
 %%
+indSample = [1:2:1501];
 figure;
-id = 1;
-for iFile=6:10
-    subplot(5,2,id)
-    plot(indSample,data_foam{iFile}(indSample,3),'LineWidth',0.5); hold on;           %data_foam{iFile}(indSample,1),
-    names(iFile) = {[dataset,num2str(iFile)]};
-    xlim([1000 1500]);
-    ylim([-7 -4.999]);
-%     title(names(iFile));
-    xlabel('Time, sec')
-    ylabel('$\Delta x$, mm')
-    id = id + 1;
-    subplot(5,2,id)
-    plot(indSample,data_foam{iFile}(indSample,2),'LineWidth',0.5); hold on;           %data_foam{iFile}(indSample,1),
-%     title(names(iFile));
-    xlim([1000 1500]);
-    ylim([-405 0]);
-    xlabel('Time, sec')
-    ylabel('Load, kN')
-    id = id + 1;
-end
+plot(indSample,data_foam{iFile}(indSample,3),'LineWidth',0.5); hold on;           %data_foam{iFile}(indSample,1),
+xlim([1 1500]);
+% ylim([-7 -4.999]);
+xlabel('Sample index')
+ylabel('$\Delta x$, mm')
+
 %%
-tikzName = ['data_',dataset,'_6to10.tikz'];
+tikzName = ['data_',dataset,'_input.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-            false, 'height', '18cm', 'width','12cm','checkForUpdates',false);
+            false, 'height', '5cm', 'width','12cm','checkForUpdates',false);

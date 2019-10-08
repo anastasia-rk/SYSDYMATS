@@ -50,4 +50,57 @@ for i = 1:2
     param_select{i} = params(indeces_new{i}(k_max,:));
 end
 
+%% Load estimated thetas
+dataset = 'C'; % 'D';
+n_y = 0;
+n_u = 4;
+fileName = ['OLS_results_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'.mat'];
+load(fileName);
 
+%% Create custom fit function and estimate coefficients
+% Files = [1 2 4 5]; % smaller dateset size
+L_cut_all = [values{1}(:, 9);values{2}(:, 9)];
+L_cut = L_cut_all(Files,1);
+D_rlx_all = [values{1}(:,11);values{2}(:,11)];
+D_rlx = D_rlx_all(Files,1);
+A_imp_all = [values{1}(:, 6);values{2}(:, 6)];
+A_imp = A_imp_all(Files,1);
+V_imp_all = [values{1}(:, 7);values{2}(:, 7)];
+V_imp = V_imp_all(Files,1);
+clear x y
+fo = fitoptions('Method','NonlinearLeastSquares');
+g = fittype(@(b0,b1,b2,b3,b4,b5,x,y) b0 + b1*x + b2*y + b3*x.^2 + b4*y.^2 + b5*x.*y, 'independent',{'x','y'},'dependent','z','options',fo);
+for iTerm = 1:finalTerm
+z = Theta(iTerm,Files)';
+[ft{iTerm},gof{iTerm},outp{iTerm}]= fit([A_imp,V_imp],z,g);
+cfs(iTerm,:) = coeffvalues(ft{iTerm});
+end
+%% Save to table
+Tab = table(Terms);
+for iCoeff = 1:size(cfs,2)
+    Parameters = round(cfs(:,iCoeff),3);
+    varName = ['$b_',num2str(iCoeff-1),'$'];
+    Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
+end
+Table_coeffs = Tab
+
+tableName = ['Betas_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T)];
+table2latex(Table_coeffs,tableName);
+
+%% Compute parameters for validation
+iFile = 3;
+A_test = A_imp_all(iFile,1);
+V_test = V_imp_all(iFile,1);
+for iTerm = 1:finalTerm
+    theta_test(iTerm,1) = g(cfs(iTerm,1),cfs(iTerm,2),cfs(iTerm,3),cfs(iTerm,4),cfs(iTerm,5),cfs(iTerm,6),A_test,V_test);
+end
+fileName = ['Dict_',dataset,num2str(iFile)];
+File = matfile(fileName,'Writable',true);
+
+
+%%
+
+% for iTerm = 1:finalTerm
+% z = Theta(iTerm,Files)';
+% [ft{iTerm},gof{iTerm},outp{iTerm}]= fit([L_cut,D_rlx],z,g);
+% end

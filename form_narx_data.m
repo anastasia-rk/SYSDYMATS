@@ -1,6 +1,6 @@
 my_init;
 %% Set up global parameters
-dataset =  'C'; %  'D'; %                                                   % name of dataset
+dataset =  'D'; %  'C'; %                                                   % name of dataset
 iFile   = 1;                                                                % id of the sample
 K       = 10;                                                               % number of datasets
 % Length of input and output lags

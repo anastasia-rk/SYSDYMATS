@@ -8,6 +8,6 @@ set(groot, 'defaultLegendInterpreter','latex');
 set(groot, 'defaultColorbarTickLabelInterpreter','latex');
 set(0, 'DefaultAxesFontWeight', 'normal','DefaultAxesFontSize', 16);
 
-%% Custom colormap
-my_map = cutsom_colormap(256);
+% %% Custom colormap
+% my_map = cutsom_colormap(256);
 

@@ -6,7 +6,7 @@ load(metaFileName);
 d       = n_y + n_u;                                                        % size of input vector x
 dict_set = ['dict_',dataset];
 fileNames = sym(dict_set,[1 K]);                                            % vector of filenames
-T = 4000;
+T = 2000;
 %% Select first significant basis vector for all datasets
 index = (1:T);                                                              % length of the sample
 Files = [1 2 4 5 6 7 9 10]; % 1:K                                           % id of the sample
@@ -23,7 +23,7 @@ for iFile=Files                                                             % ov
     end
     clear File
 end
-[AEER_m,iMax] = max(AEER{iTerm});                                         % find the index of the term with the highest criterion across all datasets
+[AEER_m,iMax] = max(AEER{iTerm});                                           % find the index of the term with the highest criterion across all datasets
 AEER_mm(iTerm,1) = AEER_m;
 S(iTerm) = iMax;                                                            % save index of the term
 dict_terms(iMax) = [];                                                      % reduce the dictionary of available terms
@@ -97,10 +97,10 @@ xlim([1 maxSign])
 xlabel('Number of terms');
 ylabel('AAMDL')
 %%
-tikzName = ['AAMDL_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
-cleanfigure;
-matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-            false, 'height', '6cm', 'width','8cm','checkForUpdates',false);
+% tikzName = ['AAMDL_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
+% cleanfigure;
+% matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+%             false, 'height', '6cm', 'width','8cm','checkForUpdates',false);
 %% Create column of names
 finalTerm = i_min;
 for iTerm=1:finalTerm
@@ -140,6 +140,7 @@ for iFile=Files
     varName = [dataset,num2str(iFile)];
     Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
 end
+
 %% Store to table
 temp      = AAMDL_all(1:finalTerm)';
 AAMDL     = round(temp,3);
@@ -148,7 +149,19 @@ Table_all = addvars(Tab,AEER,AAMDL,'NewVariableNames',{'AEER','AAMDL'})
 tableName = ['Thetas_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T)];
 table2latex(Table_all,tableName);
 %% 
+L2 = round(finalTerm/2);
+figure('Name','Internal parameters','NumberTitle','off');
+for iFig=1:finalTerm
+    subplot(2,L2,iFig)
+    plot(Files,Theta(iFig,Files),'o','LineWidth',2); hold on;
+    ylabel(Terms{iFig,1});
+    xlabel('Dataset index');
+end
+tikzName = ['Estimates_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '6cm', 'width','12cm','checkForUpdates',false);
 
 %% Store data in table
 workspaceName = ['OLS_results_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'.mat'];
-save(workspaceName);
+save(workspaceName,'Theta','Terms','Files','finalTerm','T','n_y','n_u');

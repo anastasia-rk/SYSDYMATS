@@ -72,9 +72,21 @@ fo = fitoptions('Method','NonlinearLeastSquares');
 g = fittype(@(b0,b1,b2,b3,b4,b5,x,y) b0 + b1*x + b2*y + b3*x.^2 + b4*y.^2 + b5*x.*y, 'independent',{'x','y'},'dependent','z','options',fo);
 for iTerm = 1:finalTerm
 z = Theta(iTerm,Files)';
-[ft{iTerm},gof{iTerm},outp{iTerm}]= fit([A_imp,V_imp],z,g);
+[ft{iTerm},gof{iTerm},outp{iTerm}]= fit([L_cut,D_rlx],z,g);
 cfs(iTerm,:) = coeffvalues(ft{iTerm});
 end
+%%
+iTerm = 5;
+z = Theta(iTerm,Files)';
+figure; 
+plot3(L_cut(1:4),D_rlx(1:4),z(1:4),'*','LineWidth',3); hold on;
+plot3(L_cut(5:8),D_rlx(5:8),z(5:8),'*','LineWidth',3); hold on;
+plot(ft{iTerm},[L_cut,D_rlx],z); hold on;
+legend('set 1','set 2');
+grid on;
+xlabel('$L_{cut}$');
+ylabel('$D_{rlx}$');
+zlabel(Terms{iTerm});
 %% Save to table
 Tab = table(Terms);
 for iCoeff = 1:size(cfs,2)
@@ -99,7 +111,6 @@ File = matfile(fileName,'Writable',true);
 
 
 %%
-
 % for iTerm = 1:finalTerm
 % z = Theta(iTerm,Files)';
 % [ft{iTerm},gof{iTerm},outp{iTerm}]= fit([L_cut,D_rlx],z,g);

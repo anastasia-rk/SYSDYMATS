@@ -157,11 +157,14 @@ for iFig=1:finalTerm
     ylabel(Terms{iFig,1});
     xlabel('Dataset index');
 end
-tikzName = ['Estimates_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
-cleanfigure;
-matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-            false, 'height', '6cm', 'width','12cm','checkForUpdates',false);
+% tikzName = ['Estimates_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
+% cleanfigure;
+% matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+%             false, 'height', '6cm', 'width','12cm','checkForUpdates',false);
 
+
+% SVD analysis on the regressor structure to get the sensitivity to
+% parameter perturbation
 %% Store data in table
 workspaceName = ['OLS_results_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'.mat'];
 save(workspaceName,'Theta','Terms','Files','finalTerm','T','n_y','n_u');

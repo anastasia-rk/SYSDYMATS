@@ -26,6 +26,8 @@ values{1}(:,10) = [2.87,2.56,2.26,1.83,1.64]';
 values{2}(:,10) = [5.8,5.28,4.48,4.2,3.45]';
 values{1}(:,11) = [0.123,0.113,0.104,0.095,0.093]';
 values{2}(:,11) = [0.276,0.255,0.230,0.209,0.193]';
+fileName = 'External_parameters';
+save(fileName,'params','values');
 %% total number of permutations
 M       = permn(1:L,2);                                                     % get all permutations with repetition
 ind     = find(M(:,2)>=M(:,1));                                             % sort out only increasing indeces
@@ -49,69 +51,3 @@ for i = 1:2
     [rho_max,k_max] = min(rho{i});
     param_select{i} = params(indeces_new{i}(k_max,:));
 end
-
-%% Load estimated thetas
-dataset = 'C'; % 'D';
-n_y = 0;
-n_u = 4;
-fileName = ['OLS_results_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'.mat'];
-load(fileName);
-
-%% Create custom fit function and estimate coefficients
-% Files = [1 2 4 5]; % smaller dateset size
-L_cut_all = [values{1}(:, 9);values{2}(:, 9)];
-L_cut = L_cut_all(Files,1);
-D_rlx_all = [values{1}(:,11);values{2}(:,11)];
-D_rlx = D_rlx_all(Files,1);
-A_imp_all = [values{1}(:, 6);values{2}(:, 6)];
-A_imp = A_imp_all(Files,1);
-V_imp_all = [values{1}(:, 7);values{2}(:, 7)];
-V_imp = V_imp_all(Files,1);
-clear x y
-fo = fitoptions('Method','NonlinearLeastSquares');
-g = fittype(@(b0,b1,b2,b3,b4,b5,x,y) b0 + b1*x + b2*y + b3*x.^2 + b4*y.^2 + b5*x.*y, 'independent',{'x','y'},'dependent','z','options',fo);
-for iTerm = 1:finalTerm
-z = Theta(iTerm,Files)';
-[ft{iTerm},gof{iTerm},outp{iTerm}]= fit([L_cut,D_rlx],z,g);
-cfs(iTerm,:) = coeffvalues(ft{iTerm});
-end
-%%
-iTerm = 5;
-z = Theta(iTerm,Files)';
-figure; 
-plot3(L_cut(1:4),D_rlx(1:4),z(1:4),'*','LineWidth',3); hold on;
-plot3(L_cut(5:8),D_rlx(5:8),z(5:8),'*','LineWidth',3); hold on;
-plot(ft{iTerm},[L_cut,D_rlx],z); hold on;
-legend('set 1','set 2');
-grid on;
-xlabel('$L_{cut}$');
-ylabel('$D_{rlx}$');
-zlabel(Terms{iTerm});
-%% Save to table
-Tab = table(Terms);
-for iCoeff = 1:size(cfs,2)
-    Parameters = round(cfs(:,iCoeff),3);
-    varName = ['$b_',num2str(iCoeff-1),'$'];
-    Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
-end
-Table_coeffs = Tab
-
-tableName = ['Betas_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T)];
-table2latex(Table_coeffs,tableName);
-
-%% Compute parameters for validation
-iFile = 3;
-A_test = A_imp_all(iFile,1);
-V_test = V_imp_all(iFile,1);
-for iTerm = 1:finalTerm
-    theta_test(iTerm,1) = g(cfs(iTerm,1),cfs(iTerm,2),cfs(iTerm,3),cfs(iTerm,4),cfs(iTerm,5),cfs(iTerm,6),A_test,V_test);
-end
-fileName = ['Dict_',dataset,num2str(iFile)];
-File = matfile(fileName,'Writable',true);
-
-
-%%
-% for iTerm = 1:finalTerm
-% z = Theta(iTerm,Files)';
-% [ft{iTerm},gof{iTerm},outp{iTerm}]= fit([L_cut,D_rlx],z,g);
-% end

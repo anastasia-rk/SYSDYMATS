@@ -57,40 +57,7 @@ for iCoeff = 1:size(beta,2)
     Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
 end
 Table_coeffs_ls = Tab
-%% Save table to tex
-tableName = ['Betas_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T)];
-% table2latex(Table_coeffs_ls,tableName);
-
-%% Compute parameters for validation
-testFiles = [3 8];
-for iFile = testFiles
-L_test = L_cut_all(iFile,1);
-D_test = D_rlx_all(iFile,1);
-for iTerm = 1:finalTerm
-    theta_test{iFile}(iTerm,1) = g(cfs(iTerm,1),cfs(iTerm,2),cfs(iTerm,3),cfs(iTerm,4),cfs(iTerm,5),cfs(iTerm,6),L_test,D_test);
-end
-fileName = ['Dict_',dataset,num2str(iFile)];
-File = matfile(fileName,'Writable',true);
-indSign = S(1:finalTerm);                                                   % select the indeces of significant terms from the ordered set
-Phi_all = File.term;                                                        % extract all terms into a vector
-Phi     = Phi_all(:,indSign);                                               % select only signficant terms
-y_model = Phi*theta_test{iFile};                                            % model NARMAX output
-%% Compare outputs
-indPlot = [1:500];
-figure('Name','Modelled output','NumberTitle','off');
-colormap(my_map);
-plot(indPlot+File.t_0,File.y_narx(indPlot,1)); hold on;
-plot(indPlot+File.t_0,y_model(indPlot,1),'--'); hold on;
-legend('True output','Generated output');
-
-tikzName = ['Generated_output_',dataset,num2str(iFile),'_size_',num2str(T),'.tikz'];
-cleanfigure;
-matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-            false, 'height', '6cm', 'width','12cm','checkForUpdates',false);
-        
-clear File Phi_all Phi y_model
-end
-        %%
+%%
 % finalTerm = 8;
 index1 = find(Files <=5);
 index2 = find(Files > 5);
@@ -102,11 +69,8 @@ L2 = round(finalTerm/2);
 for iTerm=1:finalTerm
 subplot(L2,2,iTerm);
 z = Theta(iTerm,Files)'; 
-scatter3(L_cut_all(Files(index1)),D_rlx_all(Files(index1)),z(index1),'filled','LineWidth',5); hold on;
-scatter3(L_cut_all(Files(index2)),D_rlx_all(Files(index2)),z(index2),'filled','LineWidth',5); hold on;
-for iFile = testFiles
-    scatter3(L_cut_all(iFile,1),D_rlx_all(iFile,1), theta_test{iFile}(iTerm,1),'filled','k','LineWidth',5); hold on;
-end
+plot3(L_cut_all(Files(index1)),D_rlx_all(Files(index1)),z(index1),'*','LineWidth',5); hold on;
+plot3(L_cut_all(Files(index2)),D_rlx_all(Files(index2)),z(index2),'*','LineWidth',5); hold on;
 srf = plot(ft{iTerm}); 
 alpha(srf,0.7);
 shading interp
@@ -117,8 +81,34 @@ zlabel(Terms{iTerm});
 view(az,el)
 end
 % legend('Foam 1','Foam 2');
-%%
 tikzName = ['Theta_surfaces_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
             false, 'height', '20cm', 'width','12cm','checkForUpdates',false);
+
+%% Save table to tex
+tableName = ['Betas_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T)];
+table2latex(Table_coeffs_nls,tableName);
+
+%% Compute parameters for validation
+clear File Phi_all Phi y_model theta_test
+iFile = 3;
+L_test = L_cut_all(iFile,1);
+D_test = D_rlx_all(iFile,1);
+for iTerm = 1:finalTerm
+    theta_test(iTerm,1) = g(cfs(iTerm,1),cfs(iTerm,2),cfs(iTerm,3),cfs(iTerm,4),cfs(iTerm,5),cfs(iTerm,6),L_test,D_test);
+end
+fileName = ['Dict_',dataset,num2str(iFile)];
+File = matfile(fileName,'Writable',true);
+indSign = S(1:finalTerm);
+Phi_all = File.term;
+Phi     = Phi_all(:,indSign);
+y_model = Phi*theta_test;
+
+%%
+indPlot = [1:500];
+figure('Name','Modelled output','NumberTitle','off');
+colormap(my_map);
+plot(File.y_narx(indPlot,1)); hold on;
+plot(y_model(indPlot,1),'--'); hold on;
+legend('True output','Generated output');

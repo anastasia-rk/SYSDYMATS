@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2019.3.7)  8 OCT 2019 13:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2019.3.7)  16 OCT 2019 18:19
 entering extended mode
 **./report_narmax.tex
 (report_narmax.tex
@@ -1498,16 +1498,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-(Thetas_C_ny_0_nu_4_size_2000.tex)
-Overfull \hbox (27.19305pt too wide) in paragraph at lines 1--200
- [][] 
- []
-
-(Thetas_C_ny_0_nu_4_size_4000.tex)
-Overfull \hbox (17.19302pt too wide) in paragraph at lines 1--206
- [][] 
- []
-
+(Thetas_C_ny_0_nu_4_size_2000.tex) (Thetas_C_ny_0_nu_4_size_4000.tex)
 (Estimates_C_ny_0_nu_4_size_2000.tikz)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
@@ -1522,33 +1513,41 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
+(Theta_surfaces_C_ny_0_nu_4_size_2000.tikz)
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
 (betas_C_ny_0_nu_4_size_4000.tex)
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
+(Theta_surfaces_C_ny_0_nu_4_size_4000.tikz)
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
 [3]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 231.
- [4] [5]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 231.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 241.
+ [4] [5] [6] [7]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 241.
  (report_narmax.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 231.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 231.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 241.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 241.
 Package rerunfilecheck Info: File `report_narmax.out' has not changed.
 (rerunfilecheck)             Checksum: F07E5E9681BE508B0C08CD8829E34FC8;169.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 231.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 241.
  ) 
 Here is how much of TeX's memory you used:
- 34451 strings out of 492979
- 819627 string characters out of 3127622
- 1339824 words of memory out of 12000000
- 37603 multiletter control sequences out of 15000+200000
+ 34830 strings out of 492979
+ 827192 string characters out of 3127622
+ 3057462 words of memory out of 12000000
+ 37972 multiletter control sequences out of 15000+200000
  18151 words of font info for 70 fonts, out of 3000000 for 9000
  1144 hyphenation exceptions out of 8191
- 62i,20n,111p,926b,2313s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 62i,14n,111p,8925b,2836s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\uos\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\tc
 rm1095.pk><C:/Users/uos/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/am
 sfonts/cm/cmbx10.pfb><C:/Users/uos/AppData/Local/Programs/MiKTeX 2.9/fonts/type
@@ -1563,15 +1562,16 @@ s/cm/cmmib10.pfb><C:/Users/uos/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pu
 blic/amsfonts/cm/cmr10.pfb><C:/Users/uos/AppData/Local/Programs/MiKTeX 2.9/font
 s/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/uos/AppData/Local/Programs/MiKTe
 X 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/uos/AppData/Local/Prog
-rams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/uos/AppData/L
-ocal/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/uos/
-AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/U
-sers/uos/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy1
-0.pfb><C:/Users/uos/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfon
-ts/cm/cmsy8.pfb>
-Output written on report_narmax.pdf (5 pages, 238746 bytes).
+rams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/uos/AppData/L
+ocal/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/uos/
+AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/U
+sers/uos/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.
+pfb><C:/Users/uos/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts
+/cm/cmsy10.pfb><C:/Users/uos/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/publ
+ic/amsfonts/cm/cmsy8.pfb>
+Output written on report_narmax.pdf (7 pages, 1063411 bytes).
 PDF statistics:
- 154 PDF objects out of 1000 (max. 8388607)
- 22 named destinations out of 1000 (max. 500000)
- 133 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 239 PDF objects out of 1000 (max. 8388607)
+ 26 named destinations out of 1000 (max. 500000)
+ 371 words of extra memory for PDF output out of 10000 (max. 10000000)
 

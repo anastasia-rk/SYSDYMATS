@@ -1,6 +1,6 @@
 my_init;
 %% Set up global parameters
-dataset =  'D'; %  'C'; %                                                   % name of dataset
+dataset = 'D'; % 'C'; %                                                     % name of dataset
 iFile   = 1;                                                                % id of the sample
 K       = 10;                                                               % number of datasets
 % Length of input and output lags
@@ -8,7 +8,7 @@ n_u     = 4;                                                                % in
 n_y     = 0;                                                                % output signal lag length
 d       = n_y + n_u;                                                        % size of input vector x
 lambda  = 2;                                                                % order of polynomial
-a       = sym('x_',[1 d]);                                                   % associated symbolic vector
+a       = sym('x_',[1 d]);                                                  % associated symbolic vector
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Identify difference in lag
 diff = n_u - n_y;                                                           % difference between lags
@@ -23,7 +23,7 @@ switch sign(diff)
         disp('positive')
         t_0 = n_u+1;
 end
-% t_0 = 1000;
+t_0 = 1000;
 T   = 10000; %length(Input); % length of the observation sequence
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Create sum index permutations
@@ -49,12 +49,13 @@ Output = fileData(:,2);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Create the batch of input vectors
 iNarx = 0;                                                                  % batch index of the input vector in AR model
-for t=t_0:t_0+T
+timesNarx = [t_0:t_0+T];
+for t=timesNarx
     iNarx = iNarx + 1;
     x_narx(:,iNarx) = [Input(t-n_u+1:t,1)]; %     Output(t-n_y:t-1,1);      % NARX input
 end
 nNarx = iNarx;                                                              % length of NARX input batch
-y_narx(:,:) = Output(t_0:end);                                       % NARX output
+y_narx(:,:) = Output(timesNarx);                                            % NARX output
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Create the batch of regressors and compute all polynomial terms
 iTerm = 0;
@@ -85,7 +86,7 @@ term(:,iTerm) = 1;
 symb_term{iTerm} = sym('c');
 disp('Dictionary complete')
 fileName = ['dict_',dataset,num2str(iFile),'.mat'];
-save(fileName, 'term','x_narx','y_narx','nNarx','-v7.3');
+save(fileName, 'term','x_narx','y_narx','nNarx','t_0','-v7.3');
 clear term x_narx y_narx
 end                                                                         % end loop over files
 nTerms = iTerm;                                                             % total number of regressors in the polynomial

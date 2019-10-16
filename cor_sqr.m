@@ -5,7 +5,7 @@ function [result] = cor_sqr(x,y)
 %   y - vector 2 of size n x 1
 % Output
 fact1 = (x'*y)^2;
-fact2 = (x'*x)^2;
-fact3 = (y'*y)^2;
+fact2 = (x'*x);
+fact3 = (y'*y);
 result = fact1/(fact2*fact3);
 end

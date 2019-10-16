@@ -9,7 +9,8 @@ fileNames = sym(dict_set,[1 K]);                                            % ve
 T = 2000;
 %% Select first significant basis vector for all datasets
 index = (1:T);                                                              % length of the sample
-Files = [1 2 4 5 6 7 9 10]; % 1:K; %                                          % id of the sample
+Files =  [1 2 4 5 6 7 9 10]; % 1:K; %                                       % id of the sample
+K = length(Files);
 iTerm = 1;                                                                  % the first significant term
 AEER{iTerm} = zeros(nTerms,1);                                              % placeholder for AERR criteria
 for iFile=Files                                                             % over all datasets
@@ -64,6 +65,7 @@ while(iTerm <= maxSign) && ~converged                                       % lo
         end
         clear File
     end
+    AEER{iTerm}(:,:) = 
     [AEER_m,iMax] = max(AEER{iTerm});                                       % Find the index of the term with the highest criterion across all datasets
     AEER_mm(iTerm,1)   = AEER_m;
     S(iTerm) = iMax;                                                        % Save index of the term  
@@ -167,4 +169,4 @@ end
 % parameter perturbation
 %% Store data in table
 workspaceName = ['OLS_results_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'.mat'];
-save(workspaceName,'Theta','Terms','Files','finalTerm','T','n_y','n_u');
+save(workspaceName,'Theta','Terms','Files','finalTerm','T','n_y','n_u','S');

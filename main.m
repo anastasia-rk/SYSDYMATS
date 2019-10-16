@@ -10,6 +10,7 @@ T = 2000;
 %% Select first significant basis vector for all datasets
 index = (1:T);                                                              % length of the sample
 Files =  [1 2 4 5 6 7 9 10]; % 1:K; %                                       % id of the sample
+K = length(Files);
 iTerm = 1;                                                                  % the first significant term
 AEER{iTerm} = zeros(nTerms,1);                                              % placeholder for AERR criteria
 for iFile=Files                                                             % over all datasets
@@ -23,6 +24,7 @@ for iFile=Files                                                             % ov
     end
     clear File
 end
+AEER{iTerm}(:,:) = AEER{iTerm}(:,:)/K;
 [AEER_m,iMax] = max(AEER{iTerm});                                           % find the index of the term with the highest criterion across all datasets
 AEER_mm(iTerm,1) = AEER_m;
 S(iTerm) = iMax;                                                            % save index of the term
@@ -64,6 +66,7 @@ while(iTerm <= maxSign) && ~converged                                       % lo
         end
         clear File
     end
+    AEER{iTerm}(:,:) = AEER{iTerm}(:,:)/K;
     [AEER_m,iMax] = max(AEER{iTerm});                                       % Find the index of the term with the highest criterion across all datasets
     AEER_mm(iTerm,1)   = AEER_m;
     S(iTerm) = iMax;                                                        % Save index of the term  
@@ -97,10 +100,10 @@ xlim([1 maxSign])
 xlabel('Number of terms');
 ylabel('AAMDL')
 %%
-% tikzName = ['AAMDL_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
-% cleanfigure;
-% matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-%             false, 'height', '6cm', 'width','8cm','checkForUpdates',false);
+tikzName = ['AAMDL_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '6cm', 'width','6cm','checkForUpdates',false);
 %% Create column of names
 finalTerm = i_min;
 for iTerm=1:finalTerm
@@ -142,12 +145,10 @@ for iFile=Files
 end
 
 %% Store to table
-temp      = AAMDL_all(1:finalTerm)';
-AAMDL     = round(temp,3);
-AEER  = round(AEER_mm(1:finalTerm,1),5);
-Table_all = addvars(Tab,AEER,AAMDL,'NewVariableNames',{'AEER','AAMDL'})
+AEER  = round(AEER_mm(1:finalTerm,1)*100,3);
+Table_all = addvars(Tab,AEER,'NewVariableNames',{'AEER($\%$)'})
 tableName = ['Thetas_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T)];
-table2latex(Table_all,tableName);
+% table2latex(Table_all,tableName);
 %% 
 L2 = round(finalTerm/2);
 figure('Name','Internal parameters','NumberTitle','off');
@@ -157,14 +158,14 @@ for iFig=1:finalTerm
     ylabel(Terms{iFig,1});
     xlabel('Dataset index');
 end
-% tikzName = ['Estimates_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
-% cleanfigure;
-% matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-%             false, 'height', '6cm', 'width','12cm','checkForUpdates',false);
+tikzName = ['Estimates_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '6cm', 'width','12cm','checkForUpdates',false);
 
 
 % SVD analysis on the regressor structure to get the sensitivity to
 % parameter perturbation
 %% Store data in table
-workspaceName = ['OLS_results_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'.mat'];
+workspaceName = ['OLS_results_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.mat'];
 save(workspaceName,'Theta','Terms','Files','finalTerm','T','n_y','n_u','S');

@@ -40,6 +40,6 @@ legend style={legend cell align=left,align=left,draw=white!15!black}
 \addplot [color=mycolor2,line width=5.0pt,only marks,mark=asterisk,mark options={solid},forget plot]
   table[row sep=crcr]{%
 8	-3.00104696019893\\
-};
+};\label{tikz:nterms}
 \end{axis}
 \end{tikzpicture}%

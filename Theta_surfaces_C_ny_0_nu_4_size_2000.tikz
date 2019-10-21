@@ -32,16 +32,16 @@ legend style={at={(1.03,1)},anchor=north west,legend cell align=left,align=left,
 72	0.113	-200.830593420783\\
 61	0.095	-93.7391747783605\\
 56	0.093	-119.696332564413\\
-};
+};\label{tikz:thetas1}
 \addplot3[only marks,mark=*,mark options={},mark size=1.5000pt,color=mycolor2] plot table[row sep=crcr,]{%
 67	0.276	-1805.89673785913\\
 66	0.255	-1488.55090215304\\
 62	0.209	-803.703476355143\\
 57	0.193	-648.796609601896\\
-};
+};\label{tikz:thetas2}
 \addplot3[only marks,mark=*,mark options={},mark size=1.5000pt,color=black] plot table[row sep=crcr,]{%
 69	0.104	-138.628962092727\\
-};
+};\label{tikz:thetaidentified}
 \addplot3[only marks,mark=*,mark options={},mark size=1.5000pt,color=black] plot table[row sep=crcr,]{%
 64	0.23	-1085.45181546038\\
 };
@@ -20403,6 +20403,6 @@ table[row sep=crcr,header=false] {%
 74	0.26868	-187.371457305467\\
 74	0.27234	-193.909336369301\\
 74	0.276	-200.569447084128\\
-};
+};\label{tikz:theta_surf}
 \end{axis}
 \end{tikzpicture}%

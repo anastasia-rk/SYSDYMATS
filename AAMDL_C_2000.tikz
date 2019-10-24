@@ -7,38 +7,39 @@
 \begin{tikzpicture}
 
 \begin{axis}[%
-width=7.762432cm,
-height=6cm,
+width=5.979382cm,
+height=4cm,
 at={(0cm,0cm)},
 scale only axis,
 xmin=1,
-xmax=14,
+xmax=15,
 xlabel={Number of terms},
-ymin=-1.7,
-ymax=-1,
+ymin=-3.00104696019893,
+ymax=-2,
 ylabel={AAMDL},
 legend style={legend cell align=left,align=left,draw=white!15!black}
 ]
 \addplot [color=mycolor1,only marks,mark=o,mark options={solid},forget plot]
   table[row sep=crcr]{%
-1	-1.09649186435475\\
-2	-1.18645912215366\\
-3	-1.22569443353968\\
-4	-1.25346802192774\\
-5	-1.62657496695785\\
-6	-1.65781165265103\\
-7	-1.66105488382319\\
-8	-1.66375965757176\\
-9	-1.66115241812931\\
-10	-1.65778401897266\\
-11	-1.65450046162883\\
-12	-1.653656835792\\
-13	-1.65060854102856\\
-14	-1.64791867997776\\
+1	-2.11570305645112\\
+2	-2.79305839626823\\
+3	-2.82935915360095\\
+4	-2.83995463691255\\
+5	-2.84820086237127\\
+6	-2.84802935769127\\
+7	-2.95749685829162\\
+8	-3.00104696019893\\
+9	-3.00045381599073\\
+10	-3.00058067310023\\
+11	-2.99929045654952\\
+12	-2.99893492528062\\
+13	-2.99723787908848\\
+14	-2.99552868329925\\
+15	-2.99382083512231\\
 };
 \addplot [color=mycolor2,line width=5.0pt,only marks,mark=asterisk,mark options={solid},forget plot]
   table[row sep=crcr]{%
-8	-1.66375965757176\\
-};
+8	-3.00104696019893\\
+};\label{tikz:nterms}
 \end{axis}
 \end{tikzpicture}%

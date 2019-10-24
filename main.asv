@@ -24,6 +24,7 @@ for iFile=Files                                                             % ov
     end
     clear File
 end
+AEER{iTerm}(:,:) = AEER{iTerm}(:,:)/K;
 [AEER_m,iMax] = max(AEER{iTerm});                                           % find the index of the term with the highest criterion across all datasets
 AEER_mm(iTerm,1) = AEER_m;
 S(iTerm) = iMax;                                                            % save index of the term
@@ -65,7 +66,7 @@ while(iTerm <= maxSign) && ~converged                                       % lo
         end
         clear File
     end
-    AEER{iTerm}(:,:) = 
+    AEER{iTerm}(:,:) = AEER{iTerm}(:,:)/K;
     [AEER_m,iMax] = max(AEER{iTerm});                                       % Find the index of the term with the highest criterion across all datasets
     AEER_mm(iTerm,1)   = AEER_m;
     S(iTerm) = iMax;                                                        % Save index of the term  
@@ -99,10 +100,10 @@ xlim([1 maxSign])
 xlabel('Number of terms');
 ylabel('AAMDL')
 %%
-% tikzName = ['AAMDL_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
-% cleanfigure;
-% matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-%             false, 'height', '6cm', 'width','8cm','checkForUpdates',false);
+tikzName = ['AAMDL_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '6cm', 'width','6cm','checkForUpdates',false);
 %% Create column of names
 finalTerm = i_min;
 for iTerm=1:finalTerm
@@ -144,12 +145,10 @@ for iFile=Files
 end
 
 %% Store to table
-temp      = AAMDL_all(1:finalTerm)';
-AAMDL     = round(temp,3);
-AEER  = round(AEER_mm(1:finalTerm,1),5);
-Table_all = addvars(Tab,AEER,AAMDL,'NewVariableNames',{'AEER','AAMDL'})
+AEER  = round(AEER_mm(1:finalTerm,1)*100,3);
+Table_all = addvars(Tab,AEER,'NewVariableNames',{'AEER($\%$)'})
 tableName = ['Thetas_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T)];
-table2latex(Table_all,tableName);
+% table2latex(Table_all,tableName);
 %% 
 L2 = round(finalTerm/2);
 figure('Name','Internal parameters','NumberTitle','off');
@@ -159,14 +158,30 @@ for iFig=1:finalTerm
     ylabel(Terms{iFig,1});
     xlabel('Dataset index');
 end
-% tikzName = ['Estimates_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
-% cleanfigure;
-% matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-%             false, 'height', '6cm', 'width','12cm','checkForUpdates',false);
+tikzName = ['Estimates_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '6cm', 'width','12cm','checkForUpdates',false);
 
 
-% SVD analysis on the regressor structure to get the sensitivity to
+%% SVD analysis on the regressor structure to get the sensitivity to
 % parameter perturbation
+
+%% Direct estimation of polynomial coefficients
+load('External_parameters');
+L_cut_all = [values{1}(:, 9);values{2}(:, 9)];
+D_rlx_all = [values{1}(:,11);values{2}(:,11)];
+A_imp_all = [values{1}(:, 6);values{2}(:, 6)];
+V_imp_all = [values{1}(:, 7);values{2}(:, 7)];
+
+
+x = L_cut_all(iFile,1);
+y = D_rlx_all(iFile,1);
+id = ones(size(x));
+v = [id x y x*y x^2 y^2]';
+v = v(:,ones(1,numel(v)));
+A = A*v;
+
 %% Store data in table
-workspaceName = ['OLS_results_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'.mat'];
+workspaceName = ['OLS_results_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.mat'];
 save(workspaceName,'Theta','Terms','Files','finalTerm','T','n_y','n_u','S');

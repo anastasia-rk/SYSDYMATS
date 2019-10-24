@@ -50,9 +50,9 @@
 \usepackage[left=2cm, right=2cm, top=2.5cm, bottom=3cm, headheight=13.6pt]{geometry}
 \allowdisplaybreaks 
 % Bibliography
-%\usepackage[backend=bibtex,style=ieee,sorting=none]{biblatex} 
-%\bibliography{Bibliography-thesis}
-%\renewcommand*{\bibfont}{\scriptsize}
+\usepackage[backend=bibtex,style=ieee,sorting=none]{biblatex} 
+\bibliography{bibliography}
+\renewcommand*{\bibfont}{\scriptsize}
 \makeatletter
 \newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
 \newcommand{\ie}{\textit{i.e.} }
@@ -165,24 +165,24 @@
 \par The experiments is conducted on ten samples of authentic elastomeric foams prepared in different manufacturing settings. In this report, the influence of two manufacturing parameters on the dynamical behaviour of the foam is evaluated: the length of the foam sample after cutting, $L_{cut}$ (mm), and the relaxed density of the sample, $D_{rlx}$ (g/cm$^3$). The parameter values for each specimen are presented in Table \ref{tab:externparams}.
 \begin{table}[!h]
 	\centering
-	\caption{manufacturing parameters of auxetic form used in 10 experiments.}\label{tab:externparams}
+	\caption{Manufacturing parameters of auxetic form used in 10 experiments.}\label{tab:externparams}
 	\small
 	\begin{tabular}{rrrrrrrrrrr}
 		Parameter  & C1 & C2 & C3 & C4 & C5 & C6 & C7 & C8 & C9 & C10 \\ 
 		\hline 
 		$L_{cut}$ & 74 & 72 & 69 & 61 & 56 & 67 & 66 & 64 & 62 & 57 \\ 
-		$D_{rlx}$ & 0.123 & 0.113 & 0.104 & 0.095 & 0.093 & 0.276 & 0.255 & 0.230 & 0.209 & .193 \\ 
+		$D_{rlx}$ & 0.123 & 0.113 & 0.104 & 0.095 & 0.093 & 0.276 & 0.255 & 0.230 & 0.209 & 0.193 \\ 
 		\hline 
 	\end{tabular}
 \end{table}
-The random input signal is adopted for all foam specimen is illustrated in Figure \ref{fig:input}. 
+The random input signal adopted for all foam sample is illustrated in Figure \ref{fig:input}. 
 \begin{figure}[!h]
 	\centering
 	\input{data_C_input.tikz}
 	\caption{The random input signal for the set of authentic foams is the displacement of the hydraulic actuator of the machine in mm.}\label{fig:input}
 \end{figure}
-Samples of recorded foam responses are presented in  Figure \ref{fig:output}. The ability to predict the response of a foam specimen to a known input based on manufacturing parameters is crucial in for optimal design. The aim of this work is to identify the dynamical model that could describe the relationship between measured input and output time series and the external parameters.	
-\begin{figure}[!h]
+Samples of recorded foam responses are presented in  Figure \ref{fig:output}. The ability to predict the response of a foam specimen to a known input based on manufacturing parameters is crucial in for optimal design. The aim of this report is to identify the dynamical model that could describe the relationship between measured input and output time series conditioned on the external parameters. Datasets C1-C2, C4-C7, and C9-C10 are used for model identification while the datasets C3 and C8 are used to validate the identified model.
+\begin{figure}[!t]
 	\centering
 	\input{data_C_outputs.tikz}
 	\caption{The measured output for each foam sample is the force of the specimen response in kN.}
@@ -204,7 +204,7 @@ u(t-3) & u(t-2) & u(t-1) & u(t)
 \end{array}\right]^{\top}.
 \end{equation}
 The unknown model is approximated with a sum of polynomial basis functions up to second degree ($\lambda = 2$), rendering the following structure
-\begin{equation}
+\begin{equation}\label{eq:narx}
 	\mathbfit{y}(t) = \theta^0 + \sum_{i=1}^{d} \theta_i x_i(t) + \sum_{i=1}^{d} \sum_{j=1}^{d} \theta_{i,j} x_i(t) x_j(t) + e(t).
 \end{equation}
 The number and order of significant terms are identified within the EFOR-CMSS algorithm based on the data from 8 out of 10 datasets. Figure \ref{fig:aamdl} illustrates the relationship between the number of model terms and the selected criterion of significance, AAMDL.
@@ -212,9 +212,9 @@ The number and order of significant terms are identified within the EFOR-CMSS al
 	\centering
 	\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
 	\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
-	\subfloat[Sample size 2000.]{\input{AAMDL_C_ny_0_nu_4_size_2000.tikz}}
-	\subfloat[Sample size 4000.]{\input{AAMDL_C_ny_0_nu_4_size_4000.tikz}}
-	\caption{AAMDL evolution with the growing number of terms for samples of different size. The optimal number of terms (\ref{tikz:nterms}) increases with the growing sample size.}\label{fig:aamdl}
+	\subfloat[Sample size 2000.]{\input{AAMDL_C_2000.tikz}}
+	\subfloat[Sample size 4000.]{\input{AAMDL_C_4000.tikz}}
+	\caption{Evolution of AAMDL with the respect to the number of terms for samples of different size. The optimal number of terms (\ref{tikz:nterms}) increases with the growing sample size.}\label{fig:aamdl}
 \end{figure}	
 \section{Parameter estimation}
 \par The results of internal parameter estimation via the EFOR-CMSS method for sample sizes of 2000 and 4000 points are presented in Tables \ref{tab:thetas2000} and \ref{tab:thetas4000}, respectively. It can be seen that the first 7 significant terms are the same for both samples; moreover, the estimated values are of the same order in both cases. The further analysis deals only with the parameter estimates obtained from the smaller data sample. 
@@ -222,53 +222,108 @@ The number and order of significant terms are identified within the EFOR-CMSS al
 	\centering
 	\caption{Estimated parameters for the sample length 2000.}\label{tab:thetas2000}
 	\small
-	\input{Thetas_C_ny_0_nu_4_size_2000.tex}
+	\input{Thetas_C_2000.tex}
 \end{table}
 \begin{table}[!h]
 	\centering
 	\caption{Estimated parameters for the sample length 4000.}\label{tab:thetas4000}
 	\small
-	\input{Thetas_C_ny_0_nu_4_size_4000.tex}
+	\input{Thetas_C_4000.tex}
 \end{table}
-\begin{figure}[!h]
-	\centering
-	\input{Estimates_C_ny_0_nu_4_size_2000.tikz}
-	\caption{Estimated values of internal parameters.}
-\end{figure}
 \par In order to link the external and internal parameters, an arbitrary polynomial function of two arguments is formed
 \begin{equation}
 \theta_i(L_{cut},D_{rlx}) = \beta_0 + \beta_1 L_{cut} + \beta_2 D_{rlx} + \beta_3 L_{cut}^{2} + \beta_4 D_{rlx}^{2} + \beta_5 L_{cut} D_{rlx}, \qquad i=1,\dots,N_s,
 \end{equation}
-$L_{cut}$ and $D_{rlx}$ are the external parameters of manufacturing process, and where $N_s$ is the estimated number of the significant terms. The coefficients $B = \left[ \beta_0 \dots \beta_5 \right]$ are unknown and must be estimated from the internal parameter values available. The linear relationship between the batch of internal parameter values corresponding to each significant term $\Theta_i$ and the surface coefficients can be established in the following form:
+$L_{cut}$ and $D_{rlx}$ are the external parameters of manufacturing process, and where $N_s$ is the estimated number of the significant terms. The coefficients $B = \left[ \beta_0 \dots \beta_5 \right]$ are unknown and must be estimated from the internal parameter values available. The linear relationship between the batch of internal parameter values corresponding to each significant term $\Theta_i$ and the surface coefficients can be established in the following form
 \begin{equation}\label{eq:linrel}
 \left[\begin{array}{c}
 \theta_{i}^{1} \\
 \vdots \\
-\theta_{i}^{j} \\
+\theta_{i}^{k} \\
 \vdots \\
-\theta_{i}^{N}
+\theta_{i}^{K}
 \end{array}\right] =
 \left[\begin{array}{cccccc}
 1 & L& D& L\times L& D\times D& L\times D
 \end{array}\right] B,
 \end{equation}
-where $j = 1, \dots, N$ is the index of the dataset, and where $\times$ denotes the by-element product such that
+where $k = 1, \dots, K$ is the index of the dataset, $i =1, \dots, N_s$ is the element index of the internal parameter vector, and where $\times$ denotes the by-element product such that
 \begin{equation*}
 L\times L = \Big[ L_{cut}^{(j)} L_{cut}^{(j)}\Big]^{N}_{j=1}.
 \end{equation*}
-Given the equation \eqref{eq:linrel}, the vector of unknown coefficients $B$ can be identified via the classical least squares (LS) method.
-Curve fitting results are presented in Table
+Given the equation \eqref{eq:linrel}, the vector of unknown coefficients $B$ can be identified via the classical least squares (LS) method. The estimated coefficients are presented in Table \ref{tab:betas_all}, and the surface fitting results for each internal parameter are illustrated in Figure \ref{fig:surfaces_all} 
 \begin{table}[!h]
 	\centering
-	\caption{Estimated polynomial coefficients for the sample length 2000.}
+	\caption{Estimated polynomial coefficients for the sample length 2000.}\label{tab:betas_all}
 	\small
-	\input{Betas_C_ny_0_nu_4_size_2000.tex}
+	\input{Betas_C_all_2000.tex}
 \end{table}
+The figure also shows values of the internal parameters computed for the external settings of experiments C3 and C8. The obtained internal parameters are substituted in the modified version of model \eqref{eq:narx} that only includes the identified significant  polynomial terms to validate the identified model structure. The simulation results are compared with true system outputs for C3 and C8 in Figure \ref{fig:c3all} and Figure \ref{fig:c8all}, respectively. 
+\begin{figure}[!t]
+	\centering
+	\input{Theta_surfaces_C_all_data_2000.tikz}
+	\caption{The quantitative relationship between external parameters ($L_{cut}, D_{rlx}$) and internal parameters $\theta$ is obtained by fitting a polynomial surface to the internal parameter values estimated for the sets C1-C5 (\ref{tikz:thetas1}) and sets C6-C10 (\ref{tikz:thetas2}). The fitted surfaces (\ref{tikz:theta_surf}) are then used to compute the internal model parameters corresponding to the settings of choice (\ref{tikz:thetaidentified}).}\label{fig:surfaces_all}
+\end{figure}
+\section{Estimating from the separated experimental data}
+\par The above report replicates the results of \cite{Wei2008} for a different pair of manufacturing parameters. The authors consider all datasets in model identification, however they are collected from two different foam types: sets C1-C5 are obtained from , while sets C6-C10 are obtained from . It is therefore reasonable to consider individual dynamical models for different foam types. For the first foam type, F1, sets C1, C2, C4, and C5 are used for identification, and C3 is used for validation of the dynamical model. For the second foam type, F2, set C8 is used for validation while the rest are used in the identification process. Application of the EFOR-CMSS framework is applied to two different foam types produces similar results, as can be seen in Tables \ref{tab:thetasC15}-\ref{tab:thetasC610}.
+\begin{figure}[!t]
+	\centering
+	\subfloat[C3]{\input{Generated_output_C3_size_2000.tikz}\label{fig:c3all}}\\
+	\subfloat[C8]{\input{Generated_output_C8_size_2000.tikz}\label{fig:c8all}}
+	\caption{Samples of the output obtained experimentally and the output generated by the identified model.}\label{fig:Callout}
+\end{figure}
+\begin{table}[!h]
+	\centering
+	\caption{Estimated parameters for the datasets obtained from foam F1.}\label{tab:thetasC15}
+	\small
+	\input{Thetas_C1_C5_2000.tex}
+\end{table}
+\begin{table}[!h]
+	\centering
+	\caption{Estimated parameters for the datasets obtained from foam F2.}\label{tab:thetasC610}
+	\small
+	\input{Thetas_C6_C10_2000.tex}
+\end{table}
+However, difficulties may arise during the stage of mapping the external parameters onto the internal parameter space. Since only 4 data points are estimated for each foam type, a bilinear model is used for surface fitting
+\begin{equation}
+\theta_i(L_{cut},D_{rlx}) = \beta_0 + \beta_1 L_{cut} + \beta_2 D_{rlx} + \beta_3 L_{cut} D_{rlx}, \qquad i=1,\dots,N_s.
+\end{equation}
+Model coefficients are estimated with LS method and are presented in Tables \ref{tab:betasC15}-\ref{tab:betasC610}.
+\begin{remark}
+	It may be possible to perform the direct estimation of the polynomial coefficients from the time series instead of estimating internal parameters in an intermediate step. This would ensure identifiability of higher order polynomials. However, a batch problem of estimating internal parameters from all datasets must be formulated first in order to avoid rank deficiency in the LS matrices. This will be investigated in the future.
+\end{remark}
+ \begin{table}[!h]
+	\centering
+	\caption{Estimated polynomial coefficients for the model describing the dynamics of  foam F1.}\label{tab:betasC15}
+	\small
+	\input{Betas_C1C5_size_2000.tex}
+\end{table}
+\begin{table}[!h]
+	\centering
+	\caption{Estimated polynomial coefficients for the model describing the dynamics of  foam F1. foam F2.}\label{tab:betasC610}
+	\small
+	\input{Betas_C6C10_size_2000.tex}
+\end{table}
+
+\begin{figure}[!t]
+	\centering
+	\input{Theta_surfaces_C1C5_size_2000.tikz}
+	\caption{The  surfaces (\ref{tikz:theta_surf}) fitted to the internal parameter values estimated for the sets C1-C5 (\ref{tikz:thetas1}) are  used to compute the internal model parameters corresponding to the settings of choice (\ref{tikz:thetaidentified}).}\label{fig:surfaces_C15}
+\end{figure}
 
 \begin{figure}[!h]
 	\centering
-	\input{Theta_surfaces_C_ny_0_nu_4_size_2000.tikz}
-	\caption{The quantifiable relationship between external parameters ($L_{cut}, D_{rlx}$) and internal parameters $\theta$ is obtained by fitting a polynomial surface to  the internal parameter values estimated for the set F1 (\ref{tikz:thetas1}) and set F2 (\ref{tikz:thetas2}). The fitted surfaces (\ref{tikz:theta_surf}) are then used to compute the internal model parameters corresponding to the settings of choice (\ref{tikz:thetaidentified}). }
+	\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+	\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+	\input{Theta_surfaces_C6C10_size_2000.tikz}
+	\caption{The  surfaces (\ref{tikz:theta_surf}) fitted to the internal parameter values estimated for the sets C1-C5 (\ref{tikz:thetas2}) are  used to compute the internal model parameters corresponding to the settings of choice (\ref{tikz:thetaidentified}).}\label{fig:surfaces_C610}
 \end{figure}
 
+\begin{figure}[!h]
+	\centering
+	\subfloat[C3]{\input{Generated_output_C3_C1C5.tikz}\label{fig:c3c15}}\\
+	\subfloat[C8]{\input{Generated_output_C8_C6C10.tikz}\label{fig:c8c610}}
+	\caption{Samples of the output obtained experimentally and the output generated by the models identified from datasets corresponding to Foams (a) F1 and (b) F2.}\label{fig:Csubsets}
+\end{figure}
+\printbibliography
 \end{document}

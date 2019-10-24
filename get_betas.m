@@ -1,5 +1,4 @@
 my_init
-load('External_parameters');
 %% Load estimated thetas
 dataset = 'C'; % 'D';
 n_y = 0;
@@ -8,6 +7,7 @@ T = 2000;
 fileName = ['OLS_results_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.mat'];
 load(fileName);
 %% Create matrices for fitting
+load('External_parameters');
 L_cut_all = [values{1}(:, 9);values{2}(:, 9)];
 D_rlx_all = [values{1}(:,11);values{2}(:,11)];
 A_imp_all = [values{1}(:, 6);values{2}(:, 6)];
@@ -38,16 +38,14 @@ for iCoeff = 1:size(cfs,2)
 end
 Table_coeffs_nls = Tab
 %% Estimate coefficients with LS
-id = ones(size(x));
-A = [id x y x.*y x.^2 y.^2];
-if length(x) <= 5
+id = ones(size(x));                                                         % create unit vector for constants
+A = [id x y x.*y x.^2 y.^2];                                                % create the matrix for ls
+if length(x) <= 4
     A = A(:,1:4);
 end
 clear beta
-for iTerm = 1:finalTerm
-B = Theta(iTerm,Files_sub)';
-beta(:,iTerm) = A\B;
-end 
+B = Theta(:,Files_sub)';
+beta = A\B; 
 beta = beta';
 
 Tab = table(Terms);
@@ -75,6 +73,7 @@ indSign = S(1:finalTerm);                                                   % se
 Phi_all = File.term;                                                        % extract all terms into a vector
 Phi     = Phi_all(:,indSign);                                               % select only signficant terms
 y_model = Phi*theta_test{iFile};                                            % model NARMAX output
+RMSE(iFile) = sqrt(mean((File.y_narx - y_model).^2));                                        % Root Mean Squared Error
 %% Compare outputs
 indPlot = [1:500];
 figure('Name','Modelled output','NumberTitle','off');

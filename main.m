@@ -148,7 +148,7 @@ end
 AEER  = round(AEER_mm(1:finalTerm,1)*100,3);
 Table_all = addvars(Tab,AEER,'NewVariableNames',{'AEER($\%$)'})
 tableName = ['Thetas_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T)];
-% table2latex(Table_all,tableName);
+table2latex(Table_all,tableName);
 %% 
 L2 = round(finalTerm/2);
 figure('Name','Internal parameters','NumberTitle','off');
@@ -164,8 +164,23 @@ matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
             false, 'height', '6cm', 'width','12cm','checkForUpdates',false);
 
 
-% SVD analysis on the regressor structure to get the sensitivity to
+%% SVD analysis on the regressor structure to get the sensitivity to
 % parameter perturbation
+
+%% Direct estimation of polynomial coefficients
+load('External_parameters');
+L_cut_all = [values{1}(:, 9);values{2}(:, 9)];
+D_rlx_all = [values{1}(:,11);values{2}(:,11)];
+A_imp_all = [values{1}(:, 6);values{2}(:, 6)];
+V_imp_all = [values{1}(:, 7);values{2}(:, 7)];
+
+
+x = L_cut_all(iFile,1);
+y = D_rlx_all(iFile,1);
+id = ones(size(x));
+v = [id x y x*y x^2 y^2];
+A = v(ones(8,1),:);
+
 %% Store data in table
 workspaceName = ['OLS_results_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.mat'];
 save(workspaceName,'Theta','Terms','Files','finalTerm','T','n_y','n_u','S');

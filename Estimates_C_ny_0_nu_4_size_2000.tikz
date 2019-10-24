@@ -34,85 +34,7 @@ legend style={legend cell align=left,align=left,draw=white!15!black}
 \begin{axis}[%
 width=2.306487cm,
 height=2.511628cm,
-at={(4cm,4cm)},
-scale only axis,
-xmin=0,
-xmax=10,
-xlabel={Dataset index},
-ymin=0,
-ymax=600,
-ylabel={$x_3$},
-legend style={legend cell align=left,align=left,draw=white!15!black}
-]
-\addplot [color=mycolor1,line width=2.0pt,only marks,mark=o,mark options={solid},forget plot]
-  table[row sep=crcr]{%
-1	75.4245651900459\\
-2	59.5782863482935\\
-4	33.0003406266977\\
-5	26.0569470415911\\
-6	508.93731875208\\
-7	419.53506953587\\
-9	242.35439857544\\
-10	195.15231965962\\
-};
-\end{axis}
-
-\begin{axis}[%
-width=2.306487cm,
-height=2.511628cm,
-at={(12cm,4cm)},
-scale only axis,
-xmin=0,
-xmax=10,
-xlabel={Dataset index},
-ymin=-0.5,
-ymax=1,
-ylabel={$x_1,x_1$},
-legend style={legend cell align=left,align=left,draw=white!15!black}
-]
-\addplot [color=mycolor1,line width=2.0pt,only marks,mark=o,mark options={solid},forget plot]
-  table[row sep=crcr]{%
-1	0.00740370360905991\\
-2	-0.186626587578763\\
-4	-0.150607769785267\\
-5	-0.216975707230133\\
-6	0.0527524251509314\\
-7	-0.475927501616939\\
-9	0.435130634728223\\
-10	0.76117565090573\\
-};
-\end{axis}
-
-\begin{axis}[%
-width=2.306487cm,
-height=2.511628cm,
-at={(0cm,4cm)},
-scale only axis,
-xmin=0,
-xmax=10,
-xlabel={Dataset index},
-ymin=-200,
-ymax=0,
-ylabel={$x_4,x_4$},
-legend style={legend cell align=left,align=left,draw=white!15!black}
-]
-\addplot [color=mycolor1,line width=2.0pt,only marks,mark=o,mark options={solid},forget plot]
-  table[row sep=crcr]{%
-1	-26.0353957891804\\
-2	-20.9879322169279\\
-4	-10.6920630070547\\
-5	-10.9569379219045\\
-6	-191.779551108501\\
-7	-157.643535964989\\
-9	-87.4196213968237\\
-10	-69.8013569503948\\
-};
-\end{axis}
-
-\begin{axis}[%
-width=2.306487cm,
-height=2.511628cm,
-at={(8cm,4cm)},
+at={(6.069704cm,3.488372cm)},
 scale only axis,
 xmin=0,
 xmax=10,
@@ -138,33 +60,111 @@ legend style={legend cell align=left,align=left,draw=white!15!black}
 \begin{axis}[%
 width=2.306487cm,
 height=2.511628cm,
-at={(8cm,0cm)},
+at={(9.104556cm,3.488372cm)},
 scale only axis,
 xmin=0,
 xmax=10,
 xlabel={Dataset index},
-ymin=-2000,
-ymax=0,
-ylabel={$c$},
+ymin=-0.5,
+ymax=1,
+ylabel={$x_1,x_1$},
 legend style={legend cell align=left,align=left,draw=white!15!black}
 ]
 \addplot [color=mycolor1,line width=2.0pt,only marks,mark=o,mark options={solid},forget plot]
   table[row sep=crcr]{%
-1	-233.157966898601\\
-2	-200.830593420783\\
-4	-93.7391747783605\\
-5	-119.696332564413\\
-6	-1805.89673785913\\
-7	-1488.55090215304\\
-9	-803.703476355143\\
-10	-648.796609601896\\
+1	0.00740370360905991\\
+2	-0.186626587578763\\
+4	-0.150607769785267\\
+5	-0.216975707230133\\
+6	0.0527524251509314\\
+7	-0.475927501616939\\
+9	0.435130634728223\\
+10	0.76117565090573\\
 };
 \end{axis}
 
 \begin{axis}[%
 width=2.306487cm,
 height=2.511628cm,
-at={(12cm,0cm)},
+at={(3.034852cm,3.488372cm)},
+scale only axis,
+xmin=0,
+xmax=10,
+xlabel={Dataset index},
+ymin=0,
+ymax=600,
+ylabel={$x_3$},
+legend style={legend cell align=left,align=left,draw=white!15!black}
+]
+\addplot [color=mycolor1,line width=2.0pt,only marks,mark=o,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+1	75.4245651900459\\
+2	59.5782863482935\\
+4	33.0003406266977\\
+5	26.0569470415911\\
+6	508.93731875208\\
+7	419.53506953587\\
+9	242.35439857544\\
+10	195.15231965962\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=2.306487cm,
+height=2.511628cm,
+at={(0cm,3.488372cm)},
+scale only axis,
+xmin=0,
+xmax=10,
+xlabel={Dataset index},
+ymin=-200,
+ymax=0,
+ylabel={$x_4,x_4$},
+legend style={legend cell align=left,align=left,draw=white!15!black}
+]
+\addplot [color=mycolor1,line width=2.0pt,only marks,mark=o,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+1	-26.0353957891804\\
+2	-20.9879322169279\\
+4	-10.6920630070547\\
+5	-10.9569379219045\\
+6	-191.779551108501\\
+7	-157.643535964989\\
+9	-87.4196213968237\\
+10	-69.8013569503948\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=2.306487cm,
+height=2.511628cm,
+at={(3.034852cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=10,
+xlabel={Dataset index},
+ymin=-1500,
+ymax=0,
+ylabel={$x_4$},
+legend style={legend cell align=left,align=left,draw=white!15!black}
+]
+\addplot [color=mycolor1,line width=2.0pt,only marks,mark=o,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+1	-171.244880190644\\
+2	-139.217460396701\\
+4	-69.6051966848396\\
+5	-73.6870961160989\\
+6	-1273.01999820883\\
+7	-1046.38133574319\\
+9	-579.722288788632\\
+10	-465.590859275979\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=2.306487cm,
+height=2.511628cm,
+at={(9.104556cm,0cm)},
 scale only axis,
 xmin=0,
 xmax=10,
@@ -190,26 +190,26 @@ legend style={legend cell align=left,align=left,draw=white!15!black}
 \begin{axis}[%
 width=2.306487cm,
 height=2.511628cm,
-at={(4cm,0cm)},
+at={(6.069704cm,0cm)},
 scale only axis,
 xmin=0,
 xmax=10,
 xlabel={Dataset index},
-ymin=-1500,
+ymin=-2000,
 ymax=0,
-ylabel={$x_4$},
+ylabel={$c$},
 legend style={legend cell align=left,align=left,draw=white!15!black}
 ]
 \addplot [color=mycolor1,line width=2.0pt,only marks,mark=o,mark options={solid},forget plot]
   table[row sep=crcr]{%
-1	-171.244880190644\\
-2	-139.217460396701\\
-4	-69.6051966848396\\
-5	-73.6870961160989\\
-6	-1273.01999820883\\
-7	-1046.38133574319\\
-9	-579.722288788632\\
-10	-465.590859275979\\
+1	-233.157966898601\\
+2	-200.830593420783\\
+4	-93.7391747783605\\
+5	-119.696332564413\\
+6	-1805.89673785913\\
+7	-1488.55090215304\\
+9	-803.703476355143\\
+10	-648.796609601896\\
 };
 \end{axis}
 \end{tikzpicture}%

@@ -86,7 +86,7 @@
       <file>report_narmax-blx.bib</file>
     </requires>
     <requires type="editable">
-      <file>Bibliography-thesis.bib</file>
+      <file>bibliography.bib</file>
     </requires>
     <requires type="static">
       <file>biblatex.bst</file>

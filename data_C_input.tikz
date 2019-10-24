@@ -7,7 +7,7 @@
 
 \begin{axis}[%
 width=11.411043cm,
-height=5cm,
+height=4cm,
 at={(0cm,0cm)},
 scale only axis,
 xmin=1,

@@ -117,7 +117,7 @@ view(az,el)
 end
 % legend('Foam 1','Foam 2');
 %%
-tikzName = ['Theta_surfaces_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
-cleanfigure;
-matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-            false, 'height', '20cm', 'width','12cm','checkForUpdates',false);
+% tikzName = ['Theta_surfaces_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
+% cleanfigure;
+% matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+%             false, 'height', '20cm', 'width','12cm','checkForUpdates',false);

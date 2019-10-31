@@ -168,6 +168,13 @@ matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
 % parameter perturbation
 
 %% Direct estimation of polynomial coefficients
+fileName = ['Dict_',dataset,num2str(iFile)];
+File = matfile(fileName,'Writable',true);
+indSign = S(1:finalTerm);                                                   % select the indeces of significant terms from the ordered set
+Phi_all = File.term;                                                        % extract all terms into a vector
+Phi     = Phi_all(:,indSign);                                               % select only signficant terms
+
+
 load('External_parameters');
 L_cut_all = [values{1}(:, 9);values{2}(:, 9)];
 D_rlx_all = [values{1}(:,11);values{2}(:,11)];
@@ -178,8 +185,8 @@ V_imp_all = [values{1}(:, 7);values{2}(:, 7)];
 x = L_cut_all(iFile,1);
 y = D_rlx_all(iFile,1);
 id = ones(size(x));
-v = [id x y x*y x^2 y^2];
-A = v(ones(8,1),:);
+A = [id x y x.*y x.^2 y.^2];
+
 
 %% Store data in table
 workspaceName = ['OLS_results_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.mat'];

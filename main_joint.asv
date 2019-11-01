@@ -9,7 +9,7 @@ fileNames   = sym(dict_set,[1 K]);                                          % ve
 T = 2000;
 %% Select first significant basis vector for all datasets
 index = (1:T);                                                              % length of the sample
-Files =  [1 2 4 5 6 7]; % 1:K; %                                       % id of the sample
+Files =  [1 2 4 5 6 7 9 10]; % 1:K; %                                       % id of the sample
 K = length(Files);
 iTerm = 1;                                                                  % the first significant term
 AEER{iTerm} = zeros(nTerms,1);                                              % placeholder for AERR criteria
@@ -123,6 +123,8 @@ I = eye(finalTerm);                                                         % un
 Kr = kron(A,I);
 M  = Phi_bar*Kr;                                                            % LS matrix - increased dimension does not guarantee increase in rank
 B_bar = M\Y_bar;
+L = size(A,2);
+Betas = reshape(B_bar,[finalTerm,L]);
 %% Create column of names
 finalTerm = i_min;
 for iTerm=1:finalTerm
@@ -139,28 +141,44 @@ end
 %% Store to table
 Step = [1:finalTerm]';
 Tab = table(Step,Terms);
-for iFile=Files
-    Parameters = round(Theta(:,iFile),2);
-    varName = [dataset,num2str(iFile)];
+for iBeta=1:L
+    Parameters = round(Betas(:,iBeta),2);
+    varName = '$\beta_{',num2str(iBeta-1),'}$';
     Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
 end
-
-AEER  = round(AEER_mm(1:finalTerm,1)*100,3);
-Table_all = addvars(Tab,AEER,'NewVariableNames',{'AEER($\%$)'})
-tableName = ['Thetas_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T)];
+Table_all = Tab
+tableName = ['Betas_direct_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T)];
 table2latex(Table_all,tableName);
-%% 
-L2 = round(finalTerm/2);
-figure('Name','Internal parameters','NumberTitle','off');
-for iFig=1:finalTerm
-    subplot(2,L2,iFig)
-    plot(Files,Theta(iFig,Files),'o','LineWidth',2); hold on;
-    ylabel(Terms{iFig,1});
-    xlabel('Dataset index');
+%% Validate the model
+testFiles = [3 8];
+for iFile = testFiles
+L_test = L_cut_all(iFile,1);
+D_test = D_rlx_all(iFile,1);
+for iTerm = 1:finalTerm
+    theta_test{iFile}(iTerm,1) = g(cfs(iTerm,1),cfs(iTerm,2),cfs(iTerm,3),cfs(iTerm,4),cfs(iTerm,5),cfs(iTerm,6),L_test,D_test);
 end
-tikzName = ['Estimates_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
+fileName  = ['Dict_',dataset,num2str(iFile)];
+File      = matfile(fileName,'Writable',true);
+indSign   = S(1:finalTerm);                                                 % select the indeces of significant terms from the ordered set
+Phi_file  = File.term(times,:);                                             % extract all terms into a vector - cannot reorder directly in files
+Phi       = Phi_file(times,indSign);                                        % select only signficant terms
+y_file    = File.y_narx(times,:);                                           % extract output
+y_model   = Phi*Betas*;                                          % model NARMAX output
+RMSE(iFile) = sqrt(mean((File.y_narx - y_model).^2));                       % Root Mean Squared Error
+%% Compare outputs
+indPlot = [1:500];
+figure('Name','Modelled output','NumberTitle','off');
+colormap(my_map);
+plot(indPlot+File.t_0,File.y_narx(indPlot,1)); hold on;
+plot(indPlot+File.t_0,y_model(indPlot,1),'--'); hold on;
+legend('True output','Generated output');
+
+tikzName = ['Gen_y_direct_',dataset,num2str(iFile),'_size_',num2str(T),'.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
             false, 'height', '6cm', 'width','12cm','checkForUpdates',false);
+        
+clear File Phi_all Phi y_model
+end
 
 

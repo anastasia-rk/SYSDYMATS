@@ -1,7 +1,7 @@
 my_init
 %% Load estimated thetas
 dataset = 'C'; % 'D';
-n_y = 0;
+n_y = 4;
 n_u = 4;
 T = 2000;
 fileName = ['OLS_results_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.mat'];
@@ -30,13 +30,6 @@ z = Theta(iTerm,Files_sub)';
 [ft{iTerm},gof{iTerm},outp{iTerm}]= fit([x,y],z,g);
 cfs(iTerm,:) = coeffvalues(ft{iTerm});
 end
-Tab = table(Terms);
-for iCoeff = 1:size(cfs,2)
-    Parameters = round(cfs(:,iCoeff),2);
-    varName = ['$\beta_',num2str(iCoeff-1),'$'];
-    Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
-end
-Table_coeffs_nls = Tab
 %% Estimate coefficients with LS
 id = ones(size(x));                                                         % create unit vector for constants
 A = [id x y x.*y x.^2 y.^2];                                                % create the matrix for ls

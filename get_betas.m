@@ -1,10 +1,13 @@
 my_init
 %% Load estimated thetas
-dataset = 'C'; % 'D';
-n_y = 0;
-n_u = 4;
+dataset = 'C'; % 'D'; %
+metaFileName = ['Meta_',dataset];
+load(metaFileName);
 T = 2000;
-fileName = ['OLS_results_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.mat'];
+folder = 'Results';                                                         % specify category where to save files
+names = {'set','ny','nu'};                                                  % names used to define results folder name (no more than 3).
+folderName = make_folder(folder,names,dataset,n_y,n_u);                     % create results folder
+fileName = [folderName,'/OLS_results_T_',num2str(T),'.mat'];
 load(fileName);
 %% Create matrices for fitting
 load('External_parameters');
@@ -56,8 +59,8 @@ for iCoeff = 1:size(beta,2)
 end
 Table_coeffs_ls = Tab
 %% Save table to tex
-tableName = ['Betas_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T)];
-% table2latex(Table_coeffs_ls,tableName);
+tableName = [folderName,'/Betas_T_',num2str(T)];
+table2latex(Table_coeffs_ls,tableName);
 
 %% Compute parameters for validation
 testFiles = [3 8];
@@ -67,8 +70,8 @@ D_test = D_rlx_all(iFile,1);
 for iTerm = 1:finalTerm
     theta_test{iFile}(iTerm,1) = g(cfs(iTerm,1),cfs(iTerm,2),cfs(iTerm,3),cfs(iTerm,4),cfs(iTerm,5),cfs(iTerm,6),L_test,D_test);
 end
-fileName = ['Dict_',dataset,num2str(iFile)];
-File = matfile(fileName,'Writable',true);
+fName = [dictFolder,'/Dict_',dataset,num2str(iFile)];
+File = matfile(fName,'Writable',true);
 indSign = S(1:finalTerm);                                                   % select the indeces of significant terms from the ordered set
 Phi_all = File.term;                                                        % extract all terms into a vector
 Phi     = Phi_all(:,indSign);                                               % select only signficant terms
@@ -82,15 +85,14 @@ plot(indPlot+File.t_0,File.y_narx(indPlot,1)); hold on;
 plot(indPlot+File.t_0,y_model(indPlot,1),'--'); hold on;
 legend('True output','Generated output');
 
-tikzName = ['Generated_output_',dataset,num2str(iFile),'_size_',num2str(T),'.tikz'];
+tikzName = [folderName,'/',dataset,num2str(iFile),'_Gen_y_T_',num2str(T),'.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
             false, 'height', '6cm', 'width','12cm','checkForUpdates',false);
         
 clear File Phi_all Phi y_model
 end
-        %%
-% finalTerm = 8;
+%%
 index1 = find(Files <=5);
 index2 = find(Files > 5);
 az = -140;
@@ -115,9 +117,7 @@ ylabel('$D_{rlx}$');
 zlabel(Terms{iTerm});
 view(az,el)
 end
-% legend('Foam 1','Foam 2');
-%%
-% tikzName = ['Theta_surfaces_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T),'.tikz'];
-% cleanfigure;
-% matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-%             false, 'height', '20cm', 'width','12cm','checkForUpdates',false);
+tikzName = [folderName,'/Theta_surfaces_T_',num2str(T),'.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '20cm', 'width','12cm','checkForUpdates',false);

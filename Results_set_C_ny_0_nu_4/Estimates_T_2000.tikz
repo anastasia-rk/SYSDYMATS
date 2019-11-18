@@ -1,0 +1,254 @@
+% This file was created by matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=2.306cm,
+height=2.512cm,
+at={(0cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=10,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-200,
+ymax=0,
+ylabel style={font=\color{white!15!black}},
+ylabel={$x_4,x_4$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+  table[row sep=crcr]{%
+1	-26.0353957891804\\
+2	-20.9879322169279\\
+4	-10.6920630070547\\
+5	-10.9569379219045\\
+6	-191.779551108501\\
+7	-157.643535964989\\
+9	-87.4196213968237\\
+10	-69.8013569503948\\
+};
+\addlegendentry{data1}
+
+\end{axis}
+
+\begin{axis}[%
+width=2.306cm,
+height=2.512cm,
+at={(3.035cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=10,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=0,
+ymax=600,
+ylabel style={font=\color{white!15!black}},
+ylabel={$x_3$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+  table[row sep=crcr]{%
+1	75.4245651900459\\
+2	59.5782863482935\\
+4	33.0003406266977\\
+5	26.0569470415911\\
+6	508.93731875208\\
+7	419.53506953587\\
+9	242.35439857544\\
+10	195.15231965962\\
+};
+\addlegendentry{data1}
+
+\end{axis}
+
+\begin{axis}[%
+width=2.306cm,
+height=2.512cm,
+at={(6.07cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=10,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=0,
+ymax=10,
+ylabel style={font=\color{white!15!black}},
+ylabel={$x_1,x_4$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+  table[row sep=crcr]{%
+1	0.616147082677301\\
+2	0.756244217181634\\
+4	0.315136730386088\\
+5	0.479225561787365\\
+6	8.54895561081077\\
+7	7.8265872893112\\
+9	2.65659919911432\\
+10	1.15263735041756\\
+};
+\addlegendentry{data1}
+
+\end{axis}
+
+\begin{axis}[%
+width=2.306cm,
+height=2.512cm,
+at={(9.105cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=10,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-0.5,
+ymax=1,
+ylabel style={font=\color{white!15!black}},
+ylabel={$x_1,x_1$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+  table[row sep=crcr]{%
+1	0.00740370360905991\\
+2	-0.186626587578763\\
+4	-0.150607769785267\\
+5	-0.216975707230133\\
+6	0.0527524251509314\\
+7	-0.475927501616939\\
+9	0.435130634728223\\
+10	0.76117565090573\\
+};
+\addlegendentry{data1}
+
+\end{axis}
+
+\begin{axis}[%
+width=2.306cm,
+height=2.512cm,
+at={(0cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=10,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-2.23969084196957,
+ymax=45.9418866067325,
+ylabel style={font=\color{white!15!black}},
+ylabel={$x_2$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+  table[row sep=crcr]{%
+1	0.706917161850943\\
+2	-0.725188933625476\\
+4	-2.23969084196957\\
+5	-0.663995623424443\\
+6	45.9418866067325\\
+7	36.5734993512285\\
+9	18.3955084875498\\
+10	12.6775369279536\\
+};
+\addlegendentry{data1}
+
+\end{axis}
+
+\begin{axis}[%
+width=2.306cm,
+height=2.512cm,
+at={(3.035cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=10,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-1500,
+ymax=0,
+ylabel style={font=\color{white!15!black}},
+ylabel={$x_4$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+  table[row sep=crcr]{%
+1	-171.244880190644\\
+2	-139.217460396701\\
+4	-69.6051966848396\\
+5	-73.6870961160989\\
+6	-1273.01999820883\\
+7	-1046.38133574319\\
+9	-579.722288788632\\
+10	-465.590859275979\\
+};
+\addlegendentry{data1}
+
+\end{axis}
+
+\begin{axis}[%
+width=2.306cm,
+height=2.512cm,
+at={(6.07cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=10,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-2000,
+ymax=0,
+ylabel style={font=\color{white!15!black}},
+ylabel={$c$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+  table[row sep=crcr]{%
+1	-233.157966898601\\
+2	-200.830593420783\\
+4	-93.7391747783605\\
+5	-119.696332564413\\
+6	-1805.89673785913\\
+7	-1488.55090215304\\
+9	-803.703476355143\\
+10	-648.796609601896\\
+};
+\addlegendentry{data1}
+
+\end{axis}
+
+\begin{axis}[%
+width=2.306cm,
+height=2.512cm,
+at={(9.105cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=10,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=0,
+ymax=110.131370256376,
+ylabel style={font=\color{white!15!black}},
+ylabel={$x_3,x_4$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+  table[row sep=crcr]{%
+1	15.4680684467597\\
+2	12.0981268654473\\
+4	6.35969255839677\\
+5	5.67589105085895\\
+6	110.131370256376\\
+7	90.4271696447197\\
+9	51.7720891508705\\
+10	41.4264697981385\\
+};
+\addlegendentry{data1}
+
+\end{axis}
+\end{tikzpicture}%

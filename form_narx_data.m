@@ -9,6 +9,9 @@ n_y     = 0;                                                                % ou
 d       = n_y + n_u;                                                        % size of input vector x
 lambda  = 2;                                                                % order of polynomial
 a       = sym('x_',[1 d]);                                                  % associated symbolic vector
+folder = 'Dictionaries';                                                    % specify category where to save files
+names = {'set','ny','nu'};                                                  % names used to define results folder name (no more than 3).
+folderName = make_folder(folder,names,dataset,n_y,n_u);                     % create results folder
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Identify difference in lag
 diff = n_u - n_y;                                                           % difference between lags
@@ -85,11 +88,12 @@ iTerm = iTerm + 1;
 term(:,iTerm) = 1;
 symb_term{iTerm} = sym('c');
 disp('Dictionary complete')
-fileName = ['dict_',dataset,num2str(iFile),'.mat'];
+fileName = [folderName,'/dict_',dataset,num2str(iFile),'.mat'];
 save(fileName, 'term','x_narx','y_narx','nNarx','t_0','-v7.3');
 clear term x_narx y_narx
 end                                                                         % end loop over files
+dictFolder = folderName;                                                    % folder from which I take dictionaties
 nTerms = iTerm;                                                             % total number of regressors in the polynomial
 dict_terms = [1:nTerms];                                                    % dictionary of all terms
 fileMeta = ['Meta_',dataset];
-save(fileMeta, 'nTerms','nNarx','symb_term','dict_terms','indeces','lambda','n_y','n_u','K','-v7.3');   % save metadata
+save(fileMeta,'dictFolder','nTerms','nNarx','symb_term','dict_terms','indeces','lambda','n_y','n_u','K','-v7.3');   % save metadata

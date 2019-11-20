@@ -1,9 +1,9 @@
 my_init
 %% Load estimated thetas
-dataset = 'C'; % 'D'; %
+dataset = 'C'; % 'D'; % 
 metaFileName = ['Meta_',dataset];
 load(metaFileName);
-T = 2000;
+T = 4000;
 folder = 'Results';                                                         % specify category where to save files
 names = {'set','ny','nu'};                                                  % names used to define results folder name (no more than 3).
 folderName = make_folder(folder,names,dataset,n_y,n_u);                     % create results folder
@@ -63,7 +63,9 @@ tableName = [folderName,'/Betas_T_',num2str(T)];
 table2latex(Table_coeffs_ls,tableName);
 
 %% Compute parameters for validation
-testFiles = [3 8];
+testFiles   = [3 8];
+TextName    = [folderName,'/RMSEs_T_',num2str(T),'.txt'];
+TextSpec    = 'RMSE for set %d is  %3.2f \n';
 for iFile = testFiles
 L_test = L_cut_all(iFile,1);
 D_test = D_rlx_all(iFile,1);
@@ -76,7 +78,9 @@ indSign = S(1:finalTerm);                                                   % se
 Phi_all = File.term;                                                        % extract all terms into a vector
 Phi     = Phi_all(:,indSign);                                               % select only signficant terms
 y_model = Phi*theta_test{iFile};                                            % model NARMAX output
-RMSE(iFile) = sqrt(mean((File.y_narx - y_model).^2));                                        % Root Mean Squared Error
+RMSE(iFile) = sqrt(mean((File.y_narx - y_model).^2));                       % Root Mean Squared Error
+TextFile    = fopen(TextName,'a');
+fprintf(TextFile,TextSpec,[iFile, RMSE(iFile)]);
 %% Compare outputs
 indPlot = [1:500];
 figure('Name','Modelled output','NumberTitle','off');
@@ -88,7 +92,7 @@ legend('True output','Generated output');
 tikzName = [folderName,'/',dataset,num2str(iFile),'_Gen_y_T_',num2str(T),'.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-            false, 'height', '6cm', 'width','12cm','checkForUpdates',false);
+            false, 'height', '4cm', 'width','12cm','checkForUpdates',false);
         
 clear File Phi_all Phi y_model
 end
@@ -99,8 +103,8 @@ az = -140;
 el =   50;
 figure('Name','Parameter surfaces','NumberTitle','off');
 colormap(my_map);
-L2 = round(finalTerm/2);
-for iTerm=1:finalTerm
+L2 = 4; % round(finalTerm/2); % Only display surfaces for first 8 parameters
+for iTerm=1:8
 subplot(L2,2,iTerm);
 z = Theta(iTerm,Files)'; 
 scatter3(L_cut_all(Files(index1)),D_rlx_all(Files(index1)),z(index1),'filled','LineWidth',5); hold on;
@@ -120,4 +124,4 @@ end
 tikzName = [folderName,'/Theta_surfaces_T_',num2str(T),'.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-            false, 'height', '20cm', 'width','12cm','checkForUpdates',false);
+            false, 'height', '16cm', 'width','15cm','checkForUpdates',false);

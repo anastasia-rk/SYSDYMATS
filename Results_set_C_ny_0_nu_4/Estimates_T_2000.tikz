@@ -17,10 +17,9 @@ ymin=-200,
 ymax=0,
 ylabel style={font=\color{white!15!black}},
 ylabel={$x_4,x_4$},
-axis background/.style={fill=white},
-legend style={legend cell align=left, align=left, draw=white!15!black}
+axis background/.style={fill=white}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
   table[row sep=crcr]{%
 1	-26.0353957891804\\
 2	-20.9879322169279\\
@@ -31,8 +30,6 @@ legend style={legend cell align=left, align=left, draw=white!15!black}
 9	-87.4196213968237\\
 10	-69.8013569503948\\
 };
-\addlegendentry{data1}
-
 \end{axis}
 
 \begin{axis}[%
@@ -48,10 +45,9 @@ ymin=0,
 ymax=600,
 ylabel style={font=\color{white!15!black}},
 ylabel={$x_3$},
-axis background/.style={fill=white},
-legend style={legend cell align=left, align=left, draw=white!15!black}
+axis background/.style={fill=white}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
   table[row sep=crcr]{%
 1	75.4245651900459\\
 2	59.5782863482935\\
@@ -62,8 +58,6 @@ legend style={legend cell align=left, align=left, draw=white!15!black}
 9	242.35439857544\\
 10	195.15231965962\\
 };
-\addlegendentry{data1}
-
 \end{axis}
 
 \begin{axis}[%
@@ -79,10 +73,9 @@ ymin=0,
 ymax=10,
 ylabel style={font=\color{white!15!black}},
 ylabel={$x_1,x_4$},
-axis background/.style={fill=white},
-legend style={legend cell align=left, align=left, draw=white!15!black}
+axis background/.style={fill=white}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
   table[row sep=crcr]{%
 1	0.616147082677301\\
 2	0.756244217181634\\
@@ -93,8 +86,6 @@ legend style={legend cell align=left, align=left, draw=white!15!black}
 9	2.65659919911432\\
 10	1.15263735041756\\
 };
-\addlegendentry{data1}
-
 \end{axis}
 
 \begin{axis}[%
@@ -110,10 +101,9 @@ ymin=-0.5,
 ymax=1,
 ylabel style={font=\color{white!15!black}},
 ylabel={$x_1,x_1$},
-axis background/.style={fill=white},
-legend style={legend cell align=left, align=left, draw=white!15!black}
+axis background/.style={fill=white}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
   table[row sep=crcr]{%
 1	0.00740370360905991\\
 2	-0.186626587578763\\
@@ -124,8 +114,6 @@ legend style={legend cell align=left, align=left, draw=white!15!black}
 9	0.435130634728223\\
 10	0.76117565090573\\
 };
-\addlegendentry{data1}
-
 \end{axis}
 
 \begin{axis}[%
@@ -141,10 +129,9 @@ ymin=-2.23969084196957,
 ymax=45.9418866067325,
 ylabel style={font=\color{white!15!black}},
 ylabel={$x_2$},
-axis background/.style={fill=white},
-legend style={legend cell align=left, align=left, draw=white!15!black}
+axis background/.style={fill=white}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
   table[row sep=crcr]{%
 1	0.706917161850943\\
 2	-0.725188933625476\\
@@ -155,8 +142,6 @@ legend style={legend cell align=left, align=left, draw=white!15!black}
 9	18.3955084875498\\
 10	12.6775369279536\\
 };
-\addlegendentry{data1}
-
 \end{axis}
 
 \begin{axis}[%
@@ -172,10 +157,9 @@ ymin=-1500,
 ymax=0,
 ylabel style={font=\color{white!15!black}},
 ylabel={$x_4$},
-axis background/.style={fill=white},
-legend style={legend cell align=left, align=left, draw=white!15!black}
+axis background/.style={fill=white}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
   table[row sep=crcr]{%
 1	-171.244880190644\\
 2	-139.217460396701\\
@@ -186,8 +170,6 @@ legend style={legend cell align=left, align=left, draw=white!15!black}
 9	-579.722288788632\\
 10	-465.590859275979\\
 };
-\addlegendentry{data1}
-
 \end{axis}
 
 \begin{axis}[%
@@ -203,10 +185,9 @@ ymin=-2000,
 ymax=0,
 ylabel style={font=\color{white!15!black}},
 ylabel={$c$},
-axis background/.style={fill=white},
-legend style={legend cell align=left, align=left, draw=white!15!black}
+axis background/.style={fill=white}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
   table[row sep=crcr]{%
 1	-233.157966898601\\
 2	-200.830593420783\\
@@ -217,8 +198,6 @@ legend style={legend cell align=left, align=left, draw=white!15!black}
 9	-803.703476355143\\
 10	-648.796609601896\\
 };
-\addlegendentry{data1}
-
 \end{axis}
 
 \begin{axis}[%
@@ -234,10 +213,9 @@ ymin=0,
 ymax=110.131370256376,
 ylabel style={font=\color{white!15!black}},
 ylabel={$x_3,x_4$},
-axis background/.style={fill=white},
-legend style={legend cell align=left, align=left, draw=white!15!black}
+axis background/.style={fill=white}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
   table[row sep=crcr]{%
 1	15.4680684467597\\
 2	12.0981268654473\\
@@ -248,7 +226,5 @@ legend style={legend cell align=left, align=left, draw=white!15!black}
 9	51.7720891508705\\
 10	41.4264697981385\\
 };
-\addlegendentry{data1}
-
 \end{axis}
 \end{tikzpicture}%

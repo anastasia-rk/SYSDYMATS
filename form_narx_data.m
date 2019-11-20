@@ -1,6 +1,7 @@
 my_init;
 %% Set up global parameters
-dataset = 'D'; % 'C'; %                                                     % name of dataset
+foamset = 'foam_2010'; % 'foam_2019'
+dataset = 'C'; %  'D'; %                                                    % name of dataset
 iFile   = 1;                                                                % id of the sample
 K       = 10;                                                               % number of datasets
 % Length of input and output lags
@@ -97,3 +98,5 @@ nTerms = iTerm;                                                             % to
 dict_terms = [1:nTerms];                                                    % dictionary of all terms
 fileMeta = ['Meta_',dataset];
 save(fileMeta,'dictFolder','nTerms','nNarx','symb_term','dict_terms','indeces','lambda','n_y','n_u','K','-v7.3');   % save metadata
+fileMeta = [folderName,'/Meta_',dataset];
+save(fileMeta,'dictFolder','nTerms','nNarx','symb_term','dict_terms','indeces','lambda','n_y','n_u','K','-v7.3');

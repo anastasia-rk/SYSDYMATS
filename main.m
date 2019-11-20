@@ -1,10 +1,10 @@
 my_init;
 
-dataset =  'D'; % 'C'; %                                                    % name of dataset
+dataset = 'C'; % 'D'; %                                                     % name of dataset
 metaFileName = ['Meta_',dataset];
 load(metaFileName);
 d       = n_y + n_u;                                                        % size of input vector x
-T = 2000;
+T = 4000;
 dict_set = ['dict_',dataset];                                   % 
 fileNames = sym(dict_set,[1 K]);                                            % vector of filenames
 folder = 'Results';                                                         % specify category where to save files
@@ -111,7 +111,7 @@ ylabel('AAMDL')
 tikzName = [folderName,'/AAMDL_T_',num2str(T),'.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-            false, 'height', '6cm', 'width','6cm','checkForUpdates',false);
+            false, 'height', '4cm', 'width','6cm','checkForUpdates',false);
 %% Create column of names
 finalTerm = i_min;
 for iTerm=1:finalTerm

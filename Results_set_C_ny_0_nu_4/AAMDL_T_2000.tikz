@@ -7,7 +7,7 @@
 
 \begin{axis}[%
 width=5.706cm,
-height=6cm,
+height=4cm,
 at={(0cm,0cm)},
 scale only axis,
 xmin=1,
@@ -18,10 +18,9 @@ ymin=-3.1,
 ymax=-2.1,
 ylabel style={font=\color{white!15!black}},
 ylabel={AAMDL},
-axis background/.style={fill=white},
-legend style={legend cell align=left, align=left, draw=white!15!black}
+axis background/.style={fill=white}
 ]
-\addplot [color=mycolor1, draw=none, mark=o, mark options={solid, mycolor1}]
+\addplot [color=mycolor1, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
   table[row sep=crcr]{%
 1	-2.11570305645112\\
 2	-2.79305839626823\\
@@ -39,13 +38,9 @@ legend style={legend cell align=left, align=left, draw=white!15!black}
 14	-2.99552868329925\\
 15	-2.99382083512231\\
 };
-\addlegendentry{data1}
-
-\addplot [color=mycolor2, line width=5.0pt, draw=none, mark=asterisk, mark options={solid, mycolor2}]
+\addplot [color=mycolor2, line width=5.0pt, draw=none, mark=asterisk, mark options={solid, mycolor2}, forget plot]
   table[row sep=crcr]{%
 8	-3.00104696019893\\
 };
-\addlegendentry{data2}
-
 \end{axis}
 \end{tikzpicture}%

@@ -1,6 +1,6 @@
 my_init;
 
-dataset =  'C'; %  'D'; %                                                   % name of dataset
+dataset = 'D'; % 'C'; %                                                     % name of dataset
 metaFileName = ['Meta_',dataset];
 load(metaFileName);
 d           = n_y + n_u;                                                    % size of input vector x

@@ -1,11 +1,13 @@
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
+
 \documentclass[a4paper,11pt,twoside]{article}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % A generic report compiler for publishing rables and plots for a partcular choise of lags in the NARX system
 % A path to media corresponding to the setting is defined below, as well as chosen parameter settings
 \makeatletter
-\def\input@path{{../Results_set_C_ny_0_nu_4/}}
+\def\input@path{{../Results_set_C_ny_4_nu_4/}}
 \def\dataset{C}
-\def\ny{0}
+\def\ny{4}
 \def\nu{4}
 \def\order{2}
 \makeatother
@@ -29,8 +31,8 @@
 \usepackage{cancel}
 \usepackage[toc,page]{appendix}
 \usepackage{pgfplots}
-\pgfplotsset{every axis/.append style={line width=0.5pt},label style={font=\scriptsize},tick label style={font=\scriptsize},x tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={}},z tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={}}}
-\usetikzlibrary{shapes,shadows,arrows,backgrounds,patterns,positioning,automata,calc,decorations.markings,decorations.pathreplacing,bayesnet,arrows.meta}
+\pgfplotsset{every axis/.append style={line width=0.5pt},label style={font=\small},tick label style={font=\small},x tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={}},y tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={}},z tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={}},x label style={font={\small},at={(axis description cs:0.5,0.0)},anchor=north},y label style={font={\small},at={(axis description cs:0.05,0.5)},anchor=south},z label style={font={\small},at={(axis description cs:-0.25,0.5)},anchor=north}}
+\usetikzlibrary{shapes,shadows,arrows,backgrounds,patterns,positioning,automata,calc,decorations.markings,decorations.pathreplacing,bayesnet,arrows.meta} 
 \usepackage{varwidth}
 \usepackage{lscape}
 \usepackage{array} 
@@ -136,7 +138,7 @@
 
 \begin{document}
 	\maketitle
-\par Experimental data is described in the previous report
+\par Experimental data is described in the earlier reports. This report summarises the settings used for model identification and presents estimation and modelling results.
 \section{Structure identification}
 \par The following model structure is assumed. The output of the NARX model $\mathbfit{y}(t)$ is the measured load. The input vector is composed as
 \begin{equation}

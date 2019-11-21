@@ -2,7 +2,6 @@ my_init;
 %% Set up global parameters
 foamset = 'foam_2010'; % 'foam_2019'
 dataset = 'C'; %  'D'; %                                                    % name of dataset
-addpath(foamset)
 iFile   = 1;                                                                % id of the sample
 K       = 10;                                                               % number of datasets
 % Length of input and output lags
@@ -10,7 +9,7 @@ n_u     = 4;                                                                % in
 n_y     = 4;                                                                % output signal lag length
 d       = n_y + n_u;                                                        % size of input vector x
 lambda  = 2;                                                                % order of polynomial
-% a       = sym('x_',[1 d]);                                                  % associated symbolic vector
+a       = sym('x_',[1 d]);                                                  % associated symbolic vector
 folder = 'Dictionaries';                                                    % specify category where to save files
 names = {'set','ny','nu'};                                                  % names used to define results folder name (no more than 3).
 folderName = make_folder(folder,names,dataset,n_y,n_u);                     % create results folder
@@ -99,7 +98,8 @@ else
                 term(iNarx,iTerm) = regressor(x_narx(:,iNarx),...
                                               indeces{iLambda}(k,:));       % compute the regressor (numeric)
             end
-            symb_term{iTerm} = strcat(x_str{indeces{iLambda}(k,:)});        % dictionary of regressors (symbolic)
+            str_term{iTerm} = strcat(lastnames, {', '}, firstnames)
+            symb_term{iTerm} = a(indeces{iLambda}(k,:));                    % dictionary of regressors (symbolic)
         end
     end
 end

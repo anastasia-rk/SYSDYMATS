@@ -33,13 +33,13 @@ z = Theta(iTerm,Files_sub)';
 [ft{iTerm},gof{iTerm},outp{iTerm}]= fit([x,y],z,g);
 cfs(iTerm,:) = coeffvalues(ft{iTerm});
 end
-Tab = table(Terms);
-for iCoeff = 1:size(cfs,2)
-    Parameters = round(cfs(:,iCoeff),2);
-    varName = ['$\beta_',num2str(iCoeff-1),'$'];
-    Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
-end
-Table_coeffs_nls = Tab
+% Tab = table(Terms);
+% for iCoeff = 1:size(cfs,2)
+%     Parameters = round(cfs(:,iCoeff),2);
+%     varName = ['$\beta_',num2str(iCoeff-1),'$'];
+%     Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
+% end
+% Table_coeffs_nls = Tab
 %% Estimate coefficients with LS
 id = ones(size(x));                                                         % create unit vector for constants
 A = [id x y x.*y x.^2 y.^2];                                                % create the matrix for ls
@@ -66,6 +66,7 @@ table2latex(Table_coeffs_ls,tableName);
 testFiles   = [3 8];
 TextName    = [folderName,'/RMSEs_T_',num2str(T),'.txt'];
 TextSpec    = 'RMSE for set %d is  %3.2f \n';
+TextFile    = fopen(TextName,'w');
 for iFile = testFiles
 L_test = L_cut_all(iFile,1);
 D_test = D_rlx_all(iFile,1);
@@ -79,7 +80,6 @@ Phi_all = File.term;                                                        % ex
 Phi     = Phi_all(:,indSign);                                               % select only signficant terms
 y_model = Phi*theta_test{iFile};                                            % model NARMAX output
 RMSE(iFile) = sqrt(mean((File.y_narx - y_model).^2));                       % Root Mean Squared Error
-TextFile    = fopen(TextName,'a');
 fprintf(TextFile,TextSpec,[iFile, RMSE(iFile)]);
 %% Compare outputs
 indPlot = [1:500];
@@ -92,7 +92,7 @@ legend('True output','Generated output');
 tikzName = [folderName,'/',dataset,num2str(iFile),'_Gen_y_T_',num2str(T),'.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-            false, 'height', '4cm', 'width','12cm','checkForUpdates',false);
+            false, 'height', '4cm', 'width','15cm','checkForUpdates',false);
         
 clear File Phi_all Phi y_model
 end

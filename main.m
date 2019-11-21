@@ -115,11 +115,11 @@ matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
 %% Create column of names
 finalTerm = i_min;
 for iTerm=1:finalTerm
-     temp = arrayfun(@char, significant_term{iTerm}, 'uniform', 0);
+      temp = arrayfun(@char, significant_term{iTerm}, 'uniform', 0);
     if length(temp) > 0
         str = temp{1};
         for iString=2:length(temp)
-            str = [str,',',temp{iString}];
+            str = [str,temp{iString}];
         end
     end
     Terms{iTerm,1} = strcat('$',str,'$');

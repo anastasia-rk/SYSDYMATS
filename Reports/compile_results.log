@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7200 64-bit) (preloaded format=pdflatex 2019.10.21)  20 NOV 2019 18:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7200 64-bit) (preloaded format=pdflatex 2019.10.21)  21 NOV 2019 20:06
 entering extended mode
 **./compile_results.tex
 (compile_results.tex
@@ -1502,11 +1502,11 @@ Package biblatex Info: ... file 'biblatex.cfg' found.
 ("C:\Program Files\MiKTeX 2.9\tex/latex/biblatex\biblatex.cfg"
 File: biblatex.cfg 
 ))
-LaTeX Font Info:    Redeclaring symbol font `symbols' on input line 85.
+LaTeX Font Info:    Redeclaring symbol font `symbols' on input line 87.
 LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
-(Font)                  OMS/cmsy/m/n --> OMS/cm/m/n on input line 85.
+(Font)                  OMS/cmsy/m/n --> OMS/cm/m/n on input line 87.
 LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
-(Font)                  OMS/cmsy/b/n --> OMS/cm/m/n on input line 85.
+(Font)                  OMS/cmsy/b/n --> OMS/cm/m/n on input line 87.
 \c@theorem=\count371
 \c@remark=\count372
 \c@assumption=\count373
@@ -1553,7 +1553,7 @@ Package tocbasic Info: setting babel extension for `nls' on input line 156.
 \openout5 = `compile_results.nlo'.
 
 Package nomencl Info: Writing nomenclature file compile_results.nlo on input li
-ne 116.
+ne 118.
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/algorithms\algorithm.sty"
 Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
@@ -1607,27 +1607,27 @@ File: english.lbx 2019/08/31 v3.13a biblatex localization (PK/MW)
 (compile_results.aux)
 \openout1 = `compile_results.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 137.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 139.
+LaTeX Font Info:    ... okay on input line 139.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 139.
+LaTeX Font Info:    ... okay on input line 139.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 139.
+LaTeX Font Info:    ... okay on input line 139.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 139.
+LaTeX Font Info:    ... okay on input line 139.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 139.
+LaTeX Font Info:    ... okay on input line 139.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 139.
+LaTeX Font Info:    ... okay on input line 139.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 139.
+LaTeX Font Info:    ... okay on input line 139.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 139.
 LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 1
-37.
+39.
  ("C:\Program Files\MiKTeX 2.9\tex/latex/base\ts1cmr.fd"
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 137.
+LaTeX Font Info:    ... okay on input line 139.
 \AtBeginShipoutBox=\box100
 
 ("C:\Program Files\MiKTeX 2.9\tex/context/base/mkii\supp-pdf.mkii"
@@ -1672,9 +1672,9 @@ ABD: EveryShipout initializing macros
 Package pgfplots Warning: running in backwards compatibility mode (unsuitable t
 ick labels; missing features). Consider writing \pgfplotsset{compat=1.16} into 
 your preamble.
- on input line 137.
+ on input line 139.
 
-Package hyperref Info: Link coloring OFF on input line 137.
+Package hyperref Info: Link coloring OFF on input line 139.
 ("C:\Program Files\MiKTeX 2.9\tex/latex/hyperref\nameref.sty"
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
 
@@ -1683,9 +1683,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count394
 )
-LaTeX Info: Redefining \ref on input line 137.
-LaTeX Info: Redefining \pageref on input line 137.
-LaTeX Info: Redefining \nameref on input line 137.
+LaTeX Info: Redefining \ref on input line 139.
+LaTeX Info: Redefining \pageref on input line 139.
+LaTeX Info: Redefining \nameref on input line 139.
 
 (compile_results.out) (compile_results.out)
 \@outlinefile=\write6
@@ -1737,57 +1737,65 @@ Package biblatex Info: Data encoding 'utf8' specified.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'compile_results.bbl' found.
 (compile_results.bbl)
-Package biblatex Info: Reference section=0 on input line 137.
-Package biblatex Info: Reference segment=0 on input line 137.
-LaTeX Font Info:    Trying to load font information for OMS+cm on input line 13
-9.
-LaTeX Font Info:    No file OMScm.fd. on input line 139.
+Package biblatex Info: Reference section=0 on input line 139.
+Package biblatex Info: Reference segment=0 on input line 139.
+LaTeX Font Info:    Trying to load font information for OMS+cm on input line 14
+1.
+LaTeX Font Info:    No file OMScm.fd. on input line 141.
 
 
 LaTeX Font Warning: Font shape `OMS/cm/m/n' undefined
-(Font)              using `OMS/cmsy/m/n' instead on input line 139.
+(Font)              using `OMS/cmsy/m/n' instead on input line 141.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 139
+LaTeX Font Info:    Trying to load font information for U+msa on input line 141
 .
 ("C:\Program Files\MiKTeX 2.9\tex/latex/amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 139
+LaTeX Font Info:    Trying to load font information for U+msb on input line 141
 .
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for U+rsfs on input line 13
-9.
+LaTeX Font Info:    Trying to load font information for U+rsfs on input line 14
+1.
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/jknappen\ursfs.fd"
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
 LaTeX Font Info:    Trying to load font information for OMS+rsfs on input line 
-139.
+141.
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/calrsfs\omsrsfs.fd")
 
 LaTeX Warning: No \author given.
 
-(../Results_set_C_ny_0_nu_4/AAMDL_T_2000.tikz)
-(../Results_set_C_ny_0_nu_4/AAMDL_T_4000.tikz)
+(../Results_set_C_ny_4_nu_4/AAMDL_T_2000.tikz)
+(../Results_set_C_ny_4_nu_4/AAMDL_T_4000.tikz)
 
 Package pgfplots Warning: Axis range for axis x is approximately empty; enlargi
-ng it (it is [8.0000000000:8.0000000000]) on input line 177.
+ng it (it is [8.0000000000:8.0000000000]) on input line 179.
 
  [warning /pgfplots/warning/approx empty range enlarged]
 
 Package pgfplots Warning: Axis range for axis y is approximately empty; enlargi
-ng it (it is [-3.001047000000000:-3.001047000000000]) on input line 177.
+ng it (it is [-3.001047000000000:-3.001047000000000]) on input line 179.
 
  [warning /pgfplots/warning/approx empty range enlarged]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-(../Results_set_C_ny_0_nu_4/Thetas_T_2000.tex)
-(../Results_set_C_ny_0_nu_4/Thetas_T_4000.tex)
+(../Results_set_C_ny_4_nu_4/Thetas_T_2000.tex)
+Overfull \hbox (19.89201pt too wide) in paragraph at lines 1--189
+ [][] 
+ []
+
+(../Results_set_C_ny_4_nu_4/Thetas_T_4000.tex)
+Overfull \hbox (14.892pt too wide) in paragraph at lines 1--195
+ [][] 
+ []
+
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
@@ -1796,20 +1804,29 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [1
 
-{C:/Users/uos/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] [2]
-(../Results_set_C_ny_0_nu_4/Betas_T_2000.tex)
-File: ../Results_set_C_ny_0_nu_4/"RMSEs_T_2000.txt"  (verbatim)
-File: ../Results_set_C_ny_0_nu_4/"RMSEs_T_4000.txt"  (verbatim)
- (surf_labels.tikz)
-(../Results_set_C_ny_0_nu_4/Theta_surfaces_T_2000.tikz)
-(../Results_set_C_ny_0_nu_4/C3_gen_y_T_2000.tikz)
-(../Results_set_C_ny_0_nu_4/C8_gen_y_T_2000.tikz) [3] [4] [5]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 250.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 250.
+{C:/Users/uos/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [2]
+(../Results_set_C_ny_4_nu_4/Betas_T_2000.tex)
+File: ../Results_set_C_ny_4_nu_4/"RMSEs_T_2000.txt"  (verbatim)
+File: ../Results_set_C_ny_4_nu_4/"RMSEs_T_4000.txt"  (verbatim)
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+(surf_labels.tikz) (../Results_set_C_ny_4_nu_4/Theta_surfaces_T_2000.tikz)
+(../Results_set_C_ny_4_nu_4/C3_gen_y_T_2000.tikz)
+(../Results_set_C_ny_4_nu_4/C8_gen_y_T_2000.tikz) [3] [4] [5] [6]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 252.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 252.
 
 (compile_results.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 250.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 250.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 252.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 252.
 Package rerunfilecheck Info: File `compile_results.out' has not changed.
 (rerunfilecheck)             Checksum: 8B97BC30DA49A90BEC0714203F0241A7;114.
 
@@ -1819,13 +1836,13 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Package logreq Info: Writing requests to 'compile_results.run.xml'.
 \openout1 = `compile_results.run.xml'.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 250.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 252.
  ) 
 Here is how much of TeX's memory you used:
- 53319 strings out of 492452
- 1279222 string characters out of 3129813
- 3524529 words of memory out of 20000000
- 56847 multiletter control sequences out of 15000+200000
+ 56296 strings out of 492452
+ 1373528 string characters out of 3129813
+ 3574411 words of memory out of 20000000
+ 59823 multiletter control sequences out of 15000+200000
  18319 words of font info for 71 fonts, out of 3000000 for 9000
  1144 hyphenation exceptions out of 8191
  68i,21n,132p,10595b,2999s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1847,9 +1864,9 @@ s/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pu
 blic/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/ams
 fonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
 cmtt10.pfb>
-Output written on compile_results.pdf (5 pages, 725544 bytes).
+Output written on compile_results.pdf (6 pages, 727753 bytes).
 PDF statistics:
- 230 PDF objects out of 1000 (max. 8388607)
- 29 named destinations out of 1000 (max. 500000)
+ 234 PDF objects out of 1000 (max. 8388607)
+ 30 named destinations out of 1000 (max. 500000)
  279 words of extra memory for PDF output out of 10000 (max. 10000000)
 

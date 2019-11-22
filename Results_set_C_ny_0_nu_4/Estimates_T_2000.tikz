@@ -16,7 +16,7 @@ xlabel={Dataset index},
 ymin=-200,
 ymax=0,
 ylabel style={font=\color{white!15!black}},
-ylabel={$x_4,x_4$},
+ylabel={$u(t)u(t)$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
@@ -44,7 +44,7 @@ xlabel={Dataset index},
 ymin=0,
 ymax=600,
 ylabel style={font=\color{white!15!black}},
-ylabel={$x_3$},
+ylabel={$u(t-1)$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
@@ -72,7 +72,7 @@ xlabel={Dataset index},
 ymin=0,
 ymax=10,
 ylabel style={font=\color{white!15!black}},
-ylabel={$x_1,x_4$},
+ylabel={$u(t-3)u(t)$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
@@ -100,7 +100,7 @@ xlabel={Dataset index},
 ymin=-0.5,
 ymax=1,
 ylabel style={font=\color{white!15!black}},
-ylabel={$x_1,x_1$},
+ylabel={$u(t-3)u(t-3)$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
@@ -128,7 +128,7 @@ xlabel={Dataset index},
 ymin=-2.23969084196957,
 ymax=45.9418866067325,
 ylabel style={font=\color{white!15!black}},
-ylabel={$x_2$},
+ylabel={$u(t-2)$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
@@ -156,7 +156,7 @@ xlabel={Dataset index},
 ymin=-1500,
 ymax=0,
 ylabel style={font=\color{white!15!black}},
-ylabel={$x_4$},
+ylabel={$u(t)$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
@@ -212,7 +212,7 @@ xlabel={Dataset index},
 ymin=0,
 ymax=110.131370256376,
 ylabel style={font=\color{white!15!black}},
-ylabel={$x_3,x_4$},
+ylabel={$u(t-1)u(t)$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]

@@ -7,7 +7,7 @@ iFile   = 1;                                                                % id
 K       = 10;                                                               % number of datasets
 % Length of input and output lags
 n_u     = 4;                                                                % input signal lag length
-n_y     = 4;                                                                % output signal lag length
+n_y     = 0;                                                                % output signal lag length
 d       = n_y + n_u;                                                        % size of input vector x
 lambda  = 2;                                                                % order of polynomial
 % a       = sym('x_',[1 d]);                                                  % associated symbolic vector

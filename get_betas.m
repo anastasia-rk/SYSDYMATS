@@ -3,7 +3,7 @@ my_init
 dataset = 'C'; % 'D'; % 
 metaFileName = ['Meta_',dataset];
 load(metaFileName);
-T = 4000;
+T = 2000;
 folder = 'Results';                                                         % specify category where to save files
 names = {'set','ny','nu'};                                                  % names used to define results folder name (no more than 3).
 folderName = make_folder(folder,names,dataset,n_y,n_u);                     % create results folder

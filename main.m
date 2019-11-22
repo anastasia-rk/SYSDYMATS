@@ -4,7 +4,7 @@ dataset = 'C'; % 'D'; %                                                     % na
 metaFileName = ['Meta_',dataset];
 load(metaFileName);
 d       = n_y + n_u;                                                        % size of input vector x
-T = 4000;
+T = 2000;
 dict_set = ['dict_',dataset];                                   % 
 fileNames = sym(dict_set,[1 K]);                                            % vector of filenames
 folder = 'Results';                                                         % specify category where to save files
@@ -169,25 +169,6 @@ tikzName = [folderName,'/Estimates_T_',num2str(T),'.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
             false, 'height', '6cm', 'width','12cm','checkForUpdates',false);
-%% Direct estimation of polynomial coefficients
-fName = [dictFolder,'/',char(fileNames(iFile))];
-File = matfile(fName,'Writable',true);
-indSign = S(1:finalTerm);                                                   % select the indeces of significant terms from the ordered set
-Phi_all = File.term;                                                        % extract all terms into a vector
-Phi     = Phi_all(:,indSign);                                               % select only signficant terms
-
-
-load('External_parameters');
-L_cut_all = [values{1}(:, 9);values{2}(:, 9)];
-D_rlx_all = [values{1}(:,11);values{2}(:,11)];
-A_imp_all = [values{1}(:, 6);values{2}(:, 6)];
-V_imp_all = [values{1}(:, 7);values{2}(:, 7)];
-
-
-x = L_cut_all(iFile,1);
-y = D_rlx_all(iFile,1);
-id = ones(size(x));
-A = [id x y x.*y x.^2 y.^2];
 %% Store data in table
 workspaceName = [folderName,'/OLS_results_T_',num2str(T),'.mat'];
 save(workspaceName,'Theta','Terms','Files','finalTerm','T','n_y','n_u','S');

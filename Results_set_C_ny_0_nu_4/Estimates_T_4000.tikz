@@ -16,7 +16,7 @@ xlabel={Dataset index},
 ymin=-150,
 ymax=0,
 ylabel style={font=\color{white!15!black}},
-ylabel={$x_4,x_4$},
+ylabel={$u(t)u(t)$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
@@ -44,7 +44,7 @@ xlabel={Dataset index},
 ymin=0,
 ymax=500,
 ylabel style={font=\color{white!15!black}},
-ylabel={$x_3$},
+ylabel={$u(t-1)$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
@@ -72,7 +72,7 @@ xlabel={Dataset index},
 ymin=0,
 ymax=40,
 ylabel style={font=\color{white!15!black}},
-ylabel={$x_1,x_4$},
+ylabel={$u(t-3)u(t)$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
@@ -100,7 +100,7 @@ xlabel={Dataset index},
 ymin=0,
 ymax=10,
 ylabel style={font=\color{white!15!black}},
-ylabel={$x_1,x_1$},
+ylabel={$u(t-3)u(t-3)$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
@@ -128,7 +128,7 @@ xlabel={Dataset index},
 ymin=-2.12993862890179,
 ymax=43.4031449012412,
 ylabel style={font=\color{white!15!black}},
-ylabel={$x_2$},
+ylabel={$u(t-2)$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
@@ -156,7 +156,7 @@ xlabel={Dataset index},
 ymin=-1153.95060686096,
 ymax=0,
 ylabel style={font=\color{white!15!black}},
-ylabel={$x_4$},
+ylabel={$u(t)$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
@@ -212,7 +212,7 @@ xlabel={Dataset index},
 ymin=0,
 ymax=80,
 ylabel style={font=\color{white!15!black}},
-ylabel={$x_3,x_3$},
+ylabel={$u(t-1)u(t-1)$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
@@ -240,7 +240,7 @@ xlabel={Dataset index},
 ymin=-50,
 ymax=0,
 ylabel style={font=\color{white!15!black}},
-ylabel={$x_1,x_3$},
+ylabel={$u(t-3)u(t-1)$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]

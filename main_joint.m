@@ -1,12 +1,15 @@
 my_init;
 
-dataset =  'C'; %  'D'; %                                                   % name of dataset
+dataset = 'D'; % 'C'; %                                                     % name of dataset
 metaFileName = ['Meta_',dataset];
 load(metaFileName);
 d           = n_y + n_u;                                                    % size of input vector x
 dict_set    = ['dict_',dataset];
 fileNames   = sym(dict_set,[1 K]);                                          % vector of filenames
 T = 2000;
+folder = 'Results';                                                         % specify category where to save files
+names = {'set','ny','nu'};                                                  % names used to define results folder name (no more than 3).
+folderName = make_folder(folder,names,dataset,n_y,n_u);                     % create results folder
 %% Select first significant basis vector for all datasets
 index = (1:T);                                                              % length of the sample
 Files =  [1 2 4 5 6 7 9 10]; % 1:K; %                                       % id of the sample
@@ -14,7 +17,8 @@ K = length(Files);
 iTerm = 1;                                                                  % the first significant term
 AEER{iTerm} = zeros(nTerms,1);                                              % placeholder for AERR criteria
 for iFile=Files                                                             % over all datasets
-    File = matfile(char(fileNames(iFile)),'Writable',true);
+    fName = [dictFolder,'/',char(fileNames(iFile))];
+    File  = matfile(fName,'Writable',true);
     residual_init{iFile} =  File.y_narx(index,1);                           % initial residual
     for jTerm = dict_terms                                                  % over all polynomial terms in the dictionary
         term0 = File.term(index,jTerm);
@@ -31,7 +35,8 @@ S(iTerm) = iMax;                                                            % sa
 dict_terms(iMax) = [];                                                      % reduce the dictionary of available terms
 AMDL_sum = 0;
 for iFile=Files                                                             % over all datasets
-    File = matfile(char(fileNames(iFile)),'Writable',true);
+    fName = [dictFolder,'/',char(fileNames(iFile))];
+    File  = matfile(fName,'Writable',true);
     alpha{iFile}(:,iTerm)    = File.term(index,iMax);                       % the corresponding basis candidate term    
     phi  {iFile}(:,iTerm)    = File.term(index,iMax);                       % the corresponding basis vector 
     residual{iFile}(:,iTerm) = residual_update(residual_init{iFile},...     % the corresponding model residual
@@ -56,7 +61,8 @@ iTerm       = 2;
 while(iTerm <= maxSign) && ~converged                                       % loop over the number of significant terms
     AEER{iTerm} = zeros(nTerms,1);                                          % placeholder for AERR criteria
     for iFile=Files                                                         % over all datasets
-        File = matfile(char(fileNames(iFile)),'Writable',true);
+        fName = [dictFolder,'/',char(fileNames(iFile))];
+        File  = matfile(fName,'Writable',true);
         for jTerm = dict_terms                                              % over all polynomial terms in the dictionary
             p{iTerm,iFile}(:,jTerm) = orthogonalise(File.term(index,jTerm),...
                                                     phi{iFile},iTerm);      % orthogonalise basis
@@ -74,7 +80,8 @@ while(iTerm <= maxSign) && ~converged                                       % lo
     dict_terms(ind) = [];                                                   % Reduce the dictionary of available terms
     AMDL_sum = 0;
     for iFile=Files
-        File = matfile(char(fileNames(iFile)),'Writable',true);
+        fName = [dictFolder,'/',char(fileNames(iFile))];
+        File = matfile(fName,'Writable',true);
         alpha{iFile}(:,iTerm) = File.term(index,S(iTerm));                  % the corresponding basis candidate term    
         phi{iFile}(:,iTerm)   = p{iTerm,iFile}(index,S(iTerm));             % the corresponding basis vector 
         residual{iFile}(:,iTerm) = residual_update(residual{iFile}(:,iTerm-1),...
@@ -98,8 +105,10 @@ times = [1:T];
 Phi_bar = [];
 Y_bar   = [];
 for iFile = Files
-    fileName  = ['Dict_',dataset,num2str(iFile)];
-    File      = matfile(fileName,'Writable',true);
+%     fileName  = ['Dict_',dataset,num2str(iFile)];
+    fName = [dictFolder,'/',char(fileNames(iFile))];
+    File  = matfile(fName,'Writable',true);
+%     File      = matfile(fileName,'Writable',true);
     indSign   = S(1:finalTerm);                                             % select the indeces of significant terms from the ordered set
     Phi_file  = File.term(times,:);                                         % extract all terms into a vector - cannot reorder directly in files
     y_file    = File.y_narx(times,:);                                       % extract output
@@ -147,23 +156,25 @@ for iBeta=1:L
     Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
 end
 Table_all = Tab
-tableName = ['Betas_direct_',dataset,'_ny_',num2str(n_y),'_nu_',num2str(n_u),'_size_',num2str(T)];
+tableName = [folderName,'/Betas_direct_T_',num2str(T)];
 table2latex(Table_all,tableName);
 %% Validate the model
 testFiles = [3 8];
 for iFile = testFiles
-x = L_cut_all(iFile,1);
-y = D_rlx_all(iFile,1);
+x  = L_cut_all(iFile,1);
+y  = D_rlx_all(iFile,1);
 id = ones(size(x));
 % Matrix A should have dimension KxL where L < N
-A_k = [id x y x.*y x.^2 y.^2]';                                             % vector
-fileName  = ['Dict_',dataset,num2str(iFile)];
-File      = matfile(fileName,'Writable',true);
-indSign   = S(1:finalTerm);                                                 % select the indeces of significant terms from the ordered set
-Phi_file  = File.term(times,:);                                             % extract all terms into a vector - cannot reorder directly in files
-Phi       = Phi_file(times,indSign);                                        % select only signficant terms
-y_file    = File.y_narx(times,:);                                           % extract output
-y_model   = Phi*Betas*A_k;                                                  % model NARMAX output
+A_k         = [id x y x.*y x.^2 y.^2]';                                             % vector
+% fileName  = ['Dict_',dataset,num2str(iFile)];
+% File      = matfile(fileName,'Writable',true);
+fName       = [dictFolder,'/',char(fileNames(iFile))];
+File        = matfile(fName,'Writable',true);
+indSign     = S(1:finalTerm);                                                 % select the indeces of significant terms from the ordered set
+Phi_file    = File.term(times,:);                                             % extract all terms into a vector - cannot reorder directly in files
+Phi         = Phi_file(times,indSign);                                        % select only signficant terms
+y_file      = File.y_narx(times,:);                                           % extract output
+y_model     = Phi*Betas*A_k;                                                  % model NARMAX output
 RMSE(iFile) = sqrt(mean((y_file - y_model).^2));                            % Root Mean Squared Error
 %% Compare outputs
 indPlot = [1:500];
@@ -173,7 +184,7 @@ plot(indPlot+File.t_0,File.y_narx(indPlot,1)); hold on;
 plot(indPlot+File.t_0,y_model(indPlot,1),'--'); hold on;
 legend('True output','Generated output');
 
-tikzName = ['Gen_y_direct_',dataset,num2str(iFile),'_size_',num2str(T),'.tikz'];
+tikzName = [folderName,'/',dataset,num2str(iFile),'_gen_y_direct_T_',num2str(T),'.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
             false, 'height', '6cm', 'width','12cm','checkForUpdates',false);

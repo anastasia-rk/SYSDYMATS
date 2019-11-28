@@ -1,6 +1,6 @@
 my_init;
 
-dataset = 'D'; % 'C'; %                                                     % name of dataset
+dataset =  'C'; % 'D'; %                                                    % name of dataset
 metaFileName = ['Meta_',dataset];
 load(metaFileName);
 d           = n_y + n_u;                                                    % size of input vector x
@@ -105,10 +105,8 @@ times = [1:T];
 Phi_bar = [];
 Y_bar   = [];
 for iFile = Files
-%     fileName  = ['Dict_',dataset,num2str(iFile)];
     fName = [dictFolder,'/',char(fileNames(iFile))];
     File  = matfile(fName,'Writable',true);
-%     File      = matfile(fileName,'Writable',true);
     indSign   = S(1:finalTerm);                                             % select the indeces of significant terms from the ordered set
     Phi_file  = File.term(times,:);                                         % extract all terms into a vector - cannot reorder directly in files
     y_file    = File.y_narx(times,:);                                       % extract output
@@ -132,6 +130,8 @@ I = eye(finalTerm);                                                         % un
 Kr = kron(A,I);
 M  = Phi_bar*Kr;                                                            % LS matrix - increased dimension does not guarantee increase in rank
 B_bar = M\Y_bar;
+Y_hat = M*B_bar;
+R_2 = r_squared(Y_bar,Y_hat);
 L = size(A,2);
 Betas = reshape(B_bar,[finalTerm,L]);
 %% Create column of names
@@ -192,4 +192,36 @@ matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
 clear File Phi_all Phi y_model
 end
 
+%% Ridge estimation
+% Normalise M
+for j=1:size(M,2)
+    m = mean(M(:,j));
+    c = sqrt(sum((M(:,j) - m).^2));
+    M_norm(:,j) = (M(:,j)- m)/c;
+end
+R_mm    = M'*M;
+R_norm  = M_norm'*M_norm;
+log_max = 0;
+log_min = -6;
+vec = [0:1/50:1];
+coeffs = sort(10.^(log_min + (log_max-log_min)*vec));
+I_k = eye(size(R_mm));
+ik = 0;
+for k = coeffs
+    ik = ik + 1;
+%     betas_rls(:,ik)     = pinv(R_norm + k*I_k)*M_norm'*Y_bar;
+    betas_rls_raw(:,ik) = pinv(R_mm + k*I_k)*M'*Y_bar;
+%             betas_lasso{iTheta}(:,ik) =  LassoShooting(A_s,B(:,iTheta),k,'verbose',0);
+%             betas_lasso_raw{iTheta}(:,ik) = LassoShooting(A,B(:,iTheta),k,'verbose',0);
+end
+
+
+figure;
+for ib = 1:6
+            h1 = semilogx(coeffs,betas_rls_raw(ib,:),'-o','MarkerSize',5); hold on;
+            set(h1, 'markerfacecolor', get(h1, 'color')); 
+end
+title('Tikhonov normalised')
+xlabel('$\gamma$');
+ylabel('Standardised estimate')
 

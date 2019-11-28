@@ -75,7 +75,7 @@ if kappa > thr
         VIF(j) = norm((Eye_n - Hat)*a_star{j})^(-2);                        % =  1 - R^2_j                  
 %         % Check is determination coefficients computed correctly 
 %         % 1. Via norm
-%         Rs_1(j) = 1 - norm((Eye_n - Hat)*a_star{j})^2;
+         Rs_1(j) = 1 - norm((Eye_n - Hat)*a_star{j})^2;
 %         b = X_star\a_star{j};
 %         a_hat{j} = X_star*b;
 %         % 2. Via direct formula using estimates

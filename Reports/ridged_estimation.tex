@@ -1,11 +1,21 @@
 \documentclass[a4paper,11pt,twoside]{article}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% A generic report compiler for publishing rables and plots for a partcular choise of lags in the NARX system
+% A path to media corresponding to the setting is defined below, as well as chosen parameter settings
+\makeatletter
+%\def\input@path{{../Results_set_C_ny_4_nu_4/}}
+\def\dataset{C}
+\def\ny{4}
+\def\nu{4}
+\def\order{2}
+\makeatother
 % Packages
 \usepackage[final]{pdfpages}
 \usepackage{verbatim}
 \usepackage{inputenc}
 \usepackage{graphicx} 
 \usepackage{amsmath,amssymb,mathrsfs,amsfonts}
+%\usepackage{unicode-math}
 \usepackage{mathtools}
 \usepackage{amsthm}
 \usepackage{mathtools}
@@ -59,8 +69,10 @@
 \newcommand{\ie}{\textit{i.e.} }
 \newcommand{\eg}{\textit{e.g.} }
 \newcommand\id{\ensuremath{\mathbbm{1}}} 
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \DeclareMathOperator{\E}{\mathbb{E}}
 \DeclareMathOperator{\eye}{\mathbb{I}}
+\DeclareMathOperator{\R}{\rm I\!R}
 \DeclareMathOperator{\zeros}{\mathbb{O}}
 \DeclareMathOperator{\tr}{\textrm{tr}}
 \DeclareMathOperator{\vvec}{\textrm{vec}}
@@ -156,16 +168,121 @@
 %\cfoot{}
 \interfootnotelinepenalty=10000
 
-\title{Regularised estimation of external parameters}
-
+\title{Regularised Least Squares estimation of external parameters}
 \begin{document}
 	\maketitle
-\section{Motivation}
-\par It can be seen from Table 1 in previous report that the experimental data is collected from the narrow subspace of design parameters.\\
-Evident collinearity
-Need for regularisation of the estimation procedure in order to reduce the dispersion of the parameter LSEs.
+\section*{Preliminaries}
+\par Recall the notation from the previous reports:
+\begin{itemize}
+	\item[] $k = 1, \dots, K$ - index of the dataset used for identification.
+	\item[] $t = 1, \dots, T$ - discrete time index.
+	\item[] $N_s$ - number of significant terms in the model.
+	\item[] $i = 1, \dots, N_s$ - term index.
+	\item[] $\Xi = \R^2$ - space of external parameters.
+	\item[] $\Theta = \R^{N_s}$ - space of internal parameters.
+	\item[]	$\theta^{k}_{i}$ - an internal regression parameter corresponding to the $i$-th term in the $k$-th dataset.
+	\item[] $\mathbf{\theta}^k = \{\theta^{k}_{i}\}_{i=1}^{N_s}$ - vector of internal parameters.
+\end{itemize}
+\par The analysis deals with the time-series data from auxetic foam vibration tests introduced in the previous report. A non-linear FIR filter is considered with the input lag of 3. The filter structure is approximated using polynomial regressors of order $\order$. Number the significant terms and corresponding scaling parameters $\theta$ are estimated via EFOR-CMSS algorithm based on 8 datasets out of 10 available. The remaining to datasets (\dataset3 and \dataset8) are used for model validation. 
+\par This report deals only with identification of the relationship between the estimated internal parameters $\mathbf{\theta}^k$ and the pre-specified design settings $\xi^k = (L_{cut}, D_{rlx})$. The first section examines the effect on the polynomial structure and sampling from the small subspace of external parameters on the generalisation of the identified model. The remaining sections briefly describe approaches to improving the estimation procedure. The results section only demonstrates numerical results and does not draw any conclusions as this report is intermediate.
+\section{Collinearity in the selected model}
+\par Recall the assumed polynomial model that links internal parameters to the external ones:
+\begin{equation}\label{eq:polyn}
+\theta^{k}_{i}(L_{cut},D_{rlx}) = \beta_0 + \beta_1 L_{cut} + \beta_2 D_{rlx} + \beta_3 L_{cut}^{2} + \beta_4 D_{rlx}^{2} + \beta_5 L_{cut} D_{rlx}, \qquad i=1,\dots,N_s,
+\end{equation}
+where polynomial coefficients $\mathbf{\beta}^i = \left[ \beta_0 \dots \beta_5 \right]$ are unknown. In the original paper \cite{Wei2008} they are estimated via batch LS estimator as follows. First, the matrix of "independent" variables is formed from the external parameter values:
+\begin{equation}
+\mathbf{A} = \left[\begin{array}{cccccc}
+1 & L& D& L\times L& D\times D& L\times D
+\end{array}\right],
+\end{equation}
+where $L = \{L_{cut}^{k}\}^{K}_{k=1}$, $D = \{D_{rlx}^{k}\}^{K}_{k=1}$, the number of columns $M + 1$, where $M$ is the order of polynomial \eqref{eq:polyn}, and where $\times$ denotes the by-element product such that
+\begin{equation*}
+L\times L = \Big[ L_{cut}^{(j)} L_{cut}^{(j)}\Big]^{N}_{j=1}.
+\end{equation*}
+Then, for each internal parameter a vector of estimated values is formed across $K$ training datasets:
+\begin{equation*}
+\bar{\theta}^i = \left\{ \theta^{1}_{i}, \theta^{1}_{i}, \dots, \theta^{K}_{i} \right\}.
+\end{equation*}
+Note that while the internal parameters are considered to be fixed in the estimation, their estimates are obtained from the random data and therefore are random variables 
+\begin{equation*}
+\bar{\mathbf{\theta}}^i \sim \mathcal{N}(\mu_i, \sigma^{2}_{i}).
+\end{equation*}
+\begin{remark}
+For the purposes of this analysis the factors contributing to this variance are not considered and the vector of LSEs is treated as a response signal in the LS formulation.
+\end{remark}
+Estimation of the polynomial coefficients for the $i$-th internal parameter $\mathbf{\beta}^i$ is a standard LS problem:
+\begin{equation}
+\hat{\mathbf{\beta}}^i = 
+\end{equation}
+where 
+\par It can be seen from Table 1 in previous report that the experimental data is collected from the narrow subspace of design parameters. Combined with the polynomial structure that means that the columns of the data matrix $\mathbf{A} $ are powers of one another, this may lead to severe collinearity problems. The quickest way to access collinearity is to check the condition number of the scaled matrix $\mathbf{A}^\ast$. As per recommendation in [cite Seber and Lee], the data is not centred to see the effect on the raw data on LSE variance:
+\begin{equation*}
+a^{\ast}_{i,j} = \frac{a_{i,j}}{\Big\{ \sum_{K}^{i=1} a^{2}_{i,j}\Big\}^{1/2}}, 
+\end{equation*}
+where $j$ is the column index.
+For the given data $\kappa(\mathbf{A}^\ast) = $ which indicates that some eigenvalues of the regression matrix $R_{aa} = (\mathbf{A}^\ast)^{\top}\mathbf{A}^\ast$ are close to zero. Indeed, 
 
-\section{Tikhonov regularisation}
+Some collinearity metrics for centred and scaled matrix $\mathbf{A}_{s}^{\star}$, where $\mathbf{A} = 1, \mathbf{A}_{s}$ are summarised in Table 1. The level of collinearity is assessed by computing the coefficients of determination for individual columns
+\begin{equation*}
+R^{2}_{j} = 1 - \frac{(a^{\star}_{j})^{\top} H_j a^{\star}_{j}}{\sum_{i}( a^{\star}_{j} - \hat{a}^{\star}_{j})^2},
+\end{equation*} 
+while the effect of collinearity on LSE variance is assessed via variance inflation coefficients
+\begin{equation*}
+\text{VIF}_j = \frac{\text{Var}(\beta_j)}{\sigma^2} = \frac{\sigma^2}{1 - R^{2}_{j}}.
+\end{equation*}
+\begin{table}[h]
+	\centering
+	\begin{tabular}{rrrrrr}
+		Column & $L$ & $R$ & $L \times R$ & $L \times L$ & $R \times R$ \\
+		\hline
+		$R^{2}_{j}$ & 0.9992  &  0.9988  &  0.9997  &  0.9992  &  0.9985 \\
+		VIF$_j$ & 1256.04 & 862.29 & 2867.46 & 1212.49 & 665.06 \\
+		\hline
+	\end{tabular}
+\end{table}
+Evident collinearity indicates the need for regularisation of the estimation procedure in order to reduce the dispersion of the parameter LSEs.
+\section{Regularised Least Squares}
+\par A common treatment for models that suffer from bad generalisation and collinearity is to introduce a constrained LS problem, where the constraint is normally posed on the unknown parameter vector:
+\begin{equation}\label{eq:rls_constr}
+\hat{\mathbf{\beta}}^i = \underset{\beta \in \R}{\arg \min}\norm{ \biggl(\bar{\theta}^i - X \mathbf{\beta}^i \biggr) }^2, \quad R(\mathbf{\beta}^i) < \gamma.
+\end{equation}
+where $\gamma$ is a pre-specified parameter that defines the size of the constraint in the parameter space $\Xi$.
+Lagrangian formulation of the constrained problem is called regularised Least Squares (RLS),
+\begin{equation}
+\mathbf{\beta}^i = \underset{\beta \in \R}{\arg \min} \Biggl\{\norm{ \biggl(\bar{\theta}^i - X \mathbf{\beta}^i \biggr) }^2 + \lambda R(\mathbf{\beta}^i)\Biggr\}
+\end{equation}
+where the regularisation coefficient $\lambda$ is directly linked to  $\gamma$ in \eqref{eq:rls_constr} CITE. Different types of the constraint function can be considered depending on the problem.
+\subsection{Tikhonov regularisation}
+Innovation regularisation  constrains the 2-norm of the parameter vector
 
+This is the only RLS formulation that has a closed form solution
+\begin{equation}
+\bar{\theta} = \mathbf{A}\beta,
+\end{equation}
+ This solution is referred to as ridge regression, because increasing $\lambda$ leads to the 
+
+
+This shows that in Tikhonov regularisation $\lambda$ quantifies the trade-off between the bias and the variance in the estimates. Small regularisation term leads to overfitting the model to the training data which may lead to poor 
+\subsection{LASSO regularisation}
+\par While in the ridge regression LSEs asymptotically approach zero, none of the parameters can be zeroed-out explicitly if the model structure is overly detailed. Another formulation of RLS, called Least absolute shrinkage and selection operator (LASSO) regression, performs variable selection and the regularisation simultaneously. The optimisation problem is 
+
+\par In LASSO approach, regularisation 
+
+\begin{remark}
+	Results of ridge estimation can be used as the initial point in convex optimisation while solving the LASSO regression. 
+\end{remark}
+\subsection{Selection of the regularisation coefficient}
+\par The important stage of solving RLS problem is selecting the regularisation parameter. The constraint $\gamma$ in \eqref{eq:rls_constr} is often selected arbitrary since the shape of the parameter space is unknown. As a result, finding $\lambda$ relies on iterative schemes most of which do not guarantee convergence [CITE MANY]. For the lack of universal approach for selecting the optimal value of $\lambda$, the choice of the method remains application-specific.
+\par In this report, the model structure is ass 
 \section{Results}
+\par The results are obtained for the auxetic form data for 8 datasets using both types of regularisation. Ridge traces are shown for values of $\lambda$ from $10^{-6}$ to $10^0$. While the RLS is usually used for the normalised (scaled and centred) data, results for the raw   
+
+\section{Future work}
+\begin{itemize}
+	\item Regularised LS for the direct estimation of $B$ from joint datasets. Long time-series and polynomial structure of the regressors may also lead to collinearity problems. It's not clear yet whether the data needs to be normalised separately.
+	\item Confidence and covariance regions to demonstrate bias-variance trade off.
+	\item Multiple methods for LASSO regression can be investigated.
+	\item 
+\end{itemize}
 \end{document}

@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2019.11.27)  29 NOV 2019 16:02
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2019.11.27)  29 NOV 2019 13:43
 entering extended mode
-**./ridged_estimation.tex
-(ridged_estimation.tex
+**./ridge_estimation.tex
+(ridge_estimation.tex
 LaTeX2e <2019-10-01> patch level 3
 ("C:\Program Files\MiKTeX 2.9\tex/latex/base\article.cls"
 Document Class: article 2019/10/25 v1.4k Standard LaTeX document class
@@ -1583,10 +1583,10 @@ Package tocbasic Info: setting babel extension for `nls' on input line 164.
 \nomitemsep=\skip99
 )
 \@nomenclaturefile=\write5
-\openout5 = `ridged_estimation.nlo'.
+\openout5 = `ridge_estimation.nlo'.
 
-Package nomencl Info: Writing nomenclature file ridged_estimation.nlo on input 
-line 121.
+Package nomencl Info: Writing nomenclature file ridge_estimation.nlo on input l
+ine 121.
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/titlesec\titlesec.sty"
 Package: titlesec 2019/10/16 v2.13 Sectioning titles
@@ -1613,8 +1613,8 @@ File: english.lbx 2019/08/31 v3.13a biblatex localization (PK/MW)
 \@quotelevel=\count380
 \@quotereset=\count381
 
-(ridged_estimation.aux)
-\openout1 = `ridged_estimation.aux'.
+(ridge_estimation.aux)
+\openout1 = `ridge_estimation.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 172.
 LaTeX Font Info:    ... okay on input line 172.
@@ -1638,7 +1638,7 @@ File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    ... okay on input line 172.
 \AtBeginShipoutBox=\box98
- ("C:\Program Files\MiKTeX 2.9\tex/context/base/mkii\supp-pdf.mkii"
+("C:\Program Files\MiKTeX 2.9\tex/context/base/mkii\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count382
 \scratchdimen=\dimen316
@@ -1697,9 +1697,9 @@ LaTeX Info: Redefining \ref on input line 172.
 LaTeX Info: Redefining \pageref on input line 172.
 LaTeX Info: Redefining \nameref on input line 172.
 
-(ridged_estimation.out) (ridged_estimation.out)
+(ridge_estimation.out) (ridge_estimation.out)
 \@outlinefile=\write6
-\openout6 = `ridged_estimation.out'.
+\openout6 = `ridge_estimation.out'.
 
 
 *geometry* driver: auto-detecting
@@ -1742,22 +1742,11 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Input encoding 'utf8' specified.
 Package biblatex Info: Data encoding 'utf8' specified.
 (biblatex)             No need to reencode data.
-\openout4 = `ridged_estimation-blx.bib'.
+\openout4 = `ridge_estimation-blx.bib'.
 
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file 'ridged_estimation.bbl' found.
-(ridged_estimation.bbl
-
-Package biblatex Warning: BibTeX reported the following issues
-(biblatex)                with 'Seber2003':
-(biblatex)                - Invalid format of field 'month'.
-
-
-Package biblatex Warning: BibTeX reported the following issues
-(biblatex)                with 'Fu1998':
-(biblatex)                - Invalid format of field 'month'.
-
-)
+Package biblatex Info: ... file 'ridge_estimation.bbl' found.
+(ridge_estimation.bbl)
 Package biblatex Info: Reference section=0 on input line 172.
 Package biblatex Info: Reference segment=0 on input line 172.
 LaTeX Font Info:    Trying to load font information for OMS+cm on input line 17
@@ -1798,55 +1787,51 @@ LaTeX Warning: No \author given.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[3] [4] [5] (../Results_set_C_ny_0_nu_4/AIC_norm.tikz)
-(../Results_set_C_ny_0_nu_4/AIC_raw.tikz) [6] [7]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 349.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 349.
- (ridged_estimation.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 349.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 349.
-Package rerunfilecheck Info: File `ridged_estimation.out' has not changed.
+[3] [4] [5] [6]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 340.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 340.
+ (ridge_estimation.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 340.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 340.
+Package rerunfilecheck Info: File `ridge_estimation.out' has not changed.
 (rerunfilecheck)             Checksum: CD6E8D185B31AB6871B1189BAC59B8C0;450.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package logreq Info: Writing requests to 'ridged_estimation.run.xml'.
-\openout1 = `ridged_estimation.run.xml'.
+Package logreq Info: Writing requests to 'ridge_estimation.run.xml'.
+\openout1 = `ridge_estimation.run.xml'.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 349.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 340.
  ) 
 Here is how much of TeX's memory you used:
- 43339 strings out of 492450
- 984975 string characters out of 3129754
- 1733097 words of memory out of 20000000
- 46845 multiletter control sequences out of 15000+200000
- 17342 words of font info for 66 fonts, out of 3000000 for 9000
+ 42844 strings out of 492450
+ 971249 string characters out of 3129754
+ 1577429 words of memory out of 20000000
+ 46372 multiletter control sequences out of 15000+200000
+ 14796 words of font info for 56 fonts, out of 3000000 for 9000
  1144 hyphenation exceptions out of 8191
- 68i,13n,114p,1144b,2174s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\uos\AppData\Local\MiKTeX\2.9\fonts/pk/ljfour/jknappen/ec/dpi600\tc
-rm1095.pk><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pf
-b><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Pr
-ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Program Fil
-es/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/Program Files/MiKT
-eX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.9/f
-onts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/typ
-e1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public
-/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts
-/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12
-.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/
-Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Fi
-les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX
- 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files/MiKTeX 2.9/fonts
-/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/p
-ublic/amsfonts/cm/cmsy6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/ams
-fonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
-cmti10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti8.pf
-b><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt8.pfb><C:/Pro
-gram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on ridged_estimation.pdf (7 pages, 352551 bytes).
+ 68i,11n,98p,1143b,795s stack positions out of 5000i,500n,10000p,200000b,50000s
+pdfTeX warning (dest): name{cite.0@Wei2008} has been referenced but does not 
+exist, replaced by a fixed one
+
+ <C:\Users\uos\AppData\Local\MiKTeX\2.9\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm
+1095.pk><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb>
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Prog
+ram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program File
+s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX
+ 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files/MiKTeX 2.9/font
+s/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/p
+ublic/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/ams
+fonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
+cmr17.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb>
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Prog
+ram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files
+/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files/MiKTeX 
+2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on ridge_estimation.pdf (6 pages, 199173 bytes).
 PDF statistics:
- 234 PDF objects out of 1000 (max. 8388607)
- 40 named destinations out of 1000 (max. 500000)
+ 181 PDF objects out of 1000 (max. 8388607)
+ 34 named destinations out of 1000 (max. 500000)
  165 words of extra memory for PDF output out of 10000 (max. 10000000)
 

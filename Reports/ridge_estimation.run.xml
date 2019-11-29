@@ -44,11 +44,11 @@
   <internal package="biblatex" priority="9" active="0">
     <generic>latex</generic>
     <provides type="dynamic">
-      <file>ridged_estimation.aux</file>
-      <file>ridged_estimation-blx.bib</file>
+      <file>ridge_estimation.aux</file>
+      <file>ridge_estimation-blx.bib</file>
     </provides>
     <requires type="dynamic">
-      <file>ridged_estimation.bbl</file>
+      <file>ridge_estimation.bbl</file>
     </requires>
     <requires type="static">
       <file>blx-dm.def</file>
@@ -70,23 +70,23 @@
     <cmdline>
       <binary>bibtex</binary>
       <option>-min-crossrefs 2</option>
-      <infile>ridged_estimation</infile>
+      <infile>ridge_estimation</infile>
     </cmdline>
     <input>
-      <file>ridged_estimation.aux</file>
+      <file>ridge_estimation.aux</file>
     </input>
     <output>
-      <file>ridged_estimation.bbl</file>
+      <file>ridge_estimation.bbl</file>
     </output>
     <provides type="dynamic">
-      <file>ridged_estimation.bbl</file>
+      <file>ridge_estimation.bbl</file>
     </provides>
     <requires type="dynamic">
-      <file>ridged_estimation.aux</file>
-      <file>ridged_estimation-blx.bib</file>
+      <file>ridge_estimation.aux</file>
+      <file>ridge_estimation-blx.bib</file>
     </requires>
     <requires type="editable">
-      <file>bibliography_ridge.bib</file>
+      <file>bibliography.bib</file>
     </requires>
     <requires type="static">
       <file>biblatex.bst</file>

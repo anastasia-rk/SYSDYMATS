@@ -98,11 +98,29 @@ for iTheta = 1:finalTerm
         ik = 0;
         for k = coeffs
             ik = ik + 1;
-            beta{iTheta}(:,ik)     = inv(R_ss + k*I_k)*A_s'*B(:,iTheta);
-            beta_raw{iTheta}(:,ik) = inv(R_aa + k*I_k)*A'*B(:,iTheta);
-            betas_lasso{iTheta}(:,ik) =  LassoShooting(A_s,B(:,iTheta),k,'verbose',0);
+            th_norm = normalize(B(:,iTheta));
+            gain                   = inv(R_ss + k*I_k)*A_s';
+            beta{iTheta}(:,ik)     = gain*th_norm;
+            Hat                    = A_s*gain;
+            sigma_b{iTheta,ik}(:,:)= gain*A_s*inv(R_ss + k*I_k);
+            mean{iTheta}(:,ik)     = A_s*beta{iTheta}(:,ik);
+            sigma_t{iTheta,ik}(:,:) = diag((th_norm - mean{iTheta}(:,ik)).^2);
+            Lik                    = mvnpdf(th_norm,mean{iTheta}(:,ik),sigma_t{iTheta,ik}(:,:));
+            AIC{iTheta}(:,ik)      = 2*trace(Hat) - 2*log(Lik);
+            % Raw data
+            gain                   = inv(R_aa + k*I_k)*A';
+            beta_raw{iTheta}(:,ik) = gain*B(:,iTheta);
+            Hat                    = A*gain;
+            sigma_b_raw{iTheta,ik}(:,:)= gain*A*inv(R_aa + k*I_k);
+            mean_th                = A*beta_raw{iTheta}(:,ik);
+            sigma_th               = diag((th_norm - mean_th).^2);
+            Lik                    = mvnpdf(th_norm,mean_th,sigma_th);
+            AIC_raw{iTheta}(:,ik)      = 2*trace(Hat) - 2*log(Lik);
+            betas_lasso{iTheta}(:,ik) =  LassoShooting(A_s,th_norm,k,'verbose',0);
             betas_lasso_raw{iTheta}(:,ik) = LassoShooting(A,B(:,iTheta),k,'verbose',0);
         end
+        [AIC_min(iTheta),ind(iTheta)] = min(AIC{iTheta});
+        [AIC_raw_min(iTheta),ind_raw(iTheta)] = min(AIC_raw{iTheta});
 %         [betas_lasso{iTheta},fit_lasso{iTheta}] =  Lasso(A_s,B(:,iTheta));
 %         [betas_lasso_raw{iTheta},fit_lasso_raw{iTheta}] =  Lasso(A,B(:,iTheta));
 end
@@ -121,11 +139,15 @@ for iBeta=1:size(A,2)
 end
 for iTheta = 1:finalTerm
         figName = char(symb_term{S(iTheta)});
-        figure('Name',figName,'NumberTitle','off');
+        fig =  figure('Name',figName,'NumberTitle','off');
         subplot(2,2,1);
         for ib = 1:size(A,2)
             h1 = semilogx(coeffs,beta{iTheta}(ib,:),'-o','MarkerSize',5); hold on;
             set(h1, 'markerfacecolor', get(h1, 'color')); 
+        end
+        for ib = 1:size(A,2)
+            h2 = semilogx(coeffs(ind(iTheta)),beta{iTheta}(ib,ind(iTheta)),'ok','MarkerSize',10); hold on;
+            set(h2, 'markerfacecolor', get(h2, 'color')); 
         end
         title('Tikhonov normalised')
         xlabel('$\gamma$');
@@ -134,6 +156,10 @@ for iTheta = 1:finalTerm
         for ib = 1:size(A,2)
             h1 = semilogx(coeffs,beta_raw{iTheta}(ib,:),'-o','MarkerSize',5); hold on;
             set(h1, 'markerfacecolor', get(h1, 'color')); 
+        end
+        for ib = 1:size(A,2)
+            h2 = semilogx(coeffs(ind_raw(iTheta)),beta{iTheta}(ib,ind_raw(iTheta)),'ok','MarkerSize',10); hold on;
+            set(h2, 'markerfacecolor', get(h2, 'color')); 
         end
         title('Tikhonov raw')
         xlabel('$\gamma$');
@@ -158,6 +184,43 @@ for iTheta = 1:finalTerm
         xlabel('$\gamma$');
         ylabel('Raw data estimate')
         legend(Legends);
+        
+%          tikzName = [folderName,'/ridges_th_',num2str(iTheta),'.tikz'];
+%         cleanfigure;
+%         matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+%         false, 'height', '12cm', 'width','15cm','checkForUpdates',false);
+        pngName = [folderName,'/ridges_th_',num2str(iTheta),'.png'];
+        saveas(fig,pngName);
 end
 %% Estimate with selected value of k
-
+figName = 'AIC_norm';
+figure('Name',figName,'NumberTitle','off');
+for iTheta = 1:finalTerm
+    h1 = semilogx(coeffs,AIC{iTheta},'-o','MarkerSize',5); hold on;
+    set(h1, 'markerfacecolor', get(h1, 'color')); 
+    Leg_theta{iTheta} = strcat('$\theta_',num2str(iTheta),'$');
+    h2 = semilogx(coeffs(ind(iTheta)),AIC_min(iTheta),'ok','MarkerSize',10); hold on;
+    set(h2, 'markerfacecolor', get(h2, 'color')); 
+end
+xlabel('$\gamma$');
+ylabel('AIC')
+tikzName = [folderName,'/',figName,'.tikz'];
+        cleanfigure;
+        matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '7cm', 'width','12cm','checkForUpdates',false);
+        
+figName = 'AIC_raw';
+figure('Name',figName,'NumberTitle','off');
+for iTheta = 1:finalTerm
+    h1 = semilogx(coeffs,AIC_raw{iTheta},'-o','MarkerSize',5); hold on;
+    set(h1, 'markerfacecolor', get(h1, 'color')); 
+    Leg_theta{iTheta} = strcat('$\theta_',num2str(iTheta),'$');
+    h2 = semilogx(coeffs(ind_raw(iTheta)),AIC_raw_min(iTheta),'ok','MarkerSize',10); hold on;
+    set(h2, 'markerfacecolor', get(h2, 'color')); 
+end
+xlabel('$\gamma$');
+ylabel('AIC')
+tikzName = [folderName,'/',figName,'.tikz'];
+        cleanfigure;
+        matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '7cm', 'width','12cm','checkForUpdates',false);

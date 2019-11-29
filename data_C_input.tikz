@@ -1,24 +1,26 @@
 % This file was created by matlab2tikz.
-% Minimal pgfplots version: 1.3
 %
 \definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
 %
 \begin{tikzpicture}
 
 \begin{axis}[%
-width=11.411043cm,
-height=4cm,
+width=11.411cm,
+height=5cm,
 at={(0cm,0cm)},
 scale only axis,
 xmin=1,
 xmax=1500,
+xlabel style={font=\color{white!15!black}},
 xlabel={Sample index},
 ymin=-7,
 ymax=-4.999,
+ylabel style={font=\color{white!15!black}},
 ylabel={$\Delta x$, mm},
-legend style={legend cell align=left,align=left,draw=white!15!black}
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
-\addplot [color=mycolor1,solid,forget plot]
+\addplot [color=mycolor1]
   table[row sep=crcr]{%
 1	-5.951\\
 3	-5.933\\
@@ -772,5 +774,7 @@ legend style={legend cell align=left,align=left,draw=white!15!black}
 1499	-5.823\\
 1501	-6.281\\
 };
+\addlegendentry{data1}
+
 \end{axis}
 \end{tikzpicture}%

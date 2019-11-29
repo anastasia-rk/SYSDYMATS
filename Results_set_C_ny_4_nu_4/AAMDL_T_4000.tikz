@@ -1,0 +1,61 @@
+% This file was created by matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=5.706cm,
+height=4cm,
+at={(0cm,0cm)},
+scale only axis,
+xmin=1,
+xmax=30,
+xlabel style={font=\color{white!15!black}},
+xlabel={Number of terms},
+ymin=-2.9,
+ymax=-1.9,
+ylabel style={font=\color{white!15!black}},
+ylabel={AAMDL},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-1.93902574745811\\
+2	-2.30081453997938\\
+3	-2.56871777638681\\
+4	-2.68420378139627\\
+5	-2.74769266966051\\
+6	-2.76537943210932\\
+7	-2.81952473127343\\
+8	-2.82266829717557\\
+9	-2.83216591427594\\
+10	-2.83228939276341\\
+11	-2.85402656300167\\
+12	-2.85965744775823\\
+13	-2.86549512935302\\
+14	-2.8690139276345\\
+15	-2.88712767152196\\
+16	-2.88614440341643\\
+17	-2.88694938766098\\
+18	-2.88685333975566\\
+19	-2.88746293341895\\
+20	-2.8860904918826\\
+21	-2.88436275564167\\
+22	-2.88320038416955\\
+23	-2.88202440383577\\
+24	-2.8813547725162\\
+25	-2.88028642833293\\
+26	-2.87849034317674\\
+27	-2.87664254575764\\
+28	-2.87493836676128\\
+29	-2.87310833480319\\
+30	-2.8713430734222\\
+};
+\addplot [color=mycolor2, line width=5.0pt, draw=none, mark=asterisk, mark options={solid, mycolor2}, forget plot]
+  table[row sep=crcr]{%
+19	-2.88746293341895\\
+};
+\end{axis}
+\end{tikzpicture}%

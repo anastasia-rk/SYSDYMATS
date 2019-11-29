@@ -1,0 +1,2 @@
+RMSE for set 3 is  1.90 
+RMSE for set 8 is  4.87 

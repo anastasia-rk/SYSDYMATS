@@ -1,20 +1,21 @@
 my_init;
 %% Load files
-addpath('foam_data');
+folderName = 'foam_2010';
+addpath(folderName);
 firstLine   = 6;
 numColumns  = 3;
 numFiles    = 10;
 
-dataset =  'D'; %  'C'; %
+dataset = 'C'; % 'D'; %  
 
 for iFile=1:numFiles
     fileName = ['FOAM',num2str(iFile),dataset,'.txt']; % read all as strings
     D = textread(fileName, '%s','delimiter','\n'); % read full file as strings
     V = cellfun(@(s) sscanf(s,'%f').',D, 'un', 0); % read each string in D as numbers
     data_foam{iFile} = vertcat(V{:}); % concentrate arrays
-%     fileName = [num2str(iFile),dataset];
-%     fileData = data_foam{iFile};
-%     save(fileName, 'fileData');
+    fileName = [folderName,'/',num2str(iFile),dataset];
+    fileData = data_foam{iFile};
+    save(fileName, 'fileData');
 end
 % fileAll = ['all_data_',dataset]
 % save(fileAll,'data_foam');

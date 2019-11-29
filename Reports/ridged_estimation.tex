@@ -198,11 +198,11 @@ where polynomial coefficients $\mathbf{\beta}^i = \left[ \beta_0 \dots \beta_5 \
 \end{equation}
 where $L = \{L_{cut}^{k}\}^{K}_{k=1}$, $D = \{D_{rlx}^{k}\}^{K}_{k=1}$, the number of columns $M + 1$, where $M$ is the order of polynomial \eqref{eq:polyn}, and where $\times$ denotes the by-element product such that
 \begin{equation*}
-L\times L = \Big[ L_{cut}^{(j)} L_{cut}^{(j)}\Big]^{N}_{j=1}.
+L\times L = \Big[ L_{cut}^{(k)} L_{cut}^{(k)}\Big]^{K}_{k=1}.
 \end{equation*}
 Then, for each internal parameter a vector of estimated values is formed across $K$ training datasets:
 \begin{equation*}
-\bar{\theta}^i = \left\{ \theta^{1}_{i}, \theta^{1}_{i}, \dots, \theta^{K}_{i} \right\}.
+\bar{\theta}^i = \left\{ \theta^{1}_{i}, \theta^{1}_{i}, \dots, \theta^{K}_{i} \right\}^{\top}.
 \end{equation*}
 Note that while the internal parameters are considered to be fixed in the estimation, their estimates are obtained from the random data and therefore are random variables 
 \begin{equation*}
@@ -211,28 +211,54 @@ Note that while the internal parameters are considered to be fixed in the estima
 \begin{remark}
 For the purposes of this analysis the factors contributing to this variance are not considered and the vector of LSEs is treated as a response signal in the LS formulation.
 \end{remark}
-Estimation of the polynomial coefficients for the $i$-th internal parameter $\mathbf{\beta}^i$ is a standard LS problem:
+Estimation of the polynomial coefficients for the $i$-th internal parameter $\mathbf{\beta}^i$ is an ordinary least squares (OLS) problem:
 \begin{equation}
-\hat{\mathbf{\beta}}^i = 
+\hat{\mathbf{\beta}}^i = \underset{\beta \in \R}{\arg \min} \Biggl\{\norm{ \biggl(\bar{\theta}^i - \mathbf{A} \mathbf{\beta}^i \biggr) }^{2}_{2}\Biggr\}
 \end{equation}
-where 
-\par It can be seen from Table 1 in previous report that the experimental data is collected from the narrow subspace of design parameters. Combined with the polynomial structure that means that the columns of the data matrix $\mathbf{A} $ are powers of one another, this may lead to severe collinearity problems. The quickest way to access collinearity is to check the condition number of the scaled matrix $\mathbf{A}^\ast$. As per recommendation in [cite Seber and Lee], the data is not centred to see the effect on the raw data on LSE variance:
+with closed form solution
+\begin{equation}
+\hat{\mathbf{\beta}}^{i}_{OLS} = \mathbf{R}^{-1}_{aa} \mathbf{A}^{\top}\bar{\theta}^i,  
+\end{equation} 
+where $\mathbf{R}^{\ast}_{aa} = (\mathbf{A}^\ast)^{\top}\mathbf{A}^\ast$ is the regression matrix. The OLS estimator is unbiased and provides the solution that best fits the training data, where the fit is characterised by the sum of squared residuals (RSS). The unbiasedness is usually at the cost of the estimate variance and thus does not guarantee good generalisation of the model with estimated parameters. 
+\par It can be seen from Table 1 in previous report that the experimental data is collected from the narrow subspace of design parameters. Combined with the polynomial structure that means that the columns of the data matrix $\mathbf{A} $ are powers of one another, this may lead to severe collinearity problem. The quickest way to access collinearity is to check the condition number of the scaled matrix $\mathbf{A}^\ast$. As per recommendation in [cite Seber and Lee], the data is not centred to see the effect on the raw data perturbation on the LSE variance:
 \begin{equation*}
-a^{\ast}_{i,j} = \frac{a_{i,j}}{\Big\{ \sum_{K}^{i=1} a^{2}_{i,j}\Big\}^{1/2}}, 
+a^{\ast}_{k,j} = \frac{a_{k,j}}{\Big\{ \sum^{K}_{k=1} a^{2}_{k,j}\Big\}^{1/2}}, 
 \end{equation*}
 where $j$ is the column index.
-For the given data $\kappa(\mathbf{A}^\ast) = $ which indicates that some eigenvalues of the regression matrix $R_{aa} = (\mathbf{A}^\ast)^{\top}\mathbf{A}^\ast$ are close to zero. Indeed, 
-
-Some collinearity metrics for centred and scaled matrix $\mathbf{A}_{s}^{\star}$, where $\mathbf{A} = 1, \mathbf{A}_{s}$ are summarised in Table 1. The level of collinearity is assessed by computing the coefficients of determination for individual columns
+For the given data $\kappa(\mathbf{A}^\ast) = 1083.57$ which indicates that some eigenvalues of the regression matrix $\mathbf{R}^{\ast}_{aa} = (\mathbf{A}^\ast)^{\top}\mathbf{A}^\ast$ are close to zero:
+\begin{equation*}
+\text{eig}(\mathbf{R}^{\ast}_{aa}) = \left[\begin{array}{r}
+4.78 \times 10^{-6} \\
+3.50 \times 10^{-5} \\
+0.0015	\\
+0.0199	\\
+0.3625	\\
+5.6161	\\
+\end{array}\right]
+\end{equation*}
+Some collinearity metrics for centred and scaled matrix $\mathbf{A}_{s}^{\star}$, where $\mathbf{A} = \left[\right]1, \mathbf{A}_{s}$ are summarised in Table 1. The correlation of each columns and linear combinations of other columns is assessed by computing the coefficients of determination for individual columns
 \begin{equation*}
 R^{2}_{j} = 1 - \frac{(a^{\star}_{j})^{\top} H_j a^{\star}_{j}}{\sum_{i}( a^{\star}_{j} - \hat{a}^{\star}_{j})^2},
 \end{equation*} 
-while the effect of collinearity on LSE variance is assessed via variance inflation coefficients
+where $ \mathbf{H}_j = \mathbf{A}_{j}^{\star}((\mathbf{A}_{j}^{\star})^{\top}\mathbf{A}_{j}^{\star})^{-1}(\mathbf{A}_{j}^{\star})^{\top}$ is the hat matrix and where $\mathbf{A}_{j}^{\star}$ is the data matrix that excludes the column $a^{\star}_{j}$. The ratio in this case quantifies the distance between the column of interest and its linear  regression on other columns. The smaller this distance is, the higher determination coefficient for the column $a^{\star}_{j}$ will be. However, coefficients of determination do not indicate which particular columns have near-linear dependence. Thus, the effect of collinearity on LSE variance is assessed via variance inflation coefficients
 \begin{equation*}
-\text{VIF}_j = \frac{\text{Var}(\beta_j)}{\sigma^2} = \frac{\sigma^2}{1 - R^{2}_{j}}.
+\text{VIF}_j = \frac{\text{Var}(\beta_j)}{\sigma^{2}_{j}} = \frac{\sigma^{2}_{j}}{1 - R^{2}_{j}},
 \end{equation*}
-\begin{table}[h]
+while the number of correlated column maybe better assessed from eigenvalues of the scaled and centred regression matrix are
+\begin{equation*}
+\text{eig}(\mathbf{R}^{\star}_{aa}) = \left[\begin{array}{r}
+0.0002\\
+0.0004\\
+0.0075\\
+1.9647\\
+3.0271\\
+8
+\end{array}\right]
+\end{equation*}
+It can be seen that at least two columns of the normalised data matrix suffer from collinearity, and its effect on variance inflation confirms that the model may suffer bad generalisation outside of the considered subspace of design parameters $\xi$. This indicates the need for regularisation of the estimation procedure in order to reduce the dispersion of the parameter LSEs.
+\begin{table}[!h]
 	\centering
+	\caption{Collinearity metrics of the data.}\label{tab:vifs}
 	\begin{tabular}{rrrrrr}
 		Column & $L$ & $R$ & $L \times R$ & $L \times L$ & $R \times R$ \\
 		\hline
@@ -241,40 +267,48 @@ while the effect of collinearity on LSE variance is assessed via variance inflat
 		\hline
 	\end{tabular}
 \end{table}
-Evident collinearity indicates the need for regularisation of the estimation procedure in order to reduce the dispersion of the parameter LSEs.
 \section{Regularised Least Squares}
 \par A common treatment for models that suffer from bad generalisation and collinearity is to introduce a constrained LS problem, where the constraint is normally posed on the unknown parameter vector:
 \begin{equation}\label{eq:rls_constr}
-\hat{\mathbf{\beta}}^i = \underset{\beta \in \R}{\arg \min}\norm{ \biggl(\bar{\theta}^i - X \mathbf{\beta}^i \biggr) }^2, \quad R(\mathbf{\beta}^i) < \gamma.
+\hat{\mathbf{\beta}}^i = \underset{\beta \in \R}{\arg \min}\norm{ \biggl(\bar{\theta}^i - \mathbf{A} \mathbf{\beta}^i \biggr) }^{2}_{2}, \quad f_{R}(\mathbf{\beta}^i) < \gamma.
 \end{equation}
 where $\gamma$ is a pre-specified parameter that defines the size of the constraint in the parameter space $\Xi$.
-Lagrangian formulation of the constrained problem is called regularised Least Squares (RLS),
-\begin{equation}
-\mathbf{\beta}^i = \underset{\beta \in \R}{\arg \min} \Biggl\{\norm{ \biggl(\bar{\theta}^i - X \mathbf{\beta}^i \biggr) }^2 + \lambda R(\mathbf{\beta}^i)\Biggr\}
+Lagrangian formulation of the constrained problem is called Regularised Least Squares (RLS),
+\begin{equation}\label{eq:rls_problem}
+\hat{\mathbf{\beta}}^i = \underset{\beta \in \R}{\arg \min} \Biggl\{\norm{ \biggl(\bar{\theta}^i - \mathbf{A} \mathbf{\beta}^i \biggr) }^{2}_{2} + \lambda f_{R}(\mathbf{\beta}^i)\Biggr\}
 \end{equation}
 where the regularisation coefficient $\lambda$ is directly linked to  $\gamma$ in \eqref{eq:rls_constr} CITE. Different types of the constraint function can be considered depending on the problem.
 \subsection{Tikhonov regularisation}
 Innovation regularisation  constrains the 2-norm of the parameter vector
-
-This is the only RLS formulation that has a closed form solution
 \begin{equation}
-\bar{\theta} = \mathbf{A}\beta,
+f_{R}(\mathbf{\beta}^i) = \norm{\mathbf{\beta}^i}^{2}_{2}.
 \end{equation}
- This solution is referred to as ridge regression, because increasing $\lambda$ leads to the 
-
-
-This shows that in Tikhonov regularisation $\lambda$ quantifies the trade-off between the bias and the variance in the estimates. Small regularisation term leads to overfitting the model to the training data which may lead to poor 
+This is the only RLS formulation that has a closed form solution that is usually obtained for the normalised data. 
+\begin{equation}
+\hat{\mathbf{\beta}}^{i}_{RLS} = (\mathbf{R}^{*}_{aa} + \lambda \eye_M)^{-1} (\mathbf{A}^{\star})^{\top}\bar{\theta}^i,  
+\end{equation}
+This solution is referred to as ridge regression, because increasing $\lambda$ shrinks the coefficients $\beta_j$. The shrinkage is shown is best interpreted via eigenvalue decomposition of the regression matrix.\\
+Derivation here\\
+This shows that in Tikhonov regularisation $\lambda$ quantifies the trade-off between the bias and the variance in the estimates. Small regularisation coefficient leads to near-OLS solution that overfits the model to the training data, while large value leads to biased estimates and drives all coefficients to near-zero values.
 \subsection{LASSO regularisation}
-\par While in the ridge regression LSEs asymptotically approach zero, none of the parameters can be zeroed-out explicitly if the model structure is overly detailed. Another formulation of RLS, called Least absolute shrinkage and selection operator (LASSO) regression, performs variable selection and the regularisation simultaneously. The optimisation problem is 
-
-\par In LASSO approach, regularisation 
-
+\par While in the ridge regression LSEs asymptotically approach zero, none of the parameters can be zeroed-out explicitly if the model structure is overly detailed. Another formulation of RLS, called Least absolute shrinkage and selection operator (LASSO) regression, performs variable selection and the regularisation simultaneously. The regularising term is the 1-norm of the parameter vector:
+\begin{equation}
+f_{R}(\mathbf{\beta}^i) = \norm{\mathbf{\beta}^i}_{1}.
+\end{equation}
+\par zeroing out schemes.
 \begin{remark}
 	Results of ridge estimation can be used as the initial point in convex optimisation while solving the LASSO regression. 
 \end{remark}
 \subsection{Selection of the regularisation coefficient}
-\par The important stage of solving RLS problem is selecting the regularisation parameter. The constraint $\gamma$ in \eqref{eq:rls_constr} is often selected arbitrary since the shape of the parameter space is unknown. As a result, finding $\lambda$ relies on iterative schemes most of which do not guarantee convergence [CITE MANY]. For the lack of universal approach for selecting the optimal value of $\lambda$, the choice of the method remains application-specific.
-\par In this report, the model structure is ass 
+\par The important stage of solving RLS problem is selecting the regularisation parameter that will result into a interpretable but parsimonious model. The constraint $\gamma$ in \eqref{eq:rls_constr} is often selected arbitrary since the shape of the parameter space is unknown. As a result, finding $\lambda$ relies on iterative schemes most of which do not guarantee convergence [CITE MANY]. For the lack of universal approach for selecting the optimal value of $\lambda$, the choice of the method remains application-specific.
+\par In this report, ridge estimation is applied to a fixed model structure, hence Aikaike’s information criterion (AIC) may be used:
+\begin{equation}
+\text{AIC}_{\lambda} = p + \frac{1}{2}\log p(\bar{\theta}^i \mid \mathbf{\beta}^i, \lambda),
+\end{equation}
+where the first term quantifies model complexity and the second term is the log-likelihood of the selected model fitting the data. The model complexity is determined as simply the trace of the hat matrix of the ridge estimator
+\begin{equation}
+p = \tr(\mathbf{H}_RLS) = \tr((\mathbf{A}^{\top})(\mathbf{R}_{aa} + \lambda \eye_M)^{-1} \mathbf{A}^{\top})
+\end{equation}.
 \section{Results}
 \par The results are obtained for the auxetic form data for 8 datasets using both types of regularisation. Ridge traces are shown for values of $\lambda$ from $10^{-6}$ to $10^0$. While the RLS is usually used for the normalised (scaled and centred) data, results for the raw   
 
@@ -283,6 +317,6 @@ This shows that in Tikhonov regularisation $\lambda$ quantifies the trade-off be
 	\item Regularised LS for the direct estimation of $B$ from joint datasets. Long time-series and polynomial structure of the regressors may also lead to collinearity problems. It's not clear yet whether the data needs to be normalised separately.
 	\item Confidence and covariance regions to demonstrate bias-variance trade off.
 	\item Multiple methods for LASSO regression can be investigated.
-	\item 
+	\item Cross-validation and other methods to select the regularisation term.
 \end{itemize}
 \end{document}

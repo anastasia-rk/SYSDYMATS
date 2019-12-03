@@ -14,6 +14,8 @@ xmin=1000,
 xmax=1500,
 ymin=-45,
 ymax=0,
+ylabel={Response, kN},
+xlabel={Sample index},
 axis background/.style={fill=white},
 legend style={legend cell align=left, align=left, draw=white!15!black}
 ]

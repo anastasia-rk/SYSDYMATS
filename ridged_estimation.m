@@ -41,10 +41,10 @@ B_hat = A*betas_ols;
 
 % Normalise data matrix
 A_2 = A(:,2:end)
-for j=1:size(A_2,2)
-    m = mean(A_2(:,j));
-    c = sqrt(sum((A_2(:,j) - m).^2));
-    A_norm(:,j) = (A_2(:,j)- m)/c;
+for j=1:2 %size(A_2,2)
+    m(j) = mean(A_2(:,j));
+    c(j) = sqrt(sum((A_2(:,j) - m(j)).^2));
+    A_norm(:,j) = (A_2(:,j)- m(j))/c(j);
 end
 n = size(A,1)
 R_a2 = A_norm'*A_norm;

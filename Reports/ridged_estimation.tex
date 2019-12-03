@@ -193,12 +193,12 @@
 where polynomial coefficients $\mathbf{\beta}^i = \left[ \beta_0 \dots \beta_5 \right]$ are unknown. In the original paper \cite{Wei2008} they are estimated via batch LS estimator as follows. First, the matrix of "independent" variables is formed from the external parameter values:
 \begin{equation}
 \mathbf{A} = \left[\begin{array}{cccccc}
-1 & L& D& L\times L& D\times D& L\times D
+1 & L& D& L\odot L& D \odot D& L\odot  D
 \end{array}\right],
 \end{equation}
-where $L = \{L_{cut}^{k}\}^{K}_{k=1}$, $D = \{D_{rlx}^{k}\}^{K}_{k=1}$, the number of columns $M + 1$, where $M$ is the order of polynomial \eqref{eq:polyn}, and where $\times$ denotes the by-element product such that
+where $L = \{L_{cut}^{k}\}^{K}_{k=1}$, $D = \{D_{rlx}^{k}\}^{K}_{k=1}$, the number of columns $M + 1$, where $M$ is the order of polynomial \eqref{eq:polyn}, and where $\odot$ denotes Hadamard entry-wise product:
 \begin{equation*}
-L\times L = \Big[ L_{cut}^{(k)} L_{cut}^{(k)}\Big]^{K}_{k=1}.
+L\odot L = \Big[ L_{cut}^{(k)} L_{cut}^{(k)}\Big]^{K}_{k=1}.
 \end{equation*}
 Then, for each internal parameter a vector of estimated values is formed across $K$ training datasets:
 \begin{equation*}
@@ -260,7 +260,7 @@ It can be seen that at least two columns of the normalised data matrix suffer fr
 	\centering
 	\caption{Collinearity metrics of the data.}\label{tab:vifs}
 	\begin{tabular}{rrrrrr}
-		Column & $L$ & $R$ & $L \times R$ & $L \times L$ & $R \times R$ \\
+		Column & $L$ & $R$ & $L \odot R$ & $L \odot L$ & $R \odot R$ \\
 		\hline
 		$R^{2}_{j}$ & 0.9992  &  0.9988  &  0.9997  &  0.9992  &  0.9985 \\
 		VIF$_j$ & 1256.04 & 862.29 & 2867.46 & 1212.49 & 665.06 \\

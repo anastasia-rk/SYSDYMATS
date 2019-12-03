@@ -1,6 +1,6 @@
 my_init;
 
-dataset = 'C'; % 'D'; %                                                     % name of dataset
+dataset = 'C'; % 'S'; % 'Z'; % 'Y'; % 'S'; %  'D'; %                        % name of dataset
 metaFileName = ['Meta_',dataset];
 load(metaFileName);
 d       = n_y + n_u;                                                        % size of input vector x
@@ -10,11 +10,59 @@ fileNames = sym(dict_set,[1 K]);                                            % ve
 folder = 'Results';                                                         % specify category where to save files
 names = {'set','ny','nu'};                                                  % names used to define results folder name (no more than 3).
 folderName = make_folder(folder,names,dataset,n_y,n_u);                     % create results folder
-
-%% Select first significant basis vector for all datasets
 index = (1:T);                                                              % length of the sample
-Files =  [1 2 4 5 6 7 9 10]; % 1:K; %                                       % id of the sample
+Files =  1:K; %                                                             % id of the sample
+Files(3) = [];Files(8) = [];
 K = length(Files);
+%% Show correlation between autoregressive and input terms
+if n_y ~= 0
+figure;
+L2 = round(K/2);
+iPlot = 0;
+for iFile=Files                                                             % over all datasets
+        fName = [dictFolder,'/',char(fileNames(iFile))];
+        File = matfile(fName,'Writable',true);
+        ind_y= n_y;
+        iPlot = iPlot + 1;
+        tht = File.term(index,ind_y)\File.y_narx(index,1);
+        y_regressed = File.term(index,ind_y)*tht;
+        Rr = round(corrcoef(File.term(index,ind_y),File.y_narx(index,1)),4);
+        subplot(L2,2,iPlot)
+        scatter(File.term(index,ind_y),File.y_narx(index,1),'filled'); hold on;
+        plot(File.term(index,ind_y),y_regressed,'Linewidth',2); 
+        title([dataset,num2str(iFile),', R = ',num2str(Rr(2,1))]); xlabel(char(symb_term{ind_y})); ylabel('y(t)');
+        clear File tht Rr
+end
+    tikzName = [folderName,'/Regressions_yt_T_',num2str(T),'.tikz'];
+    cleanfigure;
+    matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '18cm', 'width','12cm','checkForUpdates',false);
+end
+%%     
+figure;
+L2 = round(length(Files)/2);
+iPlot = 0;
+for iFile=Files                                                             % over all datasets
+        fName = [dictFolder,'/',char(fileNames(iFile))];
+        File = matfile(fName,'Writable',true);
+        ind_u= n_y + n_u;
+        iPlot = iPlot + 1;
+        tht = File.term(index,ind_u)\File.y_narx(index,1);
+        y_regressed = File.term(index,ind_u)*tht;
+        Rr = round(corrcoef(File.term(index,ind_u),File.y_narx(index,1)),4);
+        subplot(L2,2,iPlot)
+        scatter(File.term(index,ind_u),File.y_narx(index,1),'filled'); hold on;
+        plot(File.term(index,ind_u),y_regressed,'Linewidth',2); 
+        title([dataset,num2str(iFile),', R = ',num2str(Rr(2,1))]); xlabel(char(symb_term{ind_u})); ylabel('y(t)');
+        clear File tht
+end
+tikzName = [folderName,'/Regressions_ut_T_',num2str(T),'.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '18cm', 'width','12cm','checkForUpdates',false);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Select first significant basis vector for all datasets
 iTerm = 1;                                                                  % the first significant term
 AEER{iTerm} = zeros(nTerms,1);                                              % placeholder for AERR criteria
 for iFile=Files                                                             % over all datasets
@@ -49,9 +97,45 @@ AAMDL_all(iTerm) = AMDL_sum/K;                                              % av
 significant_term{iTerm} =  symb_term{S(iTerm)};
 disp(['Significant term ', num2str(iTerm),':'])
 significant_term{iTerm}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Main loop - forward selection
+%% Plot AEER across terms
+for j=1:nTerms                                                 % assign ticks
+    x_ticklabels{j} = char(symb_term{j});
+end
+figure;
+plot(AEER{iTerm}*100,'-o'); hold on;
+ylabel('AEER, $\%$'); xlabel('Terms')
+set(gca,'XTick',[1:nTerms]);
+set(gca,'XTickLabel',x_ticklabels);
+xtickangle(90)
+tikzName = [folderName,'/AEER_first_',num2str(T),'.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '5cm', 'width','12cm','checkForUpdates',false);
 
+%% Plot correlations
+figure;
+L2 = round(length(Files)/2);
+iPlot = 0;
+for iFile=Files                                                             % over all datasets
+        fName = [dictFolder,'/',char(fileNames(iFile))];
+        File = matfile(fName,'Writable',true);
+        ind_u= S(iTerm);
+        iPlot = iPlot + 1;
+        tht = File.term(index,ind_u)\File.y_narx(index,1);
+        y_regressed = File.term(index,ind_u)*tht;
+        Rr = round(corrcoef(File.term(index,ind_u),File.y_narx(index,1)),4);
+        subplot(L2,2,iPlot)
+        scatter(File.term(index,ind_u),File.y_narx(index,1),'filled'); hold on;
+        plot(File.term(index,ind_u),y_regressed,'Linewidth',2); 
+        title([dataset,num2str(iFile),', R = ',num2str(Rr(2,1))]); xlabel(char(symb_term{ind_u})); ylabel('y(t)');
+        clear File tht
+end
+tikzName = [folderName,'/Regressions_significant_T_',num2str(T),'.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '18cm', 'width','12cm','checkForUpdates',false);
+
+%% Main loop - forward selection
 if length(dict_terms) + 1 < 30                                              % Maximum significant terms (if the algorithm is not terminated by the criterion)
     maxSign = length(dict_terms) + 1;
 else
@@ -97,8 +181,6 @@ while(iTerm <= maxSign) && ~converged                                       % lo
     converged = (AAMDL_all(iTerm) < -10);                                   % check convergence PLACEHOLDER
     iTerm = iTerm + 1;                                                      % increase the number of significant terms
 end
-clear AEER
-
 %% Select optimal number of terms
 [min_aamdl,i_min] = min(AAMDL_all);
 figure('Name','AAMDL','NumberTitle','off');
@@ -107,7 +189,6 @@ plot(i_min,min_aamdl,'*','LineWidth',5);
 xlim([1 maxSign])
 xlabel('Number of terms');
 ylabel('AAMDL')
-%%
 tikzName = [folderName,'/AAMDL_T_',num2str(T),'.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
@@ -127,6 +208,21 @@ for iTerm=1:finalTerm
 end
 Step = [1:finalTerm]';
 Tab = table(Step,Terms);
+%% Plot AEER surface
+figure;
+for iTerm=2:finalTerm
+plot3(iTerm*ones(nTerms,1),[1:nTerms],AEER{iTerm}*100,'-o'); hold on;
+zlabel('AEER, $\%$'); ylabel('Terms'); xlabel('Iteration')
+end
+set(gca,'YTick',[1:nTerms]);
+set(gca,'YTickLabel',x_ticklabels);
+ytickangle(45)
+tikzName = [folderName,'/All_AEER_T_',num2str(T),'.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '4cm', 'width','12cm','checkForUpdates',false);
+
+clear AEER
 %% Parameter estimation
 for iFile=Files
     U{iFile} = zeros(finalTerm,finalTerm);                                  % placeholder for upper-trig unit matrix

@@ -64,7 +64,7 @@ matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Select first significant basis vector for all datasets
 iTerm = 1;                                                                  % the first significant term
-AEER{iTerm} = zeros(nTerms,1);                                              % placeholder for AERR criteria
+AERR{iTerm} = zeros(nTerms,1);                                              % placeholder for AERR criteria
 for iFile=Files                                                             % over all datasets
     fName = [dictFolder,'/',char(fileNames(iFile))];
     File = matfile(fName,'Writable',true);
@@ -72,14 +72,14 @@ for iFile=Files                                                             % ov
     for jTerm = dict_terms                                                  % over all polynomial terms in the dictionary
         term0 = File.term(index,jTerm);
         cf(iFile,jTerm) = cor_sqr(residual_init{iFile},term0);              % squared correlation coefficient for the dataset and the polynomial term
-        AEER{iTerm}(jTerm) = AEER{iTerm}(jTerm) + cf(iFile,jTerm);          % Average error reduction ration over all datasets
+        AERR{iTerm}(jTerm) = AERR{iTerm}(jTerm) + cf(iFile,jTerm);          % Average error reduction ration over all datasets
         clear term0
     end
     clear File
 end
-AEER{iTerm}(:,:) = AEER{iTerm}(:,:)/K;
-[AEER_m,iMax] = max(AEER{iTerm});                                           % find the index of the term with the highest criterion across all datasets
-AEER_mm(iTerm,1) = AEER_m;
+AERR{iTerm}(:,:) = AERR{iTerm}(:,:)/K;
+[AERR_m,iMax] = max(AERR{iTerm});                                           % find the index of the term with the highest criterion across all datasets
+AERR_mm(iTerm,1) = AERR_m;
 S(iTerm) = iMax;                                                            % save index of the term
 dict_terms(iMax) = [];                                                      % reduce the dictionary of available terms
 AMDL_sum = 0;
@@ -97,17 +97,17 @@ AAMDL_all(iTerm) = AMDL_sum/K;                                              % av
 significant_term{iTerm} =  symb_term{S(iTerm)};
 disp(['Significant term ', num2str(iTerm),':'])
 significant_term{iTerm}
-%% Plot AEER across terms
+%% Plot AERR across terms
 for j=1:nTerms                                                 % assign ticks
     x_ticklabels{j} = char(symb_term{j});
 end
 figure;
-plot(AEER{iTerm}*100,'-o'); hold on;
-ylabel('AEER, $\%$'); xlabel('Terms')
+plot(AERR{iTerm}*100,'-o'); hold on;
+ylabel('AERR, $\%$'); xlabel('Terms')
 set(gca,'XTick',[1:nTerms]);
 set(gca,'XTickLabel',x_ticklabels);
 xtickangle(90)
-tikzName = [folderName,'/AEER_first_',num2str(T),'.tikz'];
+tikzName = [folderName,'/AERR_first_',num2str(T),'.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
             false, 'height', '5cm', 'width','12cm','checkForUpdates',false);
@@ -144,7 +144,7 @@ end
 converged   = false;
 iTerm       = 2;
 while(iTerm <= maxSign) && ~converged                                       % loop over the number of significant terms
-    AEER{iTerm} = zeros(nTerms,1);                                          % placeholder for AERR criteria
+    AERR{iTerm} = zeros(nTerms,1);                                          % placeholder for AERR criteria
     for iFile=Files                                                         % over all datasets
         fName = [dictFolder,'/',char(fileNames(iFile))];
         File = matfile(fName,'Writable',true);
@@ -153,13 +153,13 @@ while(iTerm <= maxSign) && ~converged                                       % lo
                                                     phi{iFile},iTerm);      % orthogonalise basis
             cf(iFile,jTerm)         = cor_sqr(residual_init{iFile},...
                                               p{iTerm,iFile}(:,jTerm));     % squared correlation coefficient for the dataset and the polynomial term
-            AEER{iTerm}(jTerm) = AEER{iTerm}(jTerm) + cf(iFile,jTerm);      % Average error reduction ration over all datasets
+            AERR{iTerm}(jTerm) = AERR{iTerm}(jTerm) + cf(iFile,jTerm);      % Average error reduction ration over all datasets
         end
         clear File
     end
-    AEER{iTerm}(:,:) = AEER{iTerm}(:,:)/K;
-    [AEER_m,iMax] = max(AEER{iTerm});                                       % Find the index of the term with the highest criterion across all datasets
-    AEER_mm(iTerm,1)   = AEER_m;
+    AERR{iTerm}(:,:) = AERR{iTerm}(:,:)/K;
+    [AERR_m,iMax] = max(AERR{iTerm});                                       % Find the index of the term with the highest criterion across all datasets
+    AERR_mm(iTerm,1)   = AERR_m;
     S(iTerm) = iMax;                                                        % Save index of the term  
     ind = find(dict_terms == iMax);
     dict_terms(ind) = [];                                                   % Reduce the dictionary of available terms
@@ -208,21 +208,21 @@ for iTerm=1:finalTerm
 end
 Step = [1:finalTerm]';
 Tab = table(Step,Terms);
-%% Plot AEER surface
+%% Plot AERR surface
 figure;
 for iTerm=2:finalTerm
-plot3(iTerm*ones(nTerms,1),[1:nTerms],AEER{iTerm}*100,'-o'); hold on;
-zlabel('AEER, $\%$'); ylabel('Terms'); xlabel('Iteration')
+plot3(iTerm*ones(nTerms,1),[1:nTerms],AERR{iTerm}*100,'-o'); hold on;
+zlabel('AERR, $\%$'); ylabel('Terms'); xlabel('Iteration')
 end
 set(gca,'YTick',[1:nTerms]);
 set(gca,'YTickLabel',x_ticklabels);
 ytickangle(45)
-tikzName = [folderName,'/All_AEER_T_',num2str(T),'.tikz'];
+tikzName = [folderName,'/All_AERR_T_',num2str(T),'.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
             false, 'height', '4cm', 'width','12cm','checkForUpdates',false);
 
-clear AEER
+clear AERR
 %% Parameter estimation
 for iFile=Files
     U{iFile} = zeros(finalTerm,finalTerm);                                  % placeholder for upper-trig unit matrix
@@ -248,8 +248,8 @@ for iFile=Files
     Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
 end
 %% Store to table
-AEER  = round(AEER_mm(1:finalTerm,1)*100,3);
-Table_all = addvars(Tab,AEER,'NewVariableNames',{'AEER($\%$)'})
+AERR  = round(AERR_mm(1:finalTerm,1)*100,3);
+Table_all = addvars(Tab,AERR,'NewVariableNames',{'AERR($\%$)'})
 tableName = [folderName,'/Thetas_T_',num2str(T)];
 table2latex(Table_all,tableName);
 %% 

@@ -3954,7 +3954,7 @@ x	y\\
 \begin{axis}[%
 width=4.927cm,
 height=3cm,
-at={(6.484cm,14.516cm)},
+at={(7cm,14.516cm)},
 scale only axis,
 xmin=-7,
 xmax=-4.98,
@@ -11808,7 +11808,7 @@ x	y\\
 \begin{axis}[%
 width=4.927cm,
 height=3cm,
-at={(6.484cm,9.677cm)},
+at={(7cm,9.677cm)},
 scale only axis,
 xmin=-7,
 xmax=-4.98,
@@ -19659,7 +19659,7 @@ x	y\\
 \begin{axis}[%
 width=4.927cm,
 height=3cm,
-at={(6.484cm,4.839cm)},
+at={(7cm,4.839cm)},
 scale only axis,
 xmin=-7,
 xmax=-4.999,
@@ -27533,7 +27533,7 @@ x	y\\
 \begin{axis}[%
 width=4.927cm,
 height=3cm,
-at={(6.484cm,0cm)},
+at={(7cm,0cm)},
 scale only axis,
 xmin=-7,
 xmax=-4.98,

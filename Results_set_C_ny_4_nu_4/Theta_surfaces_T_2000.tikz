@@ -7,7 +7,7 @@
 
 \begin{axis}[%
 width=6.159cm,
-height=3.097cm,
+width=3.4cm,
 at={(0cm,12.903cm)},
 scale only axis,
 xmin=56,
@@ -2562,7 +2562,7 @@ x	y	z	c\\
 
 \begin{axis}[%
 width=6.159cm,
-height=3.097cm,
+width=3.4cm,
 at={(8.104cm,12.903cm)},
 scale only axis,
 xmin=56,
@@ -5117,7 +5117,7 @@ x	y	z	c\\
 
 \begin{axis}[%
 width=6.159cm,
-height=3.097cm,
+width=3.4cm,
 at={(0cm,8.602cm)},
 scale only axis,
 xmin=56,
@@ -7672,7 +7672,7 @@ x	y	z	c\\
 
 \begin{axis}[%
 width=6.159cm,
-height=3.097cm,
+width=3.4cm,
 at={(8.104cm,8.602cm)},
 scale only axis,
 xmin=56,
@@ -10227,7 +10227,7 @@ x	y	z	c\\
 
 \begin{axis}[%
 width=6.159cm,
-height=3.097cm,
+width=3.4cm,
 at={(0cm,4.301cm)},
 scale only axis,
 xmin=56,
@@ -12782,7 +12782,7 @@ x	y	z	c\\
 
 \begin{axis}[%
 width=6.159cm,
-height=3.097cm,
+width=3.4cm,
 at={(8.104cm,4.301cm)},
 scale only axis,
 xmin=56,
@@ -15337,7 +15337,7 @@ x	y	z	c\\
 
 \begin{axis}[%
 width=6.159cm,
-height=3.097cm,
+width=3.4cm,
 at={(0cm,0cm)},
 scale only axis,
 xmin=56,
@@ -17892,7 +17892,7 @@ x	y	z	c\\
 
 \begin{axis}[%
 width=6.159cm,
-height=3.097cm,
+width=3.4cm,
 at={(8.104cm,0cm)},
 scale only axis,
 xmin=56,

@@ -31,7 +31,7 @@
 \usepackage{cancel}
 \usepackage[toc,page]{appendix}
 \usepackage{pgfplots}
-\pgfplotsset{compat=newest,every axis/.append style={line width=0.5pt},label style={font=\small},tick label style={font=\small},title style={font=\small},y tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={},},z tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={},},x label style={font={\tiny},at={(axis description cs:0.5,-0.15)},anchor=north},y label style={font={\small},at={(axis description cs:-0.15,0.5)},anchor=south},z label style={font={\small},at={(axis description cs:-0.25,0.5)},anchor=north}}
+\pgfplotsset{compat=newest,every axis/.append style={line width=0.5pt},label style={font=\small},tick label style={font=\small},title style={font=\small},y tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={},},z tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={},},x label style={font={\small},at={(axis description cs:0.5,-0.15)},anchor=north},y label style={font={\small},at={(axis description cs:-0.15,0.5)},anchor=south},z label style={font={\small},at={(axis description cs:-0.25,0.5)},anchor=north}}
 \usetikzlibrary{shapes,shadows,arrows,backgrounds,patterns,positioning,automata,calc,decorations.markings,decorations.pathreplacing,bayesnet,arrows.meta} 
 \usepackage{varwidth}
 \usepackage{lscape}
@@ -190,14 +190,14 @@ The number and order of significant terms are identified within the EFOR-CMSS al
 \begin{table}[!h]
 	\centering
 	\caption{Estimated parameters for the sample length 4000.}\label{tab:thetas4000}
-	\small
+	\small  
 	\input{Thetas_T_4000.tex}
 \end{table}
-In either case the structure identification assigns the principal contribution to the bilinear term thus contradicting the expectation that linear autoregressive or input terms would have higher significance. This could be caused by the selection of the criterion and the fact that it is averaged across all datasets. Figure \ref{fig:aeer} showing AEERs computed for all terms on the first iteration confirms this concern: the AEER of the selected significant term is only slightly higher than the first autoregressive term $y(t-1)$. 
+In either case the structure identification assigns the principal contribution to the bilinear term thus contradicting the expectation that linear autoregressive or input terms would have higher significance. This could be caused by the selection of the criterion and the fact that it is averaged across all datasets. Figure \ref{fig:AERR} showing AERRs computed for all terms on the first iteration confirms this concern: the AERR of the selected significant term is only slightly higher than the first autoregressive term $y(t-1)$. 
 \begin{figure}[!h]
 	\centering
-	\input{AEER_first_2000.tikz}
-	\caption{AEER computed for all terms in the dictionary during the first iteration of the forward selection algorithm. While autoregressive and linear input terms are strongly correlated with the output, the maximum criterion achieved by their product.}\label{fig:aeer}
+	\input{AERR_first_2000.tikz}
+	\caption{AERR computed for all terms in the dictionary during the first iteration of the forward selection algorithm. While autoregressive and linear input terms are strongly correlated with the output, the maximum criterion achieved by their product.}\label{fig:AERR}
 \end{figure}
 Scatter plots for $y(t-1)$, $u(t)$, and $y(t-1)u(t)$ are shown in Figures \ref{fig:regr_y}-\ref{fig:regr_first}. The simplest way to avoid this problem is to first estimate the AR(0) relationship and/or current input signal, and use its residual as the first approximation in the EFOR-CMSS algorithm.
 \par In order to link the external and internal parameters, an arbitrary polynomial function of two arguments is formed
@@ -214,7 +214,7 @@ where $L_{cut}$ and $D_{rlx}$ are the external parameters of manufacturing proce
 \theta_{i}^{K}
 \end{array}\right] =
 \left[\begin{array}{cccccc}
-1 & L& D& L\times L& D\odot D& L\odot D
+1 & L& D& L\odot L& D\odot D& L\odot D
 \end{array}\right] B,
 \end{equation}
 where $k = 1, \dots, K$ is the index of the dataset, $i =1, \dots, N_s$ is the element index of the internal parameter vector, and where $\odot$ denotes Hadamard entry-wise product:

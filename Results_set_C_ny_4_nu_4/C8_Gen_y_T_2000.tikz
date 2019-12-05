@@ -17,6 +17,8 @@ ymax=0,
 ylabel={Response, kN},
 xlabel={Sample index},
 axis background/.style={fill=white},
+x tick label style={font={\tiny},font=,/pgf/number format/.cd,fixed,precision=3, set thousands separator={}},
+y label style={font={\small},at={(axis description cs:-0.05,0.5)},anchor=south},
 legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
 \addplot [color=mycolor1]
@@ -1028,6 +1030,5 @@ legend style={legend cell align=left, align=left, draw=white!15!black}
 1500	-58.7367123467233\\
 };
 \addlegendentry{Generated output}
-
 \end{axis}
 \end{tikzpicture}%

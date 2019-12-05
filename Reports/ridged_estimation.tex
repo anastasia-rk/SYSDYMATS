@@ -193,12 +193,12 @@
 where polynomial coefficients $\mathbf{\beta}^i = \left[ \beta_0 \dots \beta_5 \right]$ are unknown. In the original paper \cite{Wei2008} they are estimated via batch LS estimator as follows. First, the matrix of "independent" variables is formed from the external parameter values:
 \begin{equation}
 \mathbf{A} = \left[\begin{array}{cccccc}
-1 & L& D& L\times L& D\times D& L\times D
+1 & L& D& L\odot L& D \odot D& L\odot  D
 \end{array}\right],
 \end{equation}
-where $L = \{L_{cut}^{k}\}^{K}_{k=1}$, $D = \{D_{rlx}^{k}\}^{K}_{k=1}$, the number of columns $M + 1$, where $M$ is the order of polynomial \eqref{eq:polyn}, and where $\times$ denotes the by-element product such that
+where $L = \{L_{cut}^{k}\}^{K}_{k=1}$, $D = \{D_{rlx}^{k}\}^{K}_{k=1}$, the number of columns $M + 1$, where $M$ is the order of polynomial \eqref{eq:polyn}, and where $\odot$ denotes Hadamard entry-wise product:
 \begin{equation*}
-L\times L = \Big[ L_{cut}^{(k)} L_{cut}^{(k)}\Big]^{K}_{k=1}.
+L\odot L = \Big[ L_{cut}^{(k)} L_{cut}^{(k)}\Big]^{K}_{k=1}.
 \end{equation*}
 Then, for each internal parameter a vector of estimated values is formed across $K$ training datasets:
 \begin{equation*}
@@ -225,15 +225,21 @@ where $\mathbf{R}^{\ast}_{aa} = (\mathbf{A}^\ast)^{\top}\mathbf{A}^\ast$ is the 
 a^{\ast}_{k,j} = \frac{a_{k,j}}{\Big\{ \sum^{K}_{k=1} a^{2}_{k,j}\Big\}^{1/2}}, 
 \end{equation*}
 where $j$ is the column index.
-For the given data $\kappa(\mathbf{A}^\ast) = 1083.57$ which indicates that some eigenvalues of the regression matrix $\mathbf{R}^{\ast}_{aa} = (\mathbf{A}^\ast)^{\top}\mathbf{A}^\ast$ are close to zero:
+For the given data $\kappa(\mathbf{A}^\ast) = 3308.29$ which indicates that some eigenvalues of the regression matrix $\mathbf{R}^{\ast}_{aa} = (\mathbf{A}^\ast)^{\top}\mathbf{A}^\ast$ are close to zero:
 \begin{equation*}
 \text{eig}(\mathbf{R}^{\ast}_{aa}) = \left[\begin{array}{r}
-4.78 \times 10^{-6} \\
-3.50 \times 10^{-5} \\
-0.0015	\\
-0.0199	\\
-0.3625	\\
-5.6161	\\
+0.00016 \\
+0.00094\\
+0.01672\\
+1.11563\\
+18.7669\\
+1806.28
+%4.78 \times 10^{-6} \\
+%3.50 \times 10^{-5} \\
+%0.0015	\\
+%0.0199	\\
+%0.3625	\\
+%5.6161	\\
 \end{array}\right]
 \end{equation*}
 Some collinearity metrics for centred and scaled matrix $\mathbf{A}_{s}^{\star}$, where $\mathbf{A} = \left[\right]1, \mathbf{A}_{s}$ are summarised in Table 1. The correlation of each columns and linear combinations of other columns is assessed by computing the coefficients of determination for individual columns
@@ -247,12 +253,18 @@ where $ \mathbf{H}_j = \mathbf{A}_{j}^{\star}((\mathbf{A}_{j}^{\star})^{\top}\ma
 while the number of correlated column maybe better assessed from eigenvalues of the scaled and centred regression matrix are
 \begin{equation*}
 \text{eig}(\mathbf{R}^{\star}_{aa}) = \left[\begin{array}{r}
-0.0002\\
-0.0004\\
-0.0075\\
-1.9647\\
-3.0271\\
-8
+0.00066\\
+0.00103\\
+0.01662\\
+8.07508\\
+18.3753\\
+57.8643
+%0.0002\\
+%0.0004\\
+%0.0075\\
+%1.9647\\
+%3.0271\\
+%8
 \end{array}\right]
 \end{equation*}
 It can be seen that at least two columns of the normalised data matrix suffer from collinearity, and its effect on variance inflation confirms that the model may suffer bad generalisation outside of the considered subspace of design parameters $\xi$. This indicates the need for regularisation of the estimation procedure in order to reduce the dispersion of the parameter LSEs.
@@ -260,10 +272,12 @@ It can be seen that at least two columns of the normalised data matrix suffer fr
 	\centering
 	\caption{Collinearity metrics of the data.}\label{tab:vifs}
 	\begin{tabular}{rrrrrr}
-		Column & $L$ & $R$ & $L \times R$ & $L \times L$ & $R \times R$ \\
+		Column & $L$ & $R$ & $L \odot R$ & $L \odot L$ & $R \odot R$ \\
 		\hline
-		$R^{2}_{j}$ & 0.9992  &  0.9988  &  0.9997  &  0.9992  &  0.9985 \\
-		VIF$_j$ & 1256.04 & 862.29 & 2867.46 & 1212.49 & 665.06 \\
+		$R^{2}_{j}$ & 0.9992 &   0.9977  &  0.9825  &  0.9406  & 0.9600 \\
+		VIF$_j$ & 1180.97 &	443.31 &	56.98 &	16.82 &4	25.025 \\
+		
+%		 1256.04 & 862.29 & 2867.46 & 1212.49 & 665.06 \\
 		\hline
 	\end{tabular}
 \end{table}

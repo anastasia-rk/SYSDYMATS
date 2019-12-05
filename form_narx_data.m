@@ -1,13 +1,33 @@
 my_init;
 %% Set up global parameters
-foamset = 'foam_2010'; % 'foam_2019'
-dataset = 'C'; %  'D'; %                                                    % name of dataset
+foamset = questdlg('Select data folder', ...
+    'Choice of data',...
+	'foam_2010','foam_2019','');
+switch foamset
+    case 'foam_2010'
+        dataset = questdlg('Select data set', ...
+        'Choice of set',...
+        'C','D','');
+        input_i  = 3;                                                       % input column index
+        output_i = 2;                                                       % output column index
+        K       = 10;                                                       % number of datasets
+    case 'foam_2019'
+        dataset = questdlg('Select data set', ...
+        'Choice of set',...
+        'S','Y','Z','');
+        input_i  = 2;                                                       % input column index
+        output_i = 3;                                                       % output column index
+        K        = 9;                                                       % number of datasets
+
+    
+end
+% foamset = 'foam_2010'; % 'foam_2019'
+% dataset = 'C'; %  'D'; %                                                    % name of dataset
 addpath(foamset)
 iFile   = 1;                                                                % id of the sample
-K       = 10;                                                               % number of datasets
 % Length of input and output lags
 n_u     = 4;                                                                % input signal lag length
-n_y     = 0;                                                                % output signal lag length
+n_y     = 4;                                                                % output signal lag length
 d       = n_y + n_u;                                                        % size of input vector x
 lambda  = 2;                                                                % order of polynomial
 % a       = sym('x_',[1 d]);                                                  % associated symbolic vector
@@ -62,8 +82,13 @@ disp(['Dataset_',num2str(iFile)])
 clear Input Output 
 fileName = [num2str(iFile),dataset];
 load(fileName);
-Input  = fileData(:,3);
-Output = fileData(:,2);
+if foamset == 'foam_2019'
+    Input  = data_res(:,input_i);
+    Output = data_res(:,output_i);
+else
+    Input  = fileData(:,input_i);
+    Output = fileData(:,output_i);
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Create the batch of input vectors
 iNarx = 0;                                                                  % batch index of the input vector in AR model

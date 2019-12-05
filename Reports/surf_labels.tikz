@@ -6,7 +6,7 @@
 \begin{tikzpicture}
 
 \begin{axis}[%
-width=3.159cm,
+width=3cm,
 height=3.097cm,
 at={(0cm,12.903cm)},
 scale only axis,

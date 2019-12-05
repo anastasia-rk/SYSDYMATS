@@ -5,7 +5,7 @@
 \begin{tikzpicture}
 
 \begin{axis}[%
-width=1.118cm,
+width=2.306cm,
 height=2.512cm,
 at={(0cm,3.488cm)},
 scale only axis,
@@ -13,223 +13,123 @@ xmin=0,
 xmax=10,
 xlabel style={font=\color{white!15!black}},
 xlabel={Dataset index},
-ymin=-0.6,
-ymax=0,
+ymin=0.177853765236842,
+ymax=1,
 ylabel style={font=\color{white!15!black}},
-ylabel={$y(t-1)u(t)$},
-axis background/.style={fill=white}
+ylabel={$y(t-1)$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
   table[row sep=crcr]{%
-1	-0.0686666676869773\\
-2	-0.101963589654437\\
-4	-0.294456771322964\\
-5	-0.0465058453816688\\
-6	-0.406718753202199\\
-7	-0.437624469786327\\
-8	-0.505699519514034\\
-10	-0.369030655652113\\
+1	0.521924030643814\\
+2	0.399261602892996\\
+4	0.177853765236842\\
+5	0.282978553273594\\
+6	0.83953647554579\\
+7	0.804976044271254\\
+8	0.823036635588582\\
+10	0.730653443090906\\
 };
+\addlegendentry{data1}
+
 \end{axis}
 
 \begin{axis}[%
-width=1.118cm,
+width=2.306cm,
 height=2.512cm,
-at={(1.47cm,3.488cm)},
+at={(3.035cm,3.488cm)},
 scale only axis,
 xmin=0,
 xmax=10,
 xlabel style={font=\color{white!15!black}},
 xlabel={Dataset index},
 ymin=0,
-ymax=0.5,
+ymax=40,
 ylabel style={font=\color{white!15!black}},
-ylabel={$y(t-1)u(t-1)$},
-axis background/.style={fill=white}
+ylabel={$u(t-1)$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
   table[row sep=crcr]{%
-1	0.0351699331324428\\
-2	0.0799741781327952\\
-4	0.275895776792912\\
-5	0.0374133700192093\\
-6	0.301066575760926\\
-7	0.350191310698092\\
-8	0.413036818896497\\
-10	0.289627259050229\\
+1	6.01857158266388\\
+2	6.24540043128441\\
+4	6.31847923582348\\
+5	2.2045924899205\\
+6	37.8825679779279\\
+7	30.289950459792\\
+8	19.5187276841109\\
+10	12.9736976166592\\
 };
+\addlegendentry{data1}
+
 \end{axis}
 
 \begin{axis}[%
-width=1.118cm,
+width=2.306cm,
 height=2.512cm,
-at={(2.941cm,3.488cm)},
+at={(6.07cm,3.488cm)},
 scale only axis,
 xmin=0,
 xmax=10,
 xlabel style={font=\color{white!15!black}},
 xlabel={Dataset index},
-ymin=-1.5,
-ymax=1,
+ymin=-40,
+ymax=-9.18210211792963,
 ylabel style={font=\color{white!15!black}},
-ylabel={$u(t-2)u(t-2)$},
-axis background/.style={fill=white}
+ylabel={$u(t-2)$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
   table[row sep=crcr]{%
-1	0.626669433899564\\
-2	0.586251309870305\\
-4	0.412921419504329\\
-5	0.227603336643659\\
-6	-1.23826185612191\\
-7	0.362246047957149\\
-8	-0.474674021528633\\
-10	0.558476709528538\\
+1	-14.0479317161766\\
+2	-14.5642773351561\\
+4	-12.2626256123704\\
+5	-9.18210211792963\\
+6	-34.2507898995559\\
+7	-33.1066045154422\\
+8	-21.414723477901\\
+10	-19.690734912612\\
 };
+\addlegendentry{data1}
+
 \end{axis}
 
 \begin{axis}[%
-width=1.118cm,
+width=2.306cm,
 height=2.512cm,
-at={(4.411cm,3.488cm)},
+at={(9.105cm,3.488cm)},
 scale only axis,
 xmin=0,
 xmax=10,
 xlabel style={font=\color{white!15!black}},
 xlabel={Dataset index},
-ymin=-0.24,
-ymax=-0.132863775812487,
+ymin=-0.00453635974850919,
+ymax=0.157318260740267,
 ylabel style={font=\color{white!15!black}},
-ylabel={$y(t-2)u(t)$},
-axis background/.style={fill=white}
+ylabel={$y(t-3)$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
   table[row sep=crcr]{%
-1	-0.17293552114654\\
-2	-0.192149507426763\\
-4	-0.132863775812487\\
-5	-0.208625120999046\\
-6	-0.21166863649711\\
-7	-0.22668313645996\\
-8	-0.220950806760122\\
-10	-0.208488225619386\\
+1	0.0920933089635774\\
+2	0.0732949866662402\\
+4	0.0727873698552456\\
+5	-0.00453635974850919\\
+6	0.157318260740267\\
+7	0.14561500502723\\
+8	0.137384213068875\\
+10	0.137436548935129\\
 };
+\addlegendentry{data1}
+
 \end{axis}
 
 \begin{axis}[%
-width=1.118cm,
-height=2.512cm,
-at={(5.882cm,3.488cm)},
-scale only axis,
-xmin=0,
-xmax=10,
-xlabel style={font=\color{white!15!black}},
-xlabel={Dataset index},
-ymin=1.76037436133894,
-ymax=10,
-ylabel style={font=\color{white!15!black}},
-ylabel={$u(t-3)u(t)$},
-axis background/.style={fill=white}
-]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
-  table[row sep=crcr]{%
-1	4.50730279628293\\
-2	3.34402260570221\\
-4	1.76037436133894\\
-5	3.25883205923319\\
-6	8.78156597501621\\
-7	7.87414725143776\\
-8	7.50515345415442\\
-10	6.340571565181\\
-};
-\end{axis}
-
-\begin{axis}[%
-width=1.118cm,
-height=2.512cm,
-at={(7.352cm,3.488cm)},
-scale only axis,
-xmin=0,
-xmax=10,
-xlabel style={font=\color{white!15!black}},
-xlabel={Dataset index},
-ymin=10,
-ymax=50,
-ylabel style={font=\color{white!15!black}},
-ylabel={$u(t-3)$},
-axis background/.style={fill=white}
-]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
-  table[row sep=crcr]{%
-1	24.6513311803107\\
-2	18.6830646801035\\
-4	11.0805806349516\\
-5	19.0729465930791\\
-6	46.2916557116786\\
-7	45.7867417962673\\
-8	40.3798613083173\\
-10	35.382614146694\\
-};
-\end{axis}
-
-\begin{axis}[%
-width=1.118cm,
-height=2.512cm,
-at={(8.823cm,3.488cm)},
-scale only axis,
-xmin=0,
-xmax=10,
-xlabel style={font=\color{white!15!black}},
-xlabel={Dataset index},
-ymin=-200,
-ymax=0,
-ylabel style={font=\color{white!15!black}},
-ylabel={$u(t)u(t)$},
-axis background/.style={fill=white}
-]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
-  table[row sep=crcr]{%
-1	-26.4773279667562\\
-2	-21.129132412379\\
-4	-8.35342519062245\\
-5	-10.4509705712016\\
-6	-179.882130819562\\
-7	-140.061357097108\\
-8	-113.989396008692\\
-10	-63.2839365366136\\
-};
-\end{axis}
-
-\begin{axis}[%
-width=1.118cm,
-height=2.512cm,
-at={(10.293cm,3.488cm)},
-scale only axis,
-xmin=0,
-xmax=10,
-xlabel style={font=\color{white!15!black}},
-xlabel={Dataset index},
-ymin=-1000,
-ymax=0,
-ylabel style={font=\color{white!15!black}},
-ylabel={$u(t)$},
-axis background/.style={fill=white}
-]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
-  table[row sep=crcr]{%
-1	-128.764717793017\\
-2	-105.221434201312\\
-4	-43.8829268790447\\
-5	-51.1215838387156\\
-6	-837.173794000902\\
-7	-659.255317882103\\
-8	-535.314875303923\\
-10	-300.358944918962\\
-};
-\end{axis}
-
-\begin{axis}[%
-width=1.118cm,
+width=2.306cm,
 height=2.512cm,
 at={(0cm,0cm)},
 scale only axis,
@@ -237,218 +137,87 @@ xmin=0,
 xmax=10,
 xlabel style={font=\color{white!15!black}},
 xlabel={Dataset index},
-ymin=0,
-ymax=200,
+ymin=-0.00621710624497191,
+ymax=0.005,
 ylabel style={font=\color{white!15!black}},
-ylabel={$u(t-1)u(t)$},
-axis background/.style={fill=white}
+ylabel={$y(t-2)u(t-4)u(t-1)$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
   table[row sep=crcr]{%
-1	20.6110408261399\\
-2	16.5632157765291\\
-4	5.37215284269264\\
-5	6.17591257727183\\
-6	172.933451066648\\
-7	132.02176783251\\
-8	107.279608748233\\
-10	56.5633029790991\\
+1	-0.000698604057355728\\
+2	0.00105667973031104\\
+4	0.0033506260122897\\
+5	0.00272530025283469\\
+6	-0.00621710624497191\\
+7	-0.00553709870332843\\
+8	-0.0056591460377746\\
+10	-0.00424205714565255\\
 };
+\addlegendentry{data1}
+
 \end{axis}
 
 \begin{axis}[%
-width=1.118cm,
+width=2.306cm,
 height=2.512cm,
-at={(1.47cm,0cm)},
+at={(3.035cm,0cm)},
 scale only axis,
 xmin=0,
 xmax=10,
 xlabel style={font=\color{white!15!black}},
 xlabel={Dataset index},
-ymin=0,
-ymax=800,
-ylabel style={font=\color{white!15!black}},
-ylabel={$u(t-1)$},
-axis background/.style={fill=white}
-]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
-  table[row sep=crcr]{%
-1	100.951920561846\\
-2	84.0898216861584\\
-4	29.2530153423566\\
-5	28.5217470321826\\
-6	796.20065332834\\
-7	616.451236565946\\
-8	498.356398540009\\
-10	267.131651194809\\
-};
-\end{axis}
-
-\begin{axis}[%
-width=1.118cm,
-height=2.512cm,
-at={(2.941cm,0cm)},
-scale only axis,
-xmin=0,
-xmax=10,
-xlabel style={font=\color{white!15!black}},
-xlabel={Dataset index},
-ymin=-0.006,
+ymin=-3,
 ymax=0,
 ylabel style={font=\color{white!15!black}},
-ylabel={$y(t-3)y(t-1)$},
-axis background/.style={fill=white}
+ylabel={$u(t-3)u(t-1)$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
   table[row sep=crcr]{%
-1	-0.000943503429713101\\
-2	-0.00102445219846457\\
-4	-0.00233175460251888\\
-5	-0.00519317855035742\\
-6	-9.8698041198879e-05\\
-7	-6.36151426313766e-05\\
-8	-0.000435279175032505\\
-10	-0.000438779461564208\\
+1	-2.72488803052448\\
+2	-2.81461317905577\\
+4	-1.91133268685955\\
+5	-2.21339473589633\\
+6	-0.18882960384409\\
+7	-1.92885924591327\\
+8	-1.50487128692593\\
+10	-2.74401423444671\\
 };
+\addlegendentry{data1}
+
 \end{axis}
 
 \begin{axis}[%
-width=1.118cm,
+width=2.306cm,
 height=2.512cm,
-at={(4.411cm,0cm)},
+at={(6.07cm,0cm)},
 scale only axis,
 xmin=0,
 xmax=10,
 xlabel style={font=\color{white!15!black}},
 xlabel={Dataset index},
-ymin=0,
-ymax=0.01,
+ymin=-0.2,
+ymax=0.0027155506257119,
 ylabel style={font=\color{white!15!black}},
-ylabel={$y(t-2)y(t-2)$},
-axis background/.style={fill=white}
+ylabel={$u(t-4)u(t-2)u(t-2)$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
   table[row sep=crcr]{%
-1	0.00410538292665031\\
-2	0.00442220574077901\\
-4	0.00133698200915846\\
-5	0.00812581854324965\\
-6	0.00057906073917843\\
-7	0.000853018446161696\\
-8	0.0010875018841709\\
-10	0.00192403225186607\\
+1	-0.191257777660235\\
+2	-0.195714711399203\\
+4	-0.121533726094885\\
+5	-0.143519038729724\\
+6	0.0027155506257119\\
+7	-0.123335092844573\\
+8	-0.0978460279050621\\
+10	-0.197189941887\\
 };
-\end{axis}
+\addlegendentry{data1}
 
-\begin{axis}[%
-width=1.118cm,
-height=2.512cm,
-at={(5.882cm,0cm)},
-scale only axis,
-xmin=0,
-xmax=10,
-xlabel style={font=\color{white!15!black}},
-xlabel={Dataset index},
-ymin=-1,
-ymax=-0.6,
-ylabel style={font=\color{white!15!black}},
-ylabel={$y(t-2)$},
-axis background/.style={fill=white}
-]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
-  table[row sep=crcr]{%
-1	-0.649591633778969\\
-2	-0.803227105198796\\
-4	-0.667914857459005\\
-5	-0.986063132976867\\
-6	-0.809658098632831\\
-7	-0.830633863972662\\
-8	-0.799702619612864\\
-10	-0.723726149657214\\
-};
-\end{axis}
-
-\begin{axis}[%
-width=1.118cm,
-height=2.512cm,
-at={(7.352cm,0cm)},
-scale only axis,
-xmin=0,
-xmax=10,
-xlabel style={font=\color{white!15!black}},
-xlabel={Dataset index},
-ymin=0,
-ymax=0.0025,
-ylabel style={font=\color{white!15!black}},
-ylabel={$y(t-1)y(t-1)$},
-axis background/.style={fill=white}
-]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
-  table[row sep=crcr]{%
-1	0.0012514547496838\\
-2	0.00035196341783893\\
-4	0.00237071611558843\\
-5	0.00187892792079765\\
-6	0.000779313434891911\\
-7	0.000725578032908463\\
-8	0.00110162541808289\\
-10	0.00145870544714962\\
-};
-\end{axis}
-
-\begin{axis}[%
-width=1.118cm,
-height=2.512cm,
-at={(8.823cm,0cm)},
-scale only axis,
-xmin=0,
-xmax=10,
-xlabel style={font=\color{white!15!black}},
-xlabel={Dataset index},
-ymin=-0.01,
-ymax=0.00606380031426339,
-ylabel style={font=\color{white!15!black}},
-ylabel={$y(t-4)u(t)$},
-axis background/.style={fill=white}
-]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
-  table[row sep=crcr]{%
-1	-0.00525902124643263\\
-2	-0.00331547255691257\\
-4	0.00606380031426339\\
-5	0.000467542756357954\\
-6	-0.00825423433486311\\
-7	-0.00701338873340207\\
-8	-0.00826059127416788\\
-10	-0.00735253653936373\\
-};
-\end{axis}
-
-\begin{axis}[%
-width=1.118cm,
-height=2.512cm,
-at={(10.293cm,0cm)},
-scale only axis,
-xmin=0,
-xmax=10,
-xlabel style={font=\color{white!15!black}},
-xlabel={Dataset index},
-ymin=-0.02,
-ymax=0.02,
-ylabel style={font=\color{white!15!black}},
-ylabel={$y(t-3)u(t)$},
-axis background/.style={fill=white}
-]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
-  table[row sep=crcr]{%
-1	-0.0177492046900186\\
-2	-0.0189639990479875\\
-4	-0.014928513328636\\
-5	-0.00982108040469856\\
-6	0.0106136788164355\\
-7	0.00721444291042719\\
-8	0.0125374616042075\\
-10	0.000448728054689822\\
-};
 \end{axis}
 \end{tikzpicture}%

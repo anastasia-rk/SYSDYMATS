@@ -29,7 +29,7 @@ iFile   = 1;                                                                % id
 n_u     = 4;                                                                % input signal lag length
 n_y     = 4;                                                                % output signal lag length
 d       = n_y + n_u;                                                        % size of input vector x
-lambda  = 2;                                                                % order of polynomial
+lambda  = 3;                                                                % order of polynomial
 % a       = sym('x_',[1 d]);                                                  % associated symbolic vector
 folder = 'Dictionaries';                                                    % specify category where to save files
 names = {'set','ny','nu'};                                                  % names used to define results folder name (no more than 3).
@@ -43,11 +43,11 @@ if n_y~=0
       iStr = iStr + 1;
    end
 end
-for it=n_u:-1:2
-      x_str{iStr} = ['u(t-',num2str(it-1),')'];
+for it=n_u:-1:1
+      x_str{iStr} = ['u(t-',num2str(it),')'];
       iStr = iStr + 1;
 end
-x_str{iStr} = ['u(t)'];   
+% x_str{iStr} = ['u(t)'];   
 %% Identify difference in lag
 diff = n_u - n_y;                                                           % difference between lags
 switch sign(diff)
@@ -96,9 +96,9 @@ timesNarx = [t_0:t_0+T];
 for t=timesNarx
     iNarx = iNarx + 1;
     if n_y == 0
-    x_narx(:,iNarx) = [Input(t-n_u+1:t,1)]; %                               % NARX input
+    x_narx(:,iNarx) = [Input(t-n_u:t,1)]; %                               % NARX input
     else
-        x_narx(:,iNarx) = [Output(t-n_y:t-1,1); Input(t-n_u+1:t,1)]; %      % NARX input
+        x_narx(:,iNarx) = [Output(t-n_y:t-1,1); Input(t-n_u:t-1,1)]; %      % NARX input
     end 
 end
 nNarx = iNarx;                                                              % length of NARX input batch

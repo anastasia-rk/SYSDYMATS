@@ -11,8 +11,9 @@ folder = 'Results';                                                         % sp
 names = {'set','ny','nu'};                                                  % names used to define results folder name (no more than 3).
 folderName = make_folder(folder,names,dataset,n_y,n_u);                     % create results folder
 index = (1:T);                                                              % length of the sample
-Files =  1:K; %                                                             % id of the sample
-Files(3) = [];Files(8) = [];
+Files =  1:K;  % ids of the sample
+Validation_sets = [3 8];
+Files(Validation_sets) = [];
 K = length(Files);
 %% Show correlation between autoregressive and input terms
 if n_y ~= 0
@@ -29,14 +30,14 @@ for iFile=Files                                                             % ov
         Rr = round(corrcoef(File.term(index,ind_y),File.y_narx(index,1)),4);
         subplot(L2,2,iPlot)
         scatter(File.term(index,ind_y),File.y_narx(index,1),'filled'); hold on;
-        plot(File.term(index,ind_y),y_regressed,'Linewidth',2); 
+        plot(File.y_narx(index,1),File.y_narx(index,1),'Linewidth',2); 
         title([dataset,num2str(iFile),', R = ',num2str(Rr(2,1))]); xlabel(char(symb_term{ind_y})); ylabel('y(t)');
         clear File tht Rr
 end
-    tikzName = [folderName,'/Regressions_yt_T_',num2str(T),'.tikz'];
-    cleanfigure;
-    matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-            false, 'height', '18cm', 'width','12cm','checkForUpdates',false);
+%     tikzName = [folderName,'/Regressions_yt_T_',num2str(T),'.tikz'];
+%     cleanfigure;
+%     matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+%             false, 'height', '18cm', 'width','12cm','checkForUpdates',false);
 end
 %%     
 figure;

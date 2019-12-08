@@ -3,7 +3,7 @@ my_init
 dataset = 'C'; % 'D'; % 
 metaFileName = ['Meta_',dataset];
 load(metaFileName);
-n_y = 0;
+n_y = 4;
 n_u = 4;
 T = 2000;
 folder = 'Results';                                                         % specify category where to save files
@@ -43,21 +43,16 @@ B_hat = A*betas_ols;
 % have near-linear dependency
 
 % Normalise data matrix
-A_2 = A(:,2:end)
+A_2 = [x y];
 for j=1:2 %size(A_2,2)
     m(j) = mean(A_2(:,j));
     c(j) = sqrt(sum((A_2(:,j) - m(j)).^2));
+    d_norm(:,j) = (A_2(:,j)- m(j))/c(j);
+    d_scale(:,j) = (A_2(:,j))/c(j);
 end
-c(3) = c(1)*c(2);
-m(3) = m(1)*m(2);
-c(4) = c(1)*c(1);
-m(4) = m(1)*m(1);
-c(5) = c(2)*c(2);
-m(5) = m(2)*m(2);
-for j=1:size(A_2,2)
-    A_norm(:,j) = (A_2(:,j)- m(j))/c(j);
-    A_n(:,j) = (A_2(:,j))/c(j);
-end
+A_n = [id d_norm d_norm(:,1).*d_norm(:,2) d_norm(:,1).^2 d_norm(:,2).^2];                                               % create the matrix for ls
+A_s = [id d_scale d_scale(:,1).*d_scale(:,2) d_scale(:,1).^2 d_scale(:,2).^2]; 
+A_norm = [d_norm d_norm(:,1).*d_norm(:,2) d_norm(:,1).^2 d_norm(:,2).^2];  
 n = size(A,1)
 R_a2 = A_norm'*A_norm;
 R_22 = R_a2(2:end,2:end);
@@ -67,12 +62,12 @@ r(j-1,1) = A_norm(:,1)'*A_norm(:,j);
 end
 R_new = [1 r'; r R_22];
 R_norm = [n O'; O R_new];
-A_s = [id A_norm];
-R_ss = A_s'*A_s
+R_nn = A_n'*A_n;
 
-R_n = A_n'*A_n
-eig_r = eig(R_n);
-kappa = cond(A_n);
+% Analysis for scaled data matrix
+R_ss = A_s'*A_s
+eig_r = eig(R_ss);
+kappa = cond(A_s);
 thr = 100;
 if kappa > thr
     fprintf(['Condition number of the scaled matrix is ', num2str(kappa)]);
@@ -104,19 +99,19 @@ log_max = 0;
 log_min = -6;
 vec = [0:1/50:1];
 coeffs = sort(10.^(log_min + (log_max-log_min)*vec));
-I_k = eye(size(R_ss));
+I_k = eye(size(R_nn));
 for iTheta = 1:finalTerm
         ik = 0;
         for k = coeffs
             ik = ik + 1;
             th_norm = normalize(B(:,iTheta));
-            gain                   = inv(R_ss + k*I_k)*A_s';
+            gain                   = inv(R_nn + k*I_k)*A_n';
             beta{iTheta}(:,ik)     = gain*th_norm;
-            Hat                    = A_s*gain;
+            Hat                    = A_n*gain;
             F_inv                  = inv(R_ss + k*I_k);
             sing_F                 = svd(F_inv);
-            sigma_b{iTheta,ik}(:,:)= gain*A_s*inv(R_ss + k*I_k);
-            mean{iTheta}(:,ik)     = A_s*beta{iTheta}(:,ik);
+            sigma_b{iTheta,ik}(:,:)= gain*A_n*inv(R_nn + k*I_k);
+            mean{iTheta}(:,ik)     = A_n*beta{iTheta}(:,ik);
             sigma_t{iTheta,ik}(:,:) = diag((th_norm - mean{iTheta}(:,ik)).^2);
             Lik                    = mvnpdf(th_norm,mean{iTheta}(:,ik),sigma_t{iTheta,ik}(:,:));
             Cov_cmplx{iTheta}(ik)  = (M_d/2)*log((1/M_d)*sum(sing_F)*prod(sing_F)^(1/M_d));
@@ -178,17 +173,14 @@ for iTheta = 1:finalTerm
             h1 = semilogx(coeffs,beta_raw{iTheta}(ib,:),'-o','MarkerSize',5); hold on;
             set(h1, 'markerfacecolor', get(h1, 'color')); 
         end
-        for ib = 1:size(A,2)
-            h2 = semilogx(coeffs(ind_raw(iTheta)),beta{iTheta}(ib,ind_raw(iTheta)),'-k'); hold on;
-            set(h2, 'markerfacecolor', get(h2, 'color')); 
-        end
+        vect = beta{iTheta}(:,ind_raw(iTheta));
+        h2 = semilogx(coeffs(ind_raw(iTheta))*ones(2),beta{iTheta}(:,ind_raw(iTheta)),'-k'); hold on;
         title('Tikhonov raw')
         xlabel('$\gamma$');
         ylabel('Raw data estimate')
         legend(Legends);
         subplot(2,2,3);
         for ib = 1:size(A,2)
-%             h1 = semilogx(fit_lasso{iTheta}.Lambda,betas_lasso{iTheta}(ib,:),'-o','MarkerSize',5); hold on;
             h1 = semilogx(coeffs,betas_lasso{iTheta}(ib,:),'-o','MarkerSize',5); hold on;
             set(h1, 'markerfacecolor', get(h1, 'color')); 
         end
@@ -197,7 +189,6 @@ for iTheta = 1:finalTerm
         ylabel('Standardised estimate')
         subplot(2,2,4);
         for ib = 1:size(A,2)
-%             h1 = semilogx(fit_lasso_raw{iTheta}.Lambda,betas_lasso_raw{iTheta}(ib,:),'-o','MarkerSize',5); hold on;
             h1 = semilogx(coeffs,betas_lasso_raw{iTheta}(ib,:),'-o','MarkerSize',5); hold on;
             set(h1, 'markerfacecolor', get(h1, 'color')); 
         end
@@ -258,7 +249,7 @@ for iTheta = 1:finalTerm
     h1 = semilogx(coeffs,ICOMP_raw{iTheta},'-o','MarkerSize',5); hold on;
     set(h1, 'markerfacecolor', get(h1, 'color')); 
     Leg_theta{iTheta} = strcat('$\theta_',num2str(iTheta),'$');
-    h2 = semilogx(coeffs(ind_comp(iTheta)),ICOMP_min(iTheta),'ok','MarkerSize',10); hold on;
+    h2 = semilogx(coeffs(ind_comp(iTheta)),ICOMP_raw_min(iTheta),'ok','MarkerSize',10); hold on;
     set(h2, 'markerfacecolor', get(h2, 'color')); 
 end
 xlabel('$\lambda$');

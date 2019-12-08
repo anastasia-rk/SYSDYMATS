@@ -18,8 +18,7 @@ switch foamset
         input_i  = 2;                                                       % input column index
         output_i = 3;                                                       % output column index
         K        = 9;                                                       % number of datasets
-
-    
+   
 end
 % foamset = 'foam_2010'; % 'foam_2019'
 % dataset = 'C'; %  'D'; %                                                    % name of dataset
@@ -49,8 +48,8 @@ for it=n_u:-1:1
 end
 % x_str{iStr} = ['u(t)'];   
 %% Identify difference in lag
-diff = n_u - n_y;                                                           % difference between lags
-switch sign(diff)
+df = n_u - n_y;                                                           % difference between lags
+switch sign(df)
     case 0
         disp('zero')
         t_0 = n_u+1;
@@ -61,7 +60,7 @@ switch sign(diff)
         disp('positive')
         t_0 = n_u+1;
 end
-t_0 = 1000;
+t_0 = 1000 + t_0;
 T   = 10000; %length(Input); % length of the observation sequence
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Create sum index permutations

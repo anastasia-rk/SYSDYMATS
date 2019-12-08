@@ -1,6 +1,18 @@
 my_init
 %% Load estimated thetas
-dataset = 'S'; % 'C'; % 'D'; % 'Y'; % 'Z';                                  % name of dataset
+foamset = questdlg('Select data folder', ...
+    'Data to process',...
+	'foam_2010','foam_2019','');
+switch foamset
+    case 'foam_2010'
+        dataset = questdlg('Select data set', ...
+        'Choice of set',...
+        'C','D','');
+    case 'foam_2019'
+        dataset = questdlg('Select data set', ...
+        'Choice of set',...
+        'S','Y','Z','');   
+end
 metaFileName = ['Meta_',dataset];
 load(metaFileName);
 T = 2000;
@@ -20,7 +32,7 @@ index = find(Files <=10);
 Files_sub = Files(index);
 x = L_cut_all(Files_sub,1);
 y = D_rlx_all(Files_sub,1);
-x = [3 3 3 5 5 5 7 7 7];
+% x = [3 3 3 5 5 5 7 7 7];
 %% Estimate coefficients via curve fitting
 fo = fitoptions('Method','NonlinearLeastSquares');
 if length(x) >= 6
@@ -105,7 +117,7 @@ el =   50;
 figure('Name','Parameter surfaces','NumberTitle','off');
 colormap(my_map);
 L2 = 4; % round(finalTerm/2); % Only display surfaces for first 8 parameters
-for iTerm=1:8
+for iTerm=1:7
 subplot(L2,2,iTerm);
 z = Theta(iTerm,Files)'; 
 scatter3(L_cut_all(Files(index1)),D_rlx_all(Files(index1)),z(index1),'filled','LineWidth',5); hold on;

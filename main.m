@@ -1,10 +1,25 @@
 my_init;
-
-dataset = 'C'; % 'S'; % 'Z'; % 'Y'; % 'S'; %  'D'; %                        % name of dataset
+foamset = questdlg('Select data folder', ...
+    'Data to process',...
+	'foam_2010','foam_2019','');
+switch foamset
+    case 'foam_2010'
+        dataset = questdlg('Select data set', ...
+        'Choice of set',...
+        'C','D','');
+        K       = 10;                                                       % number of datasets
+    case 'foam_2019'
+        dataset = questdlg('Select data set', ...
+        'Choice of set',...
+        'S','Y','Z','');
+        K        = 9;                                                       % number of datasets
+   
+end
+% dataset = 'C'; % 'S'; % 'Z'; % 'Y'; % 'S'; %  'D'; %                        % name of dataset
 metaFileName = ['Meta_',dataset];
 load(metaFileName);
 d       = n_y + n_u;                                                        % size of input vector x
-T = 2000;
+T = 4000;
 dict_set = ['dict_',dataset];                                   % 
 fileNames = sym(dict_set,[1 K]);                                            % vector of filenames
 folder = 'Results';                                                         % specify category where to save files
@@ -25,12 +40,12 @@ for iFile=Files                                                             % ov
         File = matfile(fName,'Writable',true);
         ind_y= n_y;
         iPlot = iPlot + 1;
-        tht = File.term(index,ind_y)\File.y_narx(index,1);
-        y_regressed = File.term(index,ind_y)*tht;
+%         tht = File.term(index,ind_y)\File.y_narx(index,1);
+%         y_regressed = File.term(index,ind_y)*tht;
         Rr = round(corrcoef(File.term(index,ind_y),File.y_narx(index,1)),4);
         subplot(L2,2,iPlot)
         scatter(File.term(index,ind_y),File.y_narx(index,1),'filled'); hold on;
-        plot(File.y_narx(index,1),File.y_narx(index,1),'Linewidth',2); 
+        plot(File.term(index,ind_y),File.term(index,ind_y),'Linewidth',2); 
         title([dataset,num2str(iFile),', R = ',num2str(Rr(2,1))]); xlabel(char(symb_term{ind_y})); ylabel('y(t)');
         clear File tht Rr
 end
@@ -48,12 +63,12 @@ for iFile=Files                                                             % ov
         File = matfile(fName,'Writable',true);
         ind_u= n_y + n_u;
         iPlot = iPlot + 1;
-        tht = File.term(index,ind_u)\File.y_narx(index,1);
-        y_regressed = File.term(index,ind_u)*tht;
+%         tht = File.term(index,ind_u)\File.y_narx(index,1);
+%         y_regressed = File.term(index,ind_u)*tht;
         Rr = round(corrcoef(File.term(index,ind_u),File.y_narx(index,1)),4);
         subplot(L2,2,iPlot)
         scatter(File.term(index,ind_u),File.y_narx(index,1),'filled'); hold on;
-        plot(File.term(index,ind_u),y_regressed,'Linewidth',2); 
+        plot(File.term(index,ind_u),File.term(index,ind_u),'Linewidth',2);
         title([dataset,num2str(iFile),', R = ',num2str(Rr(2,1))]); xlabel(char(symb_term{ind_u})); ylabel('y(t)');
         clear File tht
 end
@@ -102,16 +117,21 @@ significant_term{iTerm}
 for j=1:nTerms                                                 % assign ticks
     x_ticklabels{j} = char(symb_term{j});
 end
+ind_aerr = find(AERR{iTerm} > 0.82);
 figure;
-plot(AERR{iTerm}*100,'-o'); hold on;
-ylabel('AERR, $\%$'); xlabel('Terms')
-set(gca,'XTick',[1:nTerms]);
-set(gca,'XTickLabel',x_ticklabels);
+h1 = plot(AERR{iTerm}(ind_aerr)*100,'o','MarkerSize',10); hold on;
+set(h1, 'markerfacecolor', get(h1, 'color')); 
+set(gca,'XTick',[1:length(ind_aerr)]);
+set(gca,'XTickLabel',x_ticklabels(ind_aerr));
+ylabel('AERR, $\%$');xtickangle(90)
+% set(gca,'XTick',[1:nTerms]);
+% set(gca,'XTickLabel',x_ticklabels);
+xtickangle(90)
 xtickangle(90)
 tikzName = [folderName,'/AERR_first_',num2str(T),'.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-            false, 'height', '5cm', 'width','12cm','checkForUpdates',false);
+            false, 'height', '7cm', 'width','12cm','checkForUpdates',false);
 
 %% Plot correlations
 figure;

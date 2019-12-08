@@ -9,7 +9,7 @@
 \def\dataset{C}
 \def\ny{4}
 \def\nu{4}
-\def\order{2}
+\def\order{3}
 \makeatother
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Packages
@@ -193,7 +193,7 @@ The number and order of significant terms are identified within the EFOR-CMSS al
 	\small  
 	\input{Thetas_T_4000.tex}
 \end{table}
-In either case the structure identification assigns the principal contribution to the bilinear term thus contradicting the expectation that linear autoregressive or input terms would have higher significance. This could be caused by the selection of the criterion and the fact that it is averaged across all datasets. Figure \ref{fig:AERR} showing AERRs computed for all terms on the first iteration confirms this concern: the AERR of the selected significant term is only slightly higher than the first autoregressive term $y(t-1)$. 
+Figure \ref{fig:AERR} showing AERRs computed for all terms on the first iteration confirms this concern: the AERR of the selected significant term is only slightly higher than the first autoregressive term $y(t-1)$. 
 \begin{figure}[!h]
 	\centering
 	\input{AERR_first_2000.tikz}

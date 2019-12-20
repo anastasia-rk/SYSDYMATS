@@ -5,7 +5,7 @@ switch direction
     case 'backward'
          tq = @(x,shift) x - shift;
 end
-sum = zeros(size(f,1));
+sum = 0;
 for l=1:order+1
     k = l-1;
       sum = sum + (-1)^(k)*nchoosek(order,k)*f(tq(t,k));

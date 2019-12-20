@@ -127,11 +127,13 @@ disp('Dictionary complete')
 fileName = [folderName,'/dict_',dataset,num2str(iFile),'.mat'];
 save(fileName, 'term','x_narx','y_narx','nNarx','t_0','-v7.3');
 clear term x_narx y_narx
-end                                                                         % end loop over files
+end
+%%
+% end loop over files
 dictFolder = folderName;                                                    % folder from which I take dictionaties
 nTerms = iTerm;                                                             % total number of regressors in the polynomial
 dict_terms = [1:nTerms];                                                    % dictionary of all terms
 fileMeta = ['Meta_delta_',dataset];
-save(fileMeta,'dictFolder','nTerms','nNarx','symb_term','dict_terms','indeces','lambda','n_y','n_u','K','normC','-v7.3');   % save metadata
+save(fileMeta,'dictFolder','nTerms','nNarx','symb_term','dict_terms','indeces','lambda','d','K','normC','-v7.3');   % save metadata
 fileMeta = [folderName,'/Meta_delta_',dataset];
-save(fileMeta,'dictFolder','nTerms','nNarx','symb_term','dict_terms','indeces','lambda','n_y','n_u','K','normC','-v7.3');
+save(fileMeta,'dictFolder','nTerms','nNarx','symb_term','dict_terms','indeces','lambda','d','K','normC','-v7.3');

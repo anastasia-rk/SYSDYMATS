@@ -5,8 +5,12 @@ metaFileName = ['Meta_',dataset];
 load(metaFileName);
 n_y = 4;
 n_u = 4;
-T = 2000;
-folder = 'Results';                                                         % specify category where to save files
+T = 4000;
+if normC == 1
+    folder = 'Results';                                                     % specify category where to save files
+else
+    folder = 'Results_norm';
+end
 names = {'set','ny','nu'};                                                  % names used to define results folder name (no more than 3).
 folderName = make_folder(folder,names,dataset,n_y,n_u);                     % create results folder
 fileName = [folderName,'/OLS_results_T_',num2str(T),'.mat'];
@@ -241,7 +245,7 @@ for iTheta = 1:finalTerm
     h2 = semilogx(coeffs(ind_raw(iTheta)),AIC_raw_min(iTheta),'ok','MarkerSize',10); hold on;
     set(h2, 'markerfacecolor', get(h2, 'color')); 
 end
-xlabel('$\lambda$');
+xlabel('$\gamma$');
 ylabel('AIC')
 subplot(1,2,2);
 for iTheta = 1:finalTerm
@@ -251,7 +255,7 @@ for iTheta = 1:finalTerm
     h2 = semilogx(coeffs(ind_comp_raw(iTheta)),ICOMP_raw_min(iTheta),'ok','MarkerSize',10); hold on;
     set(h2, 'markerfacecolor', get(h2, 'color')); 
 end
-xlabel('$\lambda$');
+xlabel('$\gamma$');
 ylabel('ICOMP')
 
 tikzName = [folderName,'/',figName,'.tikz'];
@@ -268,7 +272,7 @@ for iTheta = 1:finalTerm
     set(h1, 'markerfacecolor', get(h1, 'color')); 
     Leg_theta{iTheta} = strcat('$\theta_',num2str(iTheta),'$');
 end
-xlabel('$\lambda$');
+xlabel('$\gamma$');
 ylabel('Covariance complexity')
 title('Normalised data')
 subplot(1,2,2);
@@ -277,7 +281,7 @@ for iTheta = 1:finalTerm
     set(h1, 'markerfacecolor', get(h1, 'color')); 
     Leg_theta{iTheta} = strcat('$\theta_',num2str(iTheta),'$');
 end
-xlabel('$\lambda$');
+xlabel('$\gamma$');
 ylabel('Covariance complexity')
 title('Raw data')
 

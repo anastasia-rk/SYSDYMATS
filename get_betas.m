@@ -15,10 +15,19 @@ switch foamset
 end
 metaFileName = ['Meta_',dataset];
 load(metaFileName);
-T = 2000;
-folder = 'Results';                                                         % specify category where to save files
+normC = 1;
+if normC == 1
+    folder = 'Results';                                                     % specify category where to save files
+    dFolder = 'Dictionaries';
+else
+    folder = 'Results_norm';
+    dFolder = 'Dictionaries_norm';
+end
 names = {'set','ny','nu'};                                                  % names used to define results folder name (no more than 3).
 folderName = make_folder(folder,names,dataset,n_y,n_u);                     % create results folder
+dictFolder = make_folder(dFolder,names,dataset,n_y,n_u);                     % create results folder
+T = 2000;
+% folder = 'Results';                                                         % specify category where to save files
 fileName = [folderName,'/OLS_results_T_',num2str(T),'.mat'];
 load(fileName);
 %% Create matrices for fitting

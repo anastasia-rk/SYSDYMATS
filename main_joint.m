@@ -1,13 +1,28 @@
 my_init;
 
-dataset = 'C'; % 'S'; % 'Z'; % 'Y'; % 'S'; %  'D'; %                        % name of dataset
-metaFileName = ['Meta_',dataset];
+foamset = questdlg('Select data folder', ...
+    'Data to process',...
+	'foam_2010','foam_2019','');
+switch foamset
+    case 'foam_2010'
+        dataset = questdlg('Select data set', ...
+        'Choice of set',...
+        'C','D','');
+    case 'foam_2019'
+        dataset = questdlg('Select data set', ...
+        'Choice of set',...
+        'S','Y','Z','');
+endmetaFileName = ['Meta_',dataset];
 load(metaFileName);
 d           = n_y + n_u;                                                    % size of input vector x
 dict_set    = ['dict_',dataset];
 fileNames   = sym(dict_set,[1 K]);                                          % vector of filenames
+if normC == 1
+    folder = 'Results';                                                     % specify category where to save files
+else
+    folder = 'Results_norm';
+end
 T = 2000;
-folder = 'Results';                                                         % specify category where to save files
 names = {'set','ny','nu'};                                                  % names used to define results folder name (no more than 3).
 folderName = make_folder(folder,names,dataset,n_y,n_u);                     % create results folder
 %% Select first significant basis vector for all datasets
@@ -194,13 +209,30 @@ end
 
 %% Ridge estimation
 % Normalise M
-for j=1:size(M,2)
-    m = mean(M(:,j));
-    c = sqrt(sum((M(:,j) - m).^2));
-    M_norm(:,j) = (M(:,j)- m)/c;
+% Normalise data matrix
+A_2 = [x y];
+for j=1:2 %size(A_2,2)
+    m(j) = mean(A_2(:,j));
+    c(j) = sqrt(sum((A_2(:,j) - m(j)).^2));
+    d_norm(:,j) = (A_2(:,j)- m(j))/c(j);
+    d_scale(:,j) = (A_2(:,j))/c(j);
 end
-R_mm    = M'*M;
-R_norm  = M_norm'*M_norm;
+A_n = [id d_norm d_norm(:,1).*d_norm(:,2) d_norm(:,1).^2 d_norm(:,2).^2];                                               % create the matrix for ls
+A_s = [id d_scale d_scale(:,1).*d_scale(:,2) d_scale(:,1).^2 d_scale(:,2).^2]; 
+A_norm = [d_norm d_norm(:,1).*d_norm(:,2) d_norm(:,1).^2 d_norm(:,2).^2];  
+n = size(A,1)
+R_a2 = A_norm'*A_norm;
+R_22 = R_a2(2:end,2:end);
+O = zeros(size(A_norm,2),1);
+for j = 2:size(A_norm,2)
+r(j-1,1) = A_norm(:,1)'*A_norm(:,j);
+end
+R_new = [1 r'; r R_22];
+R_norm = [n O'; O R_new];
+R_nn = A_n'*A_n;
+Kr_norm = kron(A,I);
+M_norm  = Phi_bar*Kr_norm;                                                            % LS matrix - increased dimension does not guarantee increase in rank
+R_mm    = M_norm'*M_norm;
 log_max = 0;
 log_min = -6;
 vec = [0:1/50:1];
@@ -210,10 +242,11 @@ ik = 0;
 for k = coeffs
     ik = ik + 1;
 %     betas_rls(:,ik)     = pinv(R_norm + k*I_k)*M_norm'*Y_bar;
-    betas_rls_raw(:,ik) = pinv(R_mm + k*I_k)*M'*Y_bar;
+    betas_rls_raw(:,ik) = inv(R_mm + k*I_k)*M'*Y_bar;
 %             betas_lasso{iTheta}(:,ik) =  LassoShooting(A_s,B(:,iTheta),k,'verbose',0);
 %             betas_lasso_raw{iTheta}(:,ik) = LassoShooting(A,B(:,iTheta),k,'verbose',0);
 end
+% Betas_rls = reshape(betas_rls_raw,[finalTerm,L]);
 
 
 figure;

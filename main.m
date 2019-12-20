@@ -7,27 +7,31 @@ switch foamset
         dataset = questdlg('Select data set', ...
         'Choice of set',...
         'C','D','');
-        K       = 10;                                                       % number of datasets
     case 'foam_2019'
         dataset = questdlg('Select data set', ...
         'Choice of set',...
         'S','Y','Z','');
-        K        = 9;                                                       % number of datasets
-   
 end
-% dataset = 'C'; % 'S'; % 'Z'; % 'Y'; % 'S'; %  'D'; %                        % name of dataset
 metaFileName = ['Meta_',dataset];
 load(metaFileName);
 d       = n_y + n_u;                                                        % size of input vector x
-T = 4000;
-dict_set = ['dict_',dataset];                                   % 
+T = 2000;
+dict_set = ['dict_',dataset];                                   
+normC = 1;
 fileNames = sym(dict_set,[1 K]);                                            % vector of filenames
-folder = 'Results';                                                         % specify category where to save files
+if normC == 1
+    folder = 'Results';                                                     % specify category where to save files
+    dFolder = 'Dictionaries';
+else
+    folder = 'Results_norm';
+    dFolder = 'Dictionaries_norm';
+end
 names = {'set','ny','nu'};                                                  % names used to define results folder name (no more than 3).
 folderName = make_folder(folder,names,dataset,n_y,n_u);                     % create results folder
+dictFolder = make_folder(dFolder,names,dataset,n_y,n_u);                     % create results folder
 index = (1:T);                                                              % length of the sample
 Files =  1:K;  % ids of the sample
-Validation_sets = [3 8];
+Validation_sets = [3 8]; % Validation_sets = [];
 Files(Validation_sets) = [];
 K = length(Files);
 %% Show correlation between autoregressive and input terms
@@ -40,8 +44,6 @@ for iFile=Files                                                             % ov
         File = matfile(fName,'Writable',true);
         ind_y= n_y;
         iPlot = iPlot + 1;
-%         tht = File.term(index,ind_y)\File.y_narx(index,1);
-%         y_regressed = File.term(index,ind_y)*tht;
         Rr = round(corrcoef(File.term(index,ind_y),File.y_narx(index,1)),4);
         subplot(L2,2,iPlot)
         scatter(File.term(index,ind_y),File.y_narx(index,1),'filled'); hold on;
@@ -63,8 +65,6 @@ for iFile=Files                                                             % ov
         File = matfile(fName,'Writable',true);
         ind_u= n_y + n_u;
         iPlot = iPlot + 1;
-%         tht = File.term(index,ind_u)\File.y_narx(index,1);
-%         y_regressed = File.term(index,ind_u)*tht;
         Rr = round(corrcoef(File.term(index,ind_u),File.y_narx(index,1)),4);
         subplot(L2,2,iPlot)
         scatter(File.term(index,ind_u),File.y_narx(index,1),'filled'); hold on;
@@ -114,24 +114,24 @@ significant_term{iTerm} =  symb_term{S(iTerm)};
 disp(['Significant term ', num2str(iTerm),':'])
 significant_term{iTerm}
 %% Plot AERR across terms
-for j=1:nTerms                                                 % assign ticks
-    x_ticklabels{j} = char(symb_term{j});
-end
-ind_aerr = find(AERR{iTerm} > 0.82);
-figure;
-h1 = plot(AERR{iTerm}(ind_aerr)*100,'o','MarkerSize',10); hold on;
-set(h1, 'markerfacecolor', get(h1, 'color')); 
-set(gca,'XTick',[1:length(ind_aerr)]);
-set(gca,'XTickLabel',x_ticklabels(ind_aerr));
-ylabel('AERR, $\%$');xtickangle(90)
-% set(gca,'XTick',[1:nTerms]);
-% set(gca,'XTickLabel',x_ticklabels);
-xtickangle(90)
-xtickangle(90)
-tikzName = [folderName,'/AERR_first_',num2str(T),'.tikz'];
-cleanfigure;
-matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-            false, 'height', '7cm', 'width','12cm','checkForUpdates',false);
+% for j=1:nTerms                                                 % assign ticks
+%     x_ticklabels{j} = char(symb_term{j});
+% end
+% ind_aerr = find(AERR{iTerm} > 0.82);
+% figure;
+% h1 = plot(AERR{iTerm}(ind_aerr)*100,'o','MarkerSize',10); hold on;
+% set(h1, 'markerfacecolor', get(h1, 'color')); 
+% set(gca,'XTick',[1:length(ind_aerr)]);
+% set(gca,'XTickLabel',x_ticklabels(ind_aerr));
+% ylabel('AERR, $\%$');xtickangle(90)
+% % set(gca,'XTick',[1:nTerms]);
+% % set(gca,'XTickLabel',x_ticklabels);
+% xtickangle(90)
+% xtickangle(90)
+% tikzName = [folderName,'/AERR_first_',num2str(T),'.tikz'];
+% cleanfigure;
+% matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+%             false, 'height', '7cm', 'width','12cm','checkForUpdates',false);
 
 %% Plot correlations
 figure;
@@ -204,16 +204,16 @@ while(iTerm <= maxSign) && ~converged                                       % lo
 end
 %% Select optimal number of terms
 [min_aamdl,i_min] = min(AAMDL_all);
-figure('Name','AAMDL','NumberTitle','off');
-plot(AAMDL_all,'o'); hold on;
-plot(i_min,min_aamdl,'*','LineWidth',5);
-xlim([1 maxSign])
-xlabel('Number of terms');
-ylabel('AAMDL')
-tikzName = [folderName,'/AAMDL_T_',num2str(T),'.tikz'];
-cleanfigure;
-matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-            false, 'height', '4cm', 'width','6cm','checkForUpdates',false);
+% figure('Name','AAMDL','NumberTitle','off');
+% plot(AAMDL_all,'o'); hold on;
+% plot(i_min,min_aamdl,'*','LineWidth',5);
+% xlim([1 maxSign])
+% xlabel('Number of terms');
+% ylabel('AAMDL')
+% tikzName = [folderName,'/AAMDL_T_',num2str(T),'.tikz'];
+% cleanfigure;
+% matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+%             false, 'height', '4cm', 'width','6cm','checkForUpdates',false);
 %% Create column of names
 finalTerm = i_min;
 for iTerm=1:finalTerm
@@ -230,18 +230,18 @@ end
 Step = [1:finalTerm]';
 Tab = table(Step,Terms);
 %% Plot AERR surface
-figure;
-for iTerm=2:finalTerm
-plot3(iTerm*ones(nTerms,1),[1:nTerms],AERR{iTerm}*100,'-o'); hold on;
-zlabel('AERR, $\%$'); ylabel('Terms'); xlabel('Iteration')
-end
-set(gca,'YTick',[1:nTerms]);
-set(gca,'YTickLabel',x_ticklabels);
-ytickangle(45)
-tikzName = [folderName,'/All_AERR_T_',num2str(T),'.tikz'];
-cleanfigure;
-matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-            false, 'height', '4cm', 'width','12cm','checkForUpdates',false);
+% figure;
+% for iTerm=2:finalTerm
+% plot3(iTerm*ones(nTerms,1),[1:nTerms],AERR{iTerm}*100,'-o'); hold on;
+% zlabel('AERR, $\%$'); ylabel('Terms'); xlabel('Iteration')
+% end
+% set(gca,'YTick',[1:nTerms]);
+% set(gca,'YTickLabel',x_ticklabels);
+% ytickangle(45)
+% tikzName = [folderName,'/All_AERR_T_',num2str(T),'.tikz'];
+% cleanfigure;
+% matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+%             false, 'height', '4cm', 'width','12cm','checkForUpdates',false);
 
 clear AERR
 %% Parameter estimation

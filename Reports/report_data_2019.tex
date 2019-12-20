@@ -1,0 +1,203 @@
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
+
+\documentclass[a4paper,11pt,twoside]{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% A generic report compiler for publishing rables and plots for a partcular choise of lags in the NARX system
+% A path to media corresponding to the setting is defined below, as well as chosen parameter settings
+\makeatletter
+\def\input@path{{../}}
+%\def\dataset{C}
+\def\ny{4}
+\def\nu{4}
+\def\order{3}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Packages
+\usepackage[final]{pdfpages}
+\usepackage{verbatim}
+\usepackage{inputenc}
+\usepackage{graphicx} 
+\usepackage{amsmath,amssymb,mathrsfs,amsfonts}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{calrsfs}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{eucal}    
+\usepackage{amssymb}  
+\usepackage{pifont}
+\usepackage{color} 
+\usepackage{cancel}
+\usepackage[toc,page]{appendix}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest,every axis/.append style={line width=0.5pt},label style={font=\small},tick label style={font=\small},title style={font=\small},y tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={},},z tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={},},x label style={font={\small},at={(axis description cs:0.5,-0.15)},anchor=north},y label style={font={\small},at={(axis description cs:-0.15,0.5)},anchor=south},z label style={font={\small},at={(axis description cs:-0.25,0.5)},anchor=north}}
+\usetikzlibrary{shapes,shadows,arrows,backgrounds,patterns,positioning,automata,calc,decorations.markings,decorations.pathreplacing,bayesnet,arrows.meta} 
+\usepackage{varwidth}
+\usepackage{lscape}
+\usepackage{array} 
+\usepackage[colorlinks=false,pdfborder={0 0 0}]{hyperref}
+\usepackage{tabularx}
+\usepackage{textcomp}
+\usepackage{multicol} 
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage[font=small,labelfont=bf]{caption}                                                           
+\usepackage{textcase}
+\usepackage{bbm} 
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{soul}
+\usepackage{wrapfig}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Geometry
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.5em}
+\renewcommand{\baselinestretch}{1.2}
+\usepackage[left=2cm, right=2cm, top=2.5cm, bottom=3cm, headheight=13.6pt]{geometry}
+\allowdisplaybreaks 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Bibliography
+\usepackage[backend=bibtex,style=ieee,sorting=none]{biblatex} 
+\bibliography{bibliography}
+\renewcommand*{\bibfont}{\scriptsize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Custom commands and operators
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\newcommand{\ie}{\textit{i.e.} }
+\newcommand{\eg}{\textit{e.g.} }
+\newcommand\id{\ensuremath{\mathbbm{1}}} 
+\DeclareMathOperator{\E}{\mathbb{E}}
+\DeclareMathOperator{\eye}{\mathbb{I}}
+\DeclareMathOperator{\zeros}{\mathbb{O}}
+\DeclareMathOperator{\tr}{\textrm{tr}}
+\DeclareMathOperator{\vvec}{\textrm{vec}}
+\DeclareMathOperator{\ik}{\mathrm{k}}
+\DeclareMathOperator{\ip}{\mathrm{p}}
+\DeclareMathOperator{\inn}{\mathrm{n}}
+\DeclareMathOperator{\im}{\mathrm{m}}
+\DeclareMathOperator{\td}{\mathrm{t}}
+\DeclareMathOperator{\kd}{\mathrm{k}}
+\DeclareMathOperator{\T}{\mathrm{T}}
+\DeclareMathOperator{\K}{\mathrm{K}}
+\DeclareMathOperator{\rk}{\mathrm{rk}}
+\DeclareMathOperator{\vc}{\mathrm{vec}}
+\DeclareSymbolFontAlphabet{\mathcal} {symbols}
+\DeclareSymbolFont{symbols}{OMS}{cm}{m}{n}
+\DeclareMathAlphabet{\mathbfit}{OML}{cmm}{b}{it}
+\makeatother
+% Number equations
+%\numberwithin{equation}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Theorems
+\newtheoremstyle{mytheoremstyle} % name
+{.5em}                    % Space above
+{.8em}                    % Space below
+{\itshape}                % Body font
+{1em}                           % Indent amount
+{\bfseries}                   % Theorem head font
+{:}                          % Punctuation after theorem head
+{.5em}                       % Space after theorem head
+{}  % Theorem head spec (can be left empty, meaning ‘normal’)
+
+\theoremstyle{mytheoremstyle}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{condition}{Condition}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{property}{Property}[section]
+\newtheorem{corollary}{Corollary}[section]
+\renewcommand\qedsymbol{$\blacksquare$}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nomenclature
+\usepackage[intoc]{nomencl}
+\makenomenclature
+
+\usepackage[ruled]{algorithm}
+\usepackage{float}
+
+\usepackage{algorithmic}
+\algsetup{linenosize=\scriptsize}
+\usepackage{etoolbox}
+\AtBeginEnvironment{algorithmic}{\scriptsize}
+\renewcommand{\thealgorithm}{\thechapter.\arabic{algorithm}} 
+%\usepackage{chngcntr}
+%\counterwithin{algorithm}{section}
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[explicit]{titlesec}
+\usepackage{titletoc}
+\interfootnotelinepenalty=10000
+
+\title{Structure and parameter identification of the dynamical model of auxetic foam}
+
+\begin{document}
+	\maketitle
+\par Experimental data is described in the earlier provided by the University of Bristol. This report summarises the settings used for model identification and presents preliminary results of model structure identification
+\section{Structure identification}
+\par The following model structure is assumed. The output of the NARX model $\mathbfit{y}(t)$ is the measured load. The input vector is composed as
+\begin{equation}
+	\mathbfit{x}(t) = \{x_i(t)\}^{d}_{i=1} = \left[\{y(t - k)\}^{n_y}_{k=1} \quad \{u(t - k + n_y)\}^{n_y + n_u}_{k= n_y + 1} \right]^{\top},
+\end{equation}
+where $n_u$ is the length of the input lag and $n_y$ is the length of the output lag in discrete time, and where $d = n_u + n_y$. In this case, the identification is performed under the following assumptions:
+\begin{itemize}[noitemsep,topsep=0.3pt,parsep=0.3pt,partopsep=0.2pt,labelindent=1cm] 
+	\item the output lag $n_y =\ny$.
+	\item the input signal has a lag of length $n_u = \nu$.
+\end{itemize}
+The resultant input vector of the NARX model then takes the following form:
+\begin{equation}
+\mathbfit{x}(t) = \left[\begin{array}{cccccc}
+u(t-n_u) & \dots & y(t-1) & u(t-n_u) & \dots & u(t-1)
+\end{array}\right]^{\top}.
+\end{equation}
+The unknown model is approximated with a sum of polynomial basis functions up to second degree ($\lambda = \order$), rendering the following structure
+\begin{equation}\label{eq:narx}
+	\mathbfit{y}(t) = \theta^0 + \sum_{i=1}^{d} \theta_i x_i(t) + \sum_{i=1}^{d} \sum_{j=1}^{d} \theta_{i,j} x_i(t) x_j(t) + e(t).
+\end{equation}
+The number and order of significant terms are identified within the EFOR-CMSS algorithm based on the data from 9 datasets for each foam specimen. Figure \ref{fig:aamdl} illustrates the relationship between the number of model terms and the selected criterion of significance, AAMDL.
+\begin{figure}[!h]
+	\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+	\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+	\centering	
+	\subfloat[Square cut.]{\input{Results_set_S_ny_4_nu_4/AAMDL_T_4000.tikz}}\\
+	\subfloat[Y cut.]{\input{Results_set_Y_ny_4_nu_4/AAMDL_T_4000.tikz}}
+	\subfloat[Z cut.]{\input{Results_set_Z_ny_4_nu_4/AAMDL_T_4000.tikz}}
+	\resizebox{!}{0cm}{
+		\begin{minipage}{\textwidth}
+			\begin{tikzpicture}	
+			\begin{axis}[width=2cm,height=2cm]
+			\addplot [color=mycolor2,line width=5.0pt,only marks,mark=asterisk,mark options={solid},forget plot]
+			table[row sep=crcr]{%
+				8	-3.00104696019893\\
+			};\label{tikz:nterms}
+			\end{axis}
+			\end{tikzpicture}%
+	\end{minipage}}
+	\caption{Evolution of AAMDL with the respect to the number of terms for sample size 4000. The optimal number of terms is highlighted (\ref{tikz:nterms}).}\label{fig:aamdl}
+\end{figure}	
+\section{Structure identification}
+\par The results of internal parameter estimation via the EFOR-CMSS method for sample size of 4000 points for each type of cut are presented in Tables \ref{tab:thetasS}-\ref{tab:thetasZ}.
+\begin{table}[!h]
+	\centering
+	\caption{Estimated parameters for the square cut dataset.}\label{tab:thetasS}
+	\small
+	\input{Results_set_S_ny_4_nu_4/Thetas_T_4000.tex}
+\end{table}
+\begin{table}[!h]
+	\centering
+	\caption{Estimated parameters for the Y cut dataset.}\label{tab:thetasY}
+	\small  
+	\input{Results_set_Y_ny_4_nu_4/Thetas_T_4000.tex}
+\end{table}
+\begin{table}[!h]
+	\centering
+	\caption{Estimated parameters for the Z cut dataset.}\label{tab:thetasZ}
+	\small  
+	\input{Results_set_Z_ny_4_nu_4/Thetas_T_4000.tex}
+	\end{table}
+\end{document}

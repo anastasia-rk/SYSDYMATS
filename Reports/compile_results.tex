@@ -31,7 +31,7 @@
 \usepackage{cancel}
 \usepackage[toc,page]{appendix}
 \usepackage{pgfplots}
-\pgfplotsset{compat=newest,every axis/.append style={line width=0.5pt},label style={font=\small},tick label style={font=\small},title style={font=\small},y tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={},},z tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={},},x label style={font={\small},at={(axis description cs:0.5,-0.15)},anchor=north},y label style={font={\small},at={(axis description cs:-0.15,0.5)},anchor=south},z label style={font={\small},at={(axis description cs:-0.25,0.5)},anchor=north}}
+\pgfplotsset{compat=newest,every axis/.append style={line width=0.5pt},x label style={font={\small},at={(axis description cs:0.5,-0.15)},anchor=north},y label style={font={\small},at={(axis description cs:-0.15,0.5)},anchor=south},z label style={font={\small},at={(axis description cs:-0.25,0.5)},anchor=north},label style={font=\small},tick label style={font=\small},title style={font=\small},y tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={},},z tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={},}}
 \usetikzlibrary{shapes,shadows,arrows,backgrounds,patterns,positioning,automata,calc,decorations.markings,decorations.pathreplacing,bayesnet,arrows.meta} 
 \usepackage{varwidth}
 \usepackage{lscape}
@@ -157,7 +157,7 @@ u(t-n_u) & \dots & y(t-1) & u(t-n_u+1) & \dots & u(t)
 \end{equation}
 The unknown model is approximated with a sum of polynomial basis functions up to second degree ($\lambda = \order$), rendering the following structure
 \begin{equation}\label{eq:narx}
-	\mathbfit{y}(t) = \theta^0 + \sum_{i=1}^{d} \theta_i x_i(t) + \sum_{i=1}^{d} \sum_{j=1}^{d} \theta_{i,j} x_i(t) x_j(t) + e(t).
+	\mathbfit{y}(t) = \theta^0 + \sum_{i=1}^{d} \theta_i x_i(t) + \sum_{i=1}^{d} \sum_{j=i}^{d} \theta_{i,j} x_i(t) x_j(t) +  \sum_{i=1}^{d} \sum_{j=i}^{d} \sum_{k=j}^{d} \theta_{i,j} x_i(t) x_j(t) x_k(t) + e(t).
 \end{equation}
 The number and order of significant terms are identified within the EFOR-CMSS algorithm based on the data from 8 out of 10 datasets. Figure \ref{fig:aamdl} illustrates the relationship between the number of model terms and the selected criterion of significance, AAMDL.
 \begin{figure}[!h]

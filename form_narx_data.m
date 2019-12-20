@@ -11,14 +11,26 @@ switch foamset
         input_i  = 3;                                                       % input column index
         output_i = 2;                                                       % output column index
         K       = 10;                                                       % number of datasets
+        normC   = 400;
     case 'foam_2019'
         dataset = questdlg('Select data set', ...
         'Choice of set',...
         'S','Y','Z','');
         input_i  = 2;                                                       % input column index
         output_i = 3;                                                       % output column index
-        K        = 9;                                                       % number of datasets
+        K        = 12;                                                      % number of datasets
+        normC    = 100;
    
+end
+normalise = questdlg('Scale the data?', ...
+        'Normalisation');
+switch normalise
+    case 'No'
+        folder = 'Dictionaries';                                             % specify category where to save files
+        normC = 1;
+    case 'Yes'
+        folder = 'Dictionaries_norm';                                        % specify category where to save files
+
 end
 % foamset = 'foam_2010'; % 'foam_2019'
 % dataset = 'C'; %  'D'; %                                                    % name of dataset
@@ -29,8 +41,7 @@ n_u     = 4;                                                                % in
 n_y     = 4;                                                                % output signal lag length
 d       = n_y + n_u;                                                        % size of input vector x
 lambda  = 3;                                                                % order of polynomial
-% a       = sym('x_',[1 d]);                                                  % associated symbolic vector
-folder = 'Dictionaries';                                                    % specify category where to save files
+% a       = sym('x_',[1 d]);                                                % associated symbolic vector
 names = {'set','ny','nu'};                                                  % names used to define results folder name (no more than 3).
 folderName = make_folder(folder,names,dataset,n_y,n_u);                     % create results folder
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -82,11 +93,11 @@ clear Input Output
 fileName = [num2str(iFile),dataset];
 load(fileName);
 if foamset == 'foam_2019'
-    Input  = data_res(:,input_i);
-    Output = data_res(:,output_i);
+    Input  = data_res(:,input_i)./normC;
+    Output = data_res(:,output_i)./normC;
 else
-    Input  = fileData(:,input_i);
-    Output = fileData(:,output_i);
+    Input  = fileData(:,input_i)./normC;
+    Output = fileData(:,output_i)./normC;
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Create the batch of input vectors
@@ -139,6 +150,6 @@ dictFolder = folderName;                                                    % fo
 nTerms = iTerm;                                                             % total number of regressors in the polynomial
 dict_terms = [1:nTerms];                                                    % dictionary of all terms
 fileMeta = ['Meta_',dataset];
-save(fileMeta,'dictFolder','nTerms','nNarx','symb_term','dict_terms','indeces','lambda','n_y','n_u','K','-v7.3');   % save metadata
+save(fileMeta,'dictFolder','nTerms','nNarx','symb_term','dict_terms','indeces','lambda','n_y','n_u','K','normC','-v7.3');   % save metadata
 fileMeta = [folderName,'/Meta_',dataset];
-save(fileMeta,'dictFolder','nTerms','nNarx','symb_term','dict_terms','indeces','lambda','n_y','n_u','K','-v7.3');
+save(fileMeta,'dictFolder','nTerms','nNarx','symb_term','dict_terms','indeces','lambda','n_y','n_u','K','normC','-v7.3');

@@ -36,6 +36,7 @@ end
 addpath(foamset)
 % Length of input and output lags
 lambda  = 4;                                                                % order of delta operator
+lambda_p = 3;                                                               % order of polynomial
 names = {'set','lambda'};                                                   % names used to define results folder name (no more than 3).
 folderName = make_folder(folder,names,dataset,lambda);                      % create results folder
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -54,17 +55,31 @@ T   = 10000; %length(Input); % length of the observation sequence
 dT  = 0.01;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Create sum index permutations
+% Intial combination accounts for all linear regressors
 indeces{1} = [1:d]';
-for iLambda=2:lambda                                                        % iLambda - order of polynomial term
+% % With self-products
+% for iLambda=2:lambda_p                                                      % iLambda - order of polynomial term
+%     initial_m = permn(1:d,iLambda);                                         % get all permutations with repetition
+%     M = initial_m;                                                          % M - temporary set of permutations
+%     for j=iLambda:-1:2
+%         ind = find(M(:,j)>=M(:,j-1));                                       % sort out only increasing indeces
+%         M = M(ind,:);                                                       % update set
+%         clear ind
+%     end
+%     indeces{iLambda} = M;                                                   % all index combinations of order iLambda
+% end
+% Products with only unique elements
+for iLambda=2:lambda_p                                                      % iLambda - order of polynomial term
     initial_m = permn(1:d,iLambda);                                         % get all permutations with repetition
     M = initial_m;                                                          % M - temporary set of permutations
     for j=iLambda:-1:2
-        ind = find(M(:,j)>=M(:,j-1));                                       % sort out only increasing indeces
+        ind = find(M(:,j)>M(:,j-1));                                        % sort out only increasing indeces
         M = M(ind,:);                                                       % update set
         clear ind
     end
     indeces{iLambda} = M;                                                   % all index combinations of order iLambda
 end
+
 for iFile=1:K
 disp(['Dataset_',num2str(iFile)])
 %% Upload data

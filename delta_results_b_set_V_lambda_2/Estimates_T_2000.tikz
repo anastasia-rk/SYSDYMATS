@@ -1,0 +1,136 @@
+% This file was created by matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=3.142cm,
+height=2.512cm,
+at={(0cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-0.01,
+ymax=0,
+ylabel style={font=\color{white!15!black}},
+ylabel={$\delta^2 y(t)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-0.008827734624523\\
+2	-0.00729004767382953\\
+3	-0.00497413352006507\\
+4	-0.00214788795344307\\
+5	-0.000660707309904148\\
+7	-0.000112666425747613\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=3.142cm,
+height=2.512cm,
+at={(4.134cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-0.0944915598669949,
+ymax=1,
+ylabel style={font=\color{white!15!black}},
+ylabel={$u(t-1)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	0.828256488585411\\
+2	0.649928821635131\\
+3	0.525777329209299\\
+4	0.199391771969538\\
+5	-0.0944915598669949\\
+7	-0.0252161863566705\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=3.142cm,
+height=2.512cm,
+at={(8.269cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-0.005,
+ymax=0.01,
+ylabel style={font=\color{white!15!black}},
+ylabel={$\delta^1 y(t)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-0.00318972907729764\\
+2	-0.000128129656657831\\
+3	0.00422596278530493\\
+4	0.00695719561494914\\
+5	0.00979644559143886\\
+7	0.0093947169096877\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=3.142cm,
+height=2.512cm,
+at={(0cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=0,
+ymax=4.35534679219229e-05,
+ylabel style={font=\color{white!15!black}},
+ylabel={$\delta^1 y(t)\delta^2 y(t)u(t-1)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	4.35534679219229e-05\\
+2	3.56061540613579e-05\\
+3	3.09231027823735e-05\\
+4	1.84585536263189e-05\\
+5	1.21831676854861e-06\\
+7	2.79946833269553e-07\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=3.142cm,
+height=2.512cm,
+at={(4.134cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-6e-07,
+ymax=0,
+ylabel style={font=\color{white!15!black}},
+ylabel={$\delta^1 y(t)\delta^2 y(t)\delta^1 u(t-1)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-5.73956522837934e-07\\
+2	-3.64431897099862e-07\\
+3	-4.9547480970478e-07\\
+4	-1.90352657750921e-07\\
+5	-3.60079931357637e-08\\
+7	-5.58248199845643e-09\\
+};
+\end{axis}
+\end{tikzpicture}%

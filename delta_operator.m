@@ -1,8 +1,8 @@
 function[d_op] = delta_operator(order,f,t,dT,direction)
 switch direction
-    case 'forward'
+    case 'Forward'
         tq = @(x,shift) x + (order-shift);
-    case 'backward'
+    case 'Backward'
          tq = @(x,shift) x - shift;
 end
 sum = 0;

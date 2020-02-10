@@ -1,5 +1,6 @@
 my_init
 %% Load estimated thetas
+my_init;
 foamset = questdlg('Select data folder', ...
     'Data to process',...
 	'foam_2010','foam_2019','');
@@ -11,21 +12,41 @@ switch foamset
     case 'foam_2019'
         dataset = questdlg('Select data set', ...
         'Choice of set',...
-        'S','Y','Z','');   
+        'S','Y','Z','');
 end
-metaFileName = ['Meta_',dataset];
-load(metaFileName);
-normC = 1;
-if normC == 1
-    folder = 'Results';                                                     % specify category where to save files
-    dFolder = 'Dictionaries';
-else
-    folder = 'Results_norm';
-    dFolder = 'Dictionaries_norm';
+folder = 'results';                                                     % specify category where to save files
+dFolder = 'dictionaries';
+regressors = questdlg('Select the domain of regressors', ...
+    'Domain choice',...
+	'Shift','Delta','');
+switch regressors
+    case 'Shift'
+        metaFileName = ['Meta_',dataset];
+        load(metaFileName);
+        names = {'set','ny','nu'};                                          % names used to define results folder name (no more than 3).
+        if normC ~= 1
+            folder = [folder,'_norm'];
+            dFolder = [dFolder,'_norm'];
+        end
+        folderName = make_folder(folder,names,dataset,n_y,n_u);             % create results folder
+        dictFolder = make_folder(dFolder,names,dataset,n_y,n_u);            % create results folder
+        d       = n_y + n_u;                                                % size of input vector x
+    case 'Delta'
+        metaFileName = ['Meta_delta_',dataset];
+        load(metaFileName);
+         folder = ['delta_',folder];
+         dFolder = ['delta_',dFolder];
+         if normC ~= 1
+            folder = [folder,'_norm'];
+            dFolder = [dFolder,'_norm'];
+        end
+         names = {'set','lambda'};
+         folderName = make_folder(folder,names,dataset,lambda);             % create results folder
+         dictFolder = make_folder(dFolder,names,dataset,lambda);            % create results folder
+         n_u = 1+lambda;
+         n_y = 1;
+         d = lambda*2;
 end
-names = {'set','ny','nu'};                                                  % names used to define results folder name (no more than 3).
-folderName = make_folder(folder,names,dataset,n_y,n_u);                     % create results folder
-dictFolder = make_folder(dFolder,names,dataset,n_y,n_u);                     % create results folder
 T = 2000;
 % folder = 'Results';                                                         % specify category where to save files
 fileName = [folderName,'/OLS_results_T_',num2str(T),'.mat'];

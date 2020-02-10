@@ -1,14 +1,64 @@
-my_init;
+local_init;
 
 foamset = questdlg('Select data folder', ...
     'Data to process',...
-	'foam_2010','foam_2019','');
+	'foam_2010','foam_2019','vdpo','');
 switch foamset
     case 'foam_2010'
         dataset = questdlg('Select data set', ...
         'Choice of set',...
         'C','D','');
     case 'foam_2019'
+        dataset = questdlg('Select data set', ...
+        'Choice of set',...
+        'S','Y','Z','');
+    case 'vdpo'
+        dataset = 'V';      
+end
+folder = 'results';                                                     % specify category where to save files
+dFolder = 'dictionaries';
+regressors = questdlg('Select the domain of regressors', ...
+    'Domain choice',...
+	'Shift','Delta','');
+switch regressors
+    case 'Shift'
+        metaFileName = ['Meta_',dataset];
+        load(metaFileName);
+        names = {'set','ny','nu'};                                          % names used to define results folder name (no more than 3).
+        if normC ~= 1
+            folder = [folder,'_norm'];
+            dFolder = [dFolder,'_norm'];
+        end
+        folderName = make_folder(folder,names,dataset,n_y,n_u);             % create results folder
+        dictFolder = make_folder(dFolder,names,dataset,n_y,n_u);            % create results folder
+        d       = n_y + n_u;                                                % size of input vector x
+    case 'Delta'
+        metaFileName = ['Meta_delta_',dataset];
+        load(metaFileName);
+         folder = ['delta_',folder];
+         dFolder = ['delta_',dFolder];
+         if normC ~= 1
+            folder = [folder,'_norm'];
+            dFolder = [dFolder,'_norm'];
+         end
+        direction = questdlg('Type of delta operator', ...
+        'Causality',...
+        'Forward','Backward','');
+        switch direction
+            case 'Backward'
+                folder = [folder,'_b'];
+                dFolder = [dFolder,'_b'];
+            case 'Forward'
+                folder = [folder,'_f'];
+                dFolder = [dFolder,'_f'];
+        end
+         names = {'set','lambda'};
+         folderName = make_folder(folder,names,dataset,lambda);             % create results folder
+         dictFolder = make_folder(dFolder,names,dataset,lambda);            % create results folder
+         n_u = 1+lambda;
+         n_y = 1;
+         d = lambda*2;
+end
         dataset = questdlg('Select data set', ...
         'Choice of set',...
         'S','Y','Z','');
@@ -23,8 +73,6 @@ else
     folder = 'Results_norm';
 end
 T = 2000;
-names = {'set','ny','nu'};                                                  % names used to define results folder name (no more than 3).
-folderName = make_folder(folder,names,dataset,n_y,n_u);                     % create results folder
 %% Select first significant basis vector for all datasets
 index = (1:T);                                                              % length of the sample
 Files =  [1 2 4 5 6 7 9 10]; % 1:K; %                                       % id of the sample
@@ -72,8 +120,9 @@ else
     maxSign     = 30;                                                           
 end
 converged   = false;
-iTerm       = 2;
+iTerm       = 1;
 while(iTerm <= maxSign) && ~converged                                       % loop over the number of significant terms
+    iTerm = iTerm + 1;                                                      % increase the number of significant terms
     AEER{iTerm} = zeros(nTerms,1);                                          % placeholder for AERR criteria
     for iFile=Files                                                         % over all datasets
         fName = [dictFolder,'/',char(fileNames(iFile))];
@@ -107,14 +156,42 @@ while(iTerm <= maxSign) && ~converged                                       % lo
     significant_term{iTerm} = symb_term{S(iTerm)};
     disp(['Significant term ', num2str(iTerm),':'])
     significant_term{iTerm}
-    AAMDL_all(iTerm) = AMDL_sum/K;                                          % average AMDL over all sets
-    converged = (AAMDL_all(iTerm) < -10);                                   % check convergence PLACEHOLDER
-    iTerm = iTerm + 1;                                                      % increase the number of significant terms
+    BIC_all(iTerm) = BIC_sum/K;                                             % average AMDL over all sets
+    AIC_all(iTerm) = AIC_sum/K;                                             % average AMDL over all sets
+    converged_BIC = (abs((BIC_all(iTerm) - BIC_all(iTerm-1))/BIC_all(iTerm-1)) < 0.005); % check convergence
+    converged_AIC = (abs((AIC_all(iTerm) - AIC_all(iTerm-1))/AIC_all(iTerm-1)) < 0.005); % check convergence
+    converged_AAMDL = (abs((AAMDL_all(iTerm) - AAMDL_all(iTerm-1))/AAMDL_all(iTerm-1)) < 0.005); % check convergence
+    if converged_BIC
+        bics  = [bics,iTerm];
+    end
+    if converged_AIC
+        aics  = [aics,iTerm];
+        end
+    if converged_AAMDL
+        amdls  = [amdls,iTerm];
+    end
 end
 clear AEER
-[min_aamdl,i_min] = min(AAMDL_all);
-finalTerm = i_min;
-
+figure('Name','AAMDL','NumberTitle','off');
+subplot(3,1,1);
+plot(AAMDL_all,'o'); hold on;
+plot(amdls(1),AAMDL_all(amdls(1)),'*','LineWidth',5);
+xlim([1 iTerm])
+xlabel('Number of terms');
+ylabel('AAMDL')
+subplot(3,1,2);
+plot(BIC_all,'o'); hold on;
+plot(bics(1),BIC_all(bics(1)),'*','LineWidth',5);
+xlim([1 iTerm])
+xlabel('Number of terms');
+ylabel('BIC')
+subplot(3,1,3);
+plot(AIC_all,'o'); hold on;
+plot(aics(1),AIC_all(aics(1)),'*','LineWidth',5);
+xlim([1 iTerm])
+xlabel('Number of terms');
+ylabel('AIC')
+finalTerm = bics(1);
 %% Direct estimation of polynomial coefficients
 times = [1:T];
 Phi_bar = [];
@@ -150,7 +227,6 @@ R_2 = r_squared(Y_bar,Y_hat);
 L = size(A,2);
 Betas = reshape(B_bar,[finalTerm,L]);
 %% Create column of names
-finalTerm = i_min;
 for iTerm=1:finalTerm
      temp = arrayfun(@char, significant_term{iTerm}, 'uniform', 0);
     if length(temp) > 0

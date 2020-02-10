@@ -9,5 +9,6 @@ function [result] = AMDL(r_n,nData,nTerms)
 %   AMDL - Approximate Minimum Description Length criterion
 
     norm_r = norm(r_n);
-    result = 0.5*log2(norm_r/nData) + 1.5*nTerms*log2(nData)/nData;
+    %     result = 2*log(nData)*nTerms/nData + log(norm_r/nData);
+     result  = 1.5*log(nData)*nTerms/nData + 0.5*log(norm_r/nData);
 end

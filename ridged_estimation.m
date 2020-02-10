@@ -5,7 +5,7 @@ metaFileName = ['Meta_',dataset];
 load(metaFileName);
 n_y = 4;
 n_u = 4;
-T = 4000;
+T = 2000;
 if normC == 1
     folder = 'Results';                                                     % specify category where to save files
 else
@@ -114,11 +114,11 @@ for iTheta = 1:finalTerm
             Hat                    = A_n*gain;
             F_inv                  = inv(R_ss + k*I_k);
             sing_F                 = svd(F_inv);
-            sigma_b{iTheta,ik}(:,:)= gain*A_n*inv(R_nn + k*I_k);
-            mean{iTheta}(:,ik)     = A_n*beta{iTheta}(:,ik);
-            sigma_t{iTheta,ik}(:,:) = diag((th_norm - mean{iTheta}(:,ik)).^2);
-            Lik                    = mvnpdf(th_norm,mean{iTheta}(:,ik),sigma_t{iTheta,ik}(:,:));
-            Cov_cmplx{iTheta}(ik)  = (M_d/2)*log((1/M_d)*sum(sing_F)*prod(sing_F)^(1/M_d));
+            sigma_b{iTheta,ik}(:,:)= gain*A_n*F_inv;
+            mean_th{iTheta}(:,ik)     = A_n*beta{iTheta}(:,ik);
+            sigma_t{iTheta,ik}(:,:) = diag((th_norm - mean_th{iTheta}(:,ik)).^2);
+            Lik                    = mvnpdf(th_norm,mean_th{iTheta}(:,ik),sigma_t{iTheta,ik}(:,:));
+            Cov_cmplx{iTheta}(ik)  = (length(sing_F)/2)*log(mean(sing_F)/geomean(sing_F));
             AIC{iTheta}(:,ik)      = 2*trace(Hat) - 2*log(Lik);
             ICOMP{iTheta}(:,ik)    = AIC{iTheta}(:,ik) + Cov_cmplx{iTheta}(ik);
             % Raw data
@@ -127,11 +127,11 @@ for iTheta = 1:finalTerm
             Hat                    = A*gain;
             F_inv                  = inv(R_aa + k*I_k);
             sing_F                 = svd(F_inv);
-            sigma_b_raw{iTheta,ik}(:,:)= gain*A*inv(R_aa + k*I_k);
-            mean_th                = A*beta_raw{iTheta}(:,ik);
-            sigma_th               = diag((th_norm - mean_th).^2);
-            Lik                    = mvnpdf(th_norm,mean_th,sigma_th);
-            Cov_cmplx_raw{iTheta}(ik)  = (M_d/2)*log((1/M_d)*sum(sing_F)*prod(sing_F)^(1/M_d));
+            sigma_b_raw{iTheta,ik}(:,:)= gain*A*F_inv;
+            mean_th_raw                = A*beta_raw{iTheta}(:,ik);
+            sigma_th               = diag((th_norm - mean_th_raw).^2);
+            Lik                    = mvnpdf(th_norm,mean_th_raw,sigma_th);
+            Cov_cmplx_raw{iTheta}(ik)  = (length(sing_F)/2)*log(mean(sing_F)/geomean(sing_F));
             AIC_raw{iTheta}(:,ik)  = 2*trace(Hat) - 2*log(Lik);
             ICOMP_raw{iTheta}(:,ik)= AIC_raw{iTheta}(:,ik) + Cov_cmplx_raw{iTheta}(ik);
             betas_lasso{iTheta}(:,ik) =  LassoShooting(A_s,th_norm,k,'verbose',0);

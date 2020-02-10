@@ -1,0 +1,786 @@
+% This file was created by matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(0cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=2,
+ymax=3,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-1)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	2.04333493964193\\
+2	2.16298278509697\\
+3	2.2768644811508\\
+4	2.32897906342365\\
+5	2.32584731638553\\
+7	2.93151789135814\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(0.773cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-2.12038967471663,
+ymax=-1,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-2)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-1.05802837065671\\
+2	-1.21660350498902\\
+3	-1.36655187967502\\
+4	-1.36971172769447\\
+5	-1.36478765043228\\
+7	-2.12038967471663\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(1.546cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=0,
+ymax=0.2,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-4)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	0.0100707981004211\\
+2	0.0484713538139623\\
+3	0.0847143822519146\\
+4	0.041235578383068\\
+5	0.0389158135098336\\
+7	0.190599726825139\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(2.319cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-5.06727914866881,
+ymax=10.0403191033872,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-4)y(t-4)y(t-4)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-5.06727914866881\\
+2	-2.8435615590116\\
+3	-3.25815621460001\\
+4	2.17099454698271\\
+5	-2.42454476822713\\
+7	10.0403191033872\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(3.092cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-0.0290350772187634,
+ymax=0.00651728878251146,
+ylabel style={font=\color{white!15!black}},
+ylabel={$u(t-1)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	0.00651728878251146\\
+2	0.00525567746935742\\
+3	0.00344196066189814\\
+4	-0.00745156049075977\\
+5	-0.00782491901444582\\
+7	-0.0290350772187634\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(3.866cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-45.0469089848063,
+ymax=18.1769856464621,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-1)y(t-1)y(t-1)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-39.4110271282808\\
+2	-22.195228933031\\
+3	-19.2609709131156\\
+4	18.1769856464621\\
+5	-45.0469089848063\\
+7	15.7714202506795\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(4.639cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-59.7252039877086,
+ymax=100,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-4)y(t-1)y(t-1)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-59.7252039877086\\
+2	-32.905913027277\\
+3	-30.1963620136355\\
+4	32.602733837027\\
+5	-50.3462943378644\\
+7	73.5736145548346\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(5.412cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-50,
+ymax=52.7895631505511,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-4)y(t-4)y(t-1)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-30.216269046097\\
+2	-16.8820814461105\\
+3	-17.078901801923\\
+4	15.0454660264559\\
+5	-19.5667428960023\\
+7	52.7895631505511\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(6.185cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-2,
+ymax=0.0743964890261611,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-4)y(t-1)u(t-1)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-0.00944451548843229\\
+2	-0.0767242372292144\\
+3	-0.063184827008684\\
+4	0.0743964890261611\\
+5	-0.305439407453999\\
+7	-1.88715537324099\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(6.958cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-100,
+ymax=200,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-2)y(t-1)y(t-1)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	176.028881924996\\
+2	98.2358037262862\\
+3	86.1964108060971\\
+4	-82.1885626783827\\
+5	188.228475917608\\
+7	-76.6961108282829\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(7.731cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-0.00421418297796411,
+ymax=0.054341615824141,
+ylabel style={font=\color{white!15!black}},
+ylabel={$u(t-2)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-0.00421418297796411\\
+2	0.0037876835785987\\
+3	0.00620696233367326\\
+4	0.0298387891806943\\
+5	0.0419702514993581\\
+7	0.054341615824141\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(8.504cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-0.0714263623183122,
+ymax=2.82976897540235,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-4)y(t-1)u(t-2)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-0.0150316854611082\\
+2	0.0566992807549481\\
+3	0.0815611749249875\\
+4	-0.0714263623183122\\
+5	0.523857678414522\\
+7	2.82976897540235\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(9.277cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-0.00599549567902902,
+ymax=0.01,
+ylabel style={font=\color{white!15!black}},
+ylabel={$u(t-4)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	1.37615786434201e-05\\
+2	0.00300986180743207\\
+3	0.00576228889613786\\
+4	0.00620359809170396\\
+5	0.0076785259475964\\
+7	-0.00599549567902902\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(10.05cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-0.535752942437435,
+ymax=6.6846154446869,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-1)y(t-1)u(t-3)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	0.9668001118506\\
+2	-0.535752942437435\\
+3	0.364326751683924\\
+4	0.71231775557683\\
+5	2.67984116810357\\
+7	6.6846154446869\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(10.823cm,3.488cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-4.3601182936206,
+ymax=0.0379136169982837,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-3)y(t-2)u(t-2)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	0.0379136169982837\\
+2	-0.138545571547547\\
+3	-0.0531317586044223\\
+4	-0.03583166601094\\
+5	-1.0085090804999\\
+7	-4.3601182936206\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(0cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-0.104169775149702,
+ymax=0.424361592387772,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-4)y(t-4)u(t-3)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	0.284113101115988\\
+2	-0.104169775149702\\
+3	0.169702523791852\\
+4	0.0390545384680128\\
+5	0.424361592387772\\
+7	-0.0960514875277807\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(0.773cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-20,
+ymax=1.65380838964009,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-2)y(t-1)u(t-3)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-2.92365789225853\\
+2	1.65380838964009\\
+3	-1.17619089114442\\
+4	-1.85353105213729\\
+5	-7.56652916245372\\
+7	-18.3294690912849\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(1.546cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-1.21106122924163,
+ymax=12.3601057352431,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-2)y(t-2)u(t-3)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	2.20287479970379\\
+2	-1.21106122924163\\
+3	0.987712084382741\\
+4	1.21013175188133\\
+5	5.54357058355751\\
+7	12.3601057352431\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(2.319cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-0.0412994382709409,
+ymax=0.663756698491437,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-3)y(t-1)u(t-2)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-0.0412994382709409\\
+2	0.113392873783475\\
+3	-0.0264316679349556\\
+4	0.114453855174113\\
+5	0.646407264477197\\
+7	0.663756698491437\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(3.092cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-1,
+ymax=2,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-4)y(t-1)u(t-3)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	1.04975871463578\\
+2	-0.623793676643345\\
+3	0.446773548001016\\
+4	0.291168661491466\\
+5	1.59796063474578\\
+7	1.93076663188277\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(3.866cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-2.67450956102227,
+ymax=0.820392858917779,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-4)y(t-2)u(t-3)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-1.57920714338132\\
+2	0.820392858917779\\
+3	-0.793516287970016\\
+4	-0.395418556411655\\
+5	-2.67450956102227\\
+7	-2.5456947795703\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(4.639cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-0.0412283976118994,
+ymax=0.000778618670255769,
+ylabel style={font=\color{white!15!black}},
+ylabel={$u(t-3)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	0.000778618670255769\\
+2	-0.00724343624679603\\
+3	-0.00969251032134693\\
+4	-0.0293406061538861\\
+5	-0.0412283976118994\\
+7	-0.0227798675868085\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(5.412cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-100,
+ymax=50,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-4)y(t-4)y(t-2)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	44.8900317455026\\
+2	25.0777494371064\\
+3	26.3226249117595\\
+4	-20.7393410778745\\
+5	27.4576877723748\\
+7	-76.6005389899206\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(6.185cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-217.739165915614,
+ymax=200,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-4)y(t-2)y(t-1)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	177.925120319549\\
+2	98.3428637417056\\
+3	92.7264231871694\\
+4	-91.0446896005895\\
+5	142.620632021604\\
+7	-217.739165915614\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(6.958cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-200,
+ymax=200,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-4)y(t-2)y(t-2)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-132.340516769328\\
+2	-73.2897207402817\\
+3	-71.2723584716791\\
+4	63.3364486569733\\
+5	-100.773070965632\\
+7	161.673052139892\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(7.731cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-0.0850654929011811,
+ymax=0.289354380665349,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-3)y(t-2)u(t-1)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-0.00219236010915574\\
+2	0.0579439425207422\\
+3	0.0658178912300352\\
+4	-0.0850654929011811\\
+5	0.289354380665349\\
+7	0.108454732338892\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(8.504cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-0.166189912050303,
+ymax=1,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-1)y(t-1)u(t-2)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	0.0179600891589776\\
+2	-0.029830586999532\\
+3	-4.90151505617228e-05\\
+4	-0.0126958982571119\\
+5	-0.166189912050303\\
+7	0.860929345138138\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(9.277cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-263.780882161661,
+ymax=200,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-2)y(t-2)y(t-1)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	-262.085595380761\\
+2	-145.554744308526\\
+3	-129.990633543951\\
+4	120.582443598979\\
+5	-263.780882161661\\
+7	123.819964243543\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(10.05cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-100,
+ymax=130.001935633346,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-2)y(t-2)y(t-2)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	130.001935633346\\
+2	72.0151751629913\\
+3	65.8123270060825\\
+4	-57.9427596257545\\
+5	123.631557337275\\
+7	-66.6325966426512\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=0.588cm,
+height=2.512cm,
+at={(10.823cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Dataset index},
+ymin=-0.00389915702395034,
+ymax=2,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y(t-3)y(t-3)u(t-1)$},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	0.0117964407370068\\
+2	0.0171578994859664\\
+3	-0.00389915702395034\\
+4	0.0129332376103495\\
+5	0.0157511338483438\\
+7	1.78104841860397\\
+};
+\end{axis}
+\end{tikzpicture}%

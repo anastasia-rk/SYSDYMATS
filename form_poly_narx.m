@@ -1,9 +1,10 @@
 my_init;
 % Creates dictionaries of polynomial regressors from the time-series data
 %% Set up global parameters
+difFormat = false;
 foamset = questdlg('Select data folder', ...
     'Choice of data',...
-	'foam_2010','foam_2019','');
+	'foam_2010','foam_2019','vdpo','');
 switch foamset
     case 'foam_2010'
         dataset = questdlg('Select data set', ...
@@ -11,8 +12,8 @@ switch foamset
         'C','D','');
         input_i  = 3;                                                       % input column index
         output_i = 2;                                                       % output column index
-        K       = 10;                                                       % number of datasets
-        normC   = 400;
+        K        = 10;                                                      % number of datasets
+        normC    = 400;
     case 'foam_2019'
         dataset = questdlg('Select data set', ...
         'Choice of set',...
@@ -21,16 +22,23 @@ switch foamset
         output_i = 3;                                                       % output column index
         K        = 12;                                                      % number of datasets
         normC    = 100;
-   
+        difFormat = true;
+    case 'vdpo'
+        input_i  = 2;                                                       % input column index
+        output_i = 3;                                                       % output column index
+        K        = 7;                                                       % number of datasets
+        normC    = 1;
+        dataset = 'V';                                                      % testing dataset for delta-domain
 end
+
 normalise = questdlg('Scale the data?', ...
         'Normalisation');
 switch normalise
     case 'No'
-        folder = 'Dictionaries';                                             % specify category where to save files
+        folder = 'dictionaries';                                             % specify category where to save files
         normC = 1;
     case 'Yes'
-        folder = 'Dictionaries_norm';                                        % specify category where to save files
+        folder = 'dictionaries_norm';                                        % specify category where to save files
 
 end
 % foamset = 'foam_2010'; % 'foam_2019'
@@ -38,8 +46,8 @@ end
 addpath(foamset)
 iFile   = 1;                                                                % id of the sample
 % Length of input and output lags
-n_u     = 4;                                                                % input signal lag length
-n_y     = 4;                                                                % output signal lag length
+n_u     = 2;                                                                % input signal lag length
+n_y     = 2;                                                                % output signal lag length
 d       = n_y + n_u;                                                        % size of input vector x
 lambda  = 3;                                                                % order of polynomial
 % a       = sym('x_',[1 d]);                                                % associated symbolic vector
@@ -72,7 +80,7 @@ switch sign(df)
         disp('positive')
         t_0 = n_u+1;
 end
-t_0 = 1000 + t_0;
+% t_0 = 500 + t_0;
 T   = 10000; %length(Input);                                                % length of the observation sequence
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Create sum index permutations
@@ -93,7 +101,7 @@ disp(['Dataset_',num2str(iFile)])
 clear Input Output 
 fileName = [num2str(iFile),dataset];
 load(fileName);
-if foamset == 'foam_2019'
+if difFormat
     Input  = data_res(:,input_i)./normC;
     Output = data_res(:,output_i)./normC;
 else
@@ -103,7 +111,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Create the batch of input vectors
 iNarx = 0;                                                                  % batch index of the input vector in AR model
-timesNarx = [t_0:t_0+T];
+timesNarx = [t_0:T];
 for t=timesNarx
     iNarx = iNarx + 1;
     if n_y == 0

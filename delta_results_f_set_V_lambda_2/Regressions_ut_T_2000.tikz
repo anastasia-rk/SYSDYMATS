@@ -22,7 +22,8 @@ axis background/.style={fill=white},
 title style={font=\bfseries},
 title={V1, R = 0.1905},
 axis x line*=bottom,
-axis y line*=left
+axis y line*=left,
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
 \addplot[only marks, mark=*, mark options={}, mark size=1.5000pt, color=mycolor1, fill=mycolor1] table[row sep=crcr]{%
 x	y\\
@@ -2027,7 +2028,9 @@ x	y\\
 -34.5907395262069	-202.112084066064\\
 39.4949912313491	-118.732750837074\\
 };
-\addplot [color=mycolor2, line width=2.0pt, forget plot]
+\addlegendentry{data1}
+
+\addplot [color=mycolor2, line width=2.0pt]
   table[row sep=crcr]{%
 35.025504336928	35.025504336928\\
 -94.5265467470035	-94.5265467470035\\
@@ -4030,6 +4033,8 @@ x	y\\
 -34.5907395262069	-34.5907395262069\\
 39.4949912313491	39.4949912313491\\
 };
+\addlegendentry{data2}
+
 \end{axis}
 
 \begin{axis}[%
@@ -4049,7 +4054,8 @@ axis background/.style={fill=white},
 title style={font=\bfseries},
 title={V2, R = 0.2103},
 axis x line*=bottom,
-axis y line*=left
+axis y line*=left,
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
 \addplot[only marks, mark=*, mark options={}, mark size=1.5000pt, color=mycolor1, fill=mycolor1] table[row sep=crcr]{%
 x	y\\
@@ -6054,7 +6060,9 @@ x	y\\
 -60.5624370156746	72.4472148568134\\
 9.58959654409051	28.8919576554476\\
 };
-\addplot [color=mycolor2, line width=2.0pt, forget plot]
+\addlegendentry{data1}
+
+\addplot [color=mycolor2, line width=2.0pt]
   table[row sep=crcr]{%
 -114.268195011635	-114.268195011635\\
 -105.44463187471	-105.44463187471\\
@@ -8057,6 +8065,8 @@ x	y\\
 -60.5624370156746	-60.5624370156746\\
 9.58959654409051	9.58959654409051\\
 };
+\addlegendentry{data2}
+
 \end{axis}
 
 \begin{axis}[%
@@ -8076,7 +8086,8 @@ axis background/.style={fill=white},
 title style={font=\bfseries},
 title={V3, R = 0.2056},
 axis x line*=bottom,
-axis y line*=left
+axis y line*=left,
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
 \addplot[only marks, mark=*, mark options={}, mark size=1.5000pt, color=mycolor1, fill=mycolor1] table[row sep=crcr]{%
 x	y\\
@@ -10081,7 +10092,9 @@ x	y\\
 53.292227994599	-265.641583536584\\
 67.6022229371486	-200.36610818619\\
 };
-\addplot [color=mycolor2, line width=2.0pt, forget plot]
+\addlegendentry{data1}
+
+\addplot [color=mycolor2, line width=2.0pt]
   table[row sep=crcr]{%
 -48.6475652471333	-48.6475652471333\\
 -105.821771348521	-105.821771348521\\
@@ -12084,6 +12097,8 @@ x	y\\
 53.292227994599	53.292227994599\\
 67.6022229371486	67.6022229371486\\
 };
+\addlegendentry{data2}
+
 \end{axis}
 
 \begin{axis}[%
@@ -12103,7 +12118,8 @@ axis background/.style={fill=white},
 title style={font=\bfseries},
 title={V4, R = 0.1577},
 axis x line*=bottom,
-axis y line*=left
+axis y line*=left,
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
 \addplot[only marks, mark=*, mark options={}, mark size=1.5000pt, color=mycolor1, fill=mycolor1] table[row sep=crcr]{%
 x	y\\
@@ -14108,7 +14124,9 @@ x	y\\
 33.8836389792712	414.083338493943\\
 20.6309537908472	418.897285316983\\
 };
-\addplot [color=mycolor2, line width=2.0pt, forget plot]
+\addlegendentry{data1}
+
+\addplot [color=mycolor2, line width=2.0pt]
   table[row sep=crcr]{%
 64.8673697324279	64.8673697324279\\
 -8.80141359640443	-8.80141359640443\\
@@ -16111,6 +16129,8 @@ x	y\\
 33.8836389792712	33.8836389792712\\
 20.6309537908472	20.6309537908472\\
 };
+\addlegendentry{data2}
+
 \end{axis}
 
 \begin{axis}[%
@@ -16130,7 +16150,8 @@ axis background/.style={fill=white},
 title style={font=\bfseries},
 title={V5, R = 0.023},
 axis x line*=bottom,
-axis y line*=left
+axis y line*=left,
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
 \addplot[only marks, mark=*, mark options={}, mark size=1.5000pt, color=mycolor1, fill=mycolor1] table[row sep=crcr]{%
 x	y\\
@@ -18135,7 +18156,9 @@ x	y\\
 11.5534536062496	33.9921406350241\\
 -106.469899672125	-55.0061265439017\\
 };
-\addplot [color=mycolor2, line width=2.0pt, forget plot]
+\addlegendentry{data1}
+
+\addplot [color=mycolor2, line width=2.0pt]
   table[row sep=crcr]{%
 -11.5156647301217	-11.5156647301217\\
 32.7543112313091	32.7543112313091\\
@@ -20138,6 +20161,8 @@ x	y\\
 11.5534536062496	11.5534536062496\\
 -106.469899672125	-106.469899672125\\
 };
+\addlegendentry{data2}
+
 \end{axis}
 
 \begin{axis}[%
@@ -20157,7 +20182,8 @@ axis background/.style={fill=white},
 title style={font=\bfseries},
 title={V7, R = 0.0049},
 axis x line*=bottom,
-axis y line*=left
+axis y line*=left,
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
 \addplot[only marks, mark=*, mark options={}, mark size=1.5000pt, color=mycolor1, fill=mycolor1] table[row sep=crcr]{%
 x	y\\
@@ -22162,7 +22188,9 @@ x	y\\
 5.52499181925432	-16.9331130873185\\
 62.152106166179	19.8929707660911\\
 };
-\addplot [color=mycolor2, line width=2.0pt, forget plot]
+\addlegendentry{data1}
+
+\addplot [color=mycolor2, line width=2.0pt]
   table[row sep=crcr]{%
 -64.6982884004343	-64.6982884004343\\
 0.0519542442534826	0.0519542442534826\\
@@ -24165,5 +24193,7 @@ x	y\\
 5.52499181925432	5.52499181925432\\
 62.152106166179	62.152106166179\\
 };
+\addlegendentry{data2}
+
 \end{axis}
 \end{tikzpicture}%

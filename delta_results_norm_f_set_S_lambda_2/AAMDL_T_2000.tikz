@@ -1,0 +1,187 @@
+% This file was created by matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=5.706cm,
+height=1.059cm,
+at={(0cm,2.941cm)},
+scale only axis,
+xmin=1,
+xmax=31,
+xlabel style={font=\color{white!15!black}},
+xlabel={Number of terms},
+ymin=-0.429433771140034,
+ymax=0.00127750520925392,
+ylabel style={font=\color{white!15!black}},
+ylabel={AAMDL},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, draw=none, mark=o, mark options={solid, mycolor1}]
+  table[row sep=crcr]{%
+1	0.00127750520925392\\
+2	-0.0393982480025288\\
+3	-0.126851839342106\\
+4	-0.286792490956701\\
+5	-0.429433771140034\\
+6	-0.428179225773623\\
+7	-0.426906740688298\\
+8	-0.425521464245599\\
+9	-0.424209226614659\\
+10	-0.422877735128874\\
+11	-0.421501740032295\\
+12	-0.420077101125615\\
+13	-0.418657806251528\\
+14	-0.41741205803203\\
+15	-0.416050480233745\\
+16	-0.414670202008221\\
+17	-0.413357999556181\\
+18	-0.412104280969624\\
+19	-0.410658251235616\\
+20	-0.409260916127814\\
+21	-0.407904926537154\\
+22	-0.406522489051993\\
+23	-0.405140327356993\\
+24	-0.403694297622985\\
+25	-0.402321339051056\\
+26	-0.400914651845103\\
+27	-0.399468622111094\\
+28	-0.398022592377086\\
+29	-0.396609567163813\\
+30	-0.395163537429805\\
+31	-0.393816748018482\\
+};
+\addlegendentry{data1}
+
+\addplot [color=mycolor2, line width=5.0pt, draw=none, mark=asterisk, mark options={solid, mycolor2}]
+  table[row sep=crcr]{%
+6	-0.428179225773623\\
+};
+\addlegendentry{data2}
+
+\end{axis}
+
+\begin{axis}[%
+width=5.706cm,
+height=1.059cm,
+at={(0cm,1.471cm)},
+scale only axis,
+xmin=1,
+xmax=31,
+xlabel style={font=\color{white!15!black}},
+xlabel={Number of terms},
+ymin=-10000,
+ymax=0,
+ylabel style={font=\color{white!15!black}},
+ylabel={BIC},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, draw=none, mark=o, mark options={solid, mycolor1}]
+  table[row sep=crcr]{%
+1	0\\
+2	-785.282117884879\\
+3	-2465.39356518993\\
+4	-5522.90413184089\\
+5	-8251.69204255499\\
+6	-8246.17147617287\\
+7	-8240.31001925193\\
+8	-8232.30530095817\\
+9	-8225.68846616547\\
+10	-8218.70576962299\\
+11	-8210.87741546822\\
+12	-8202.12473163389\\
+13	-8193.47359510691\\
+14	-8188.12019211043\\
+15	-8180.56579545782\\
+16	-8172.65605328684\\
+17	-8166.03988696359\\
+18	-8160.53503105224\\
+19	-8151.37587871703\\
+20	-8143.14202166898\\
+21	-8135.69381213769\\
+22	-8127.74303971506\\
+23	-8119.79750785709\\
+24	-8110.63835552189\\
+25	-8102.86770140851\\
+26	-8094.45613579139\\
+27	-8085.29698345618\\
+28	-8076.13783112098\\
+29	-8067.60583068876\\
+30	-8058.44667835355\\
+31	-8051.17329063001\\
+};
+\addlegendentry{data1}
+
+\addplot [color=mycolor2, line width=5.0pt, draw=none, mark=asterisk, mark options={solid, mycolor2}]
+  table[row sep=crcr]{%
+6	-8246.17147617287\\
+};
+\addlegendentry{data2}
+
+\end{axis}
+
+\begin{axis}[%
+width=5.706cm,
+height=1.059cm,
+at={(0cm,0cm)},
+scale only axis,
+xmin=1,
+xmax=31,
+xlabel style={font=\color{white!15!black}},
+xlabel={Number of terms},
+ymin=-10000,
+ymax=0,
+ylabel style={font=\color{white!15!black}},
+ylabel={AIC},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, draw=none, mark=o, mark options={solid, mycolor1}]
+  table[row sep=crcr]{%
+1	0\\
+2	-799.600422555293\\
+3	-2486.87102219555\\
+4	-5551.54074118172\\
+5	-8287.48780423103\\
+6	-8289.12639018411\\
+7	-8290.42408559837\\
+8	-8289.57851963983\\
+9	-8290.12083718234\\
+10	-8290.29729297506\\
+11	-8289.6280911555\\
+12	-8288.03455965637\\
+13	-8286.5425754646\\
+14	-8288.34832480332\\
+15	-8287.95308048592\\
+16	-8287.20249065015\\
+17	-8287.7454766621\\
+18	-8289.39977308596\\
+19	-8287.39977308596\\
+20	-8286.32506837312\\
+21	-8286.03601117703\\
+22	-8285.24439108961\\
+23	-8284.45801156685\\
+24	-8282.45801156685\\
+25	-8281.84650978868\\
+26	-8280.59409650677\\
+27	-8278.59409650677\\
+28	-8276.59409650677\\
+29	-8275.22124840975\\
+30	-8273.22124840975\\
+31	-8273.10701302142\\
+};
+\addlegendentry{data1}
+
+\addplot [color=mycolor2, line width=5.0pt, draw=none, mark=asterisk, mark options={solid, mycolor2}]
+  table[row sep=crcr]{%
+6	-8289.12639018411\\
+};
+\addlegendentry{data2}
+
+\end{axis}
+\end{tikzpicture}%

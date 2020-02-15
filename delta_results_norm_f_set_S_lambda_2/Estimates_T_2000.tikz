@@ -14,16 +14,27 @@ xmax=12,
 xlabel style={font=\color{white!15!black}},
 xlabel={Dataset index},
 ymin=30,
+<<<<<<< HEAD
 ymax=45.2541087079395,
 ylabel style={font=\color{white!15!black}},
 ylabel={$\delta^1 u(t)$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+=======
+ymax=45.2541087079392,
+ylabel style={font=\color{white!15!black}},
+ylabel={$\delta^1 u(t)$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+>>>>>>> master
   table[row sep=crcr]{%
 1	41.1998358711645\\
 2	39.3871943104496\\
 3	39.0610841639823\\
+<<<<<<< HEAD
 4	31.9956972969182\\
 5	31.6701702235812\\
 6	31.3872280957293\\
@@ -33,6 +44,19 @@ axis background/.style={fill=white}
 10	45.2541087079395\\
 12	42.2181669163972\\
 };
+=======
+4	31.9956972969186\\
+5	31.6701702235812\\
+6	31.3872280957293\\
+7	38.8357804293954\\
+8	39.2671778707311\\
+9	38.2321905222172\\
+10	45.2541087079392\\
+12	42.2181669163972\\
+};
+\addlegendentry{data1}
+
+>>>>>>> master
 \end{axis}
 
 \begin{axis}[%
@@ -48,6 +72,7 @@ ymin=2500,
 ymax=4000,
 ylabel style={font=\color{white!15!black}},
 ylabel={$u(t)$},
+<<<<<<< HEAD
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
@@ -64,6 +89,27 @@ axis background/.style={fill=white}
 10	3862.26498750864\\
 12	3563.76153026505\\
 };
+=======
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+  table[row sep=crcr]{%
+1	3532.4789476006\\
+2	3320.13486890816\\
+3	3230.95490239564\\
+4	2946.91810153279\\
+5	2747.82486572212\\
+6	2744.39008113993\\
+7	3547.73056453982\\
+8	3577.97132779831\\
+9	3466.41587485005\\
+10	3862.26498750863\\
+12	3563.76153026504\\
+};
+\addlegendentry{data1}
+
+>>>>>>> master
 \end{axis}
 
 \begin{axis}[%
@@ -75,6 +121,7 @@ xmin=0,
 xmax=12,
 xlabel style={font=\color{white!15!black}},
 xlabel={Dataset index},
+<<<<<<< HEAD
 ymin=-100.310009715005,
 ymax=-80,
 ylabel style={font=\color{white!15!black}},
@@ -95,6 +142,31 @@ axis background/.style={fill=white}
 10	-100.310009715005\\
 12	-99.9026750201008\\
 };
+=======
+ymin=-100.310009715006,
+ymax=-80,
+ylabel style={font=\color{white!15!black}},
+ylabel={$\delta^1 y(t)$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+  table[row sep=crcr]{%
+1	-88.7597054996015\\
+2	-89.3816954761319\\
+3	-86.987982958132\\
+4	-86.4574849676571\\
+5	-85.0554801401485\\
+6	-83.0113522395545\\
+7	-86.4973302878201\\
+8	-86.697306167299\\
+9	-86.8247837538323\\
+10	-100.310009715006\\
+12	-99.9026750201007\\
+};
+\addlegendentry{data1}
+
+>>>>>>> master
 \end{axis}
 
 \begin{axis}[%
@@ -110,6 +182,7 @@ ymin=-5500,
 ymax=-4447.66225958172,
 ylabel style={font=\color{white!15!black}},
 ylabel={$y(t)$},
+<<<<<<< HEAD
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
@@ -126,6 +199,27 @@ axis background/.style={fill=white}
 10	-5497.06639370814\\
 12	-5436.3011510111\\
 };
+=======
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+  table[row sep=crcr]{%
+1	-4635.8701161948\\
+2	-4680.29937651596\\
+3	-4447.66225958172\\
+4	-5010.57331267282\\
+5	-4751.67991936559\\
+6	-4627.99111500957\\
+7	-4896.64979177631\\
+8	-4852.79348699761\\
+9	-4860.32970673957\\
+10	-5497.06639370829\\
+12	-5436.30115101111\\
+};
+\addlegendentry{data1}
+
+>>>>>>> master
 \end{axis}
 
 \begin{axis}[%
@@ -138,16 +232,27 @@ xmax=12,
 xlabel style={font=\color{white!15!black}},
 xlabel={Dataset index},
 ymin=-103.73077752169,
+<<<<<<< HEAD
 ymax=684.819500390604,
 ylabel style={font=\color{white!15!black}},
 ylabel={$c$},
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+=======
+ymax=684.819500390623,
+ylabel style={font=\color{white!15!black}},
+ylabel={$c$},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+>>>>>>> master
   table[row sep=crcr]{%
 1	470.6085787208\\
 2	75.5847899018352\\
 3	-91.9031096411093\\
+<<<<<<< HEAD
 4	323.875698228235\\
 5	156.857994810309\\
 6	12.0864052497127\\
@@ -157,6 +262,19 @@ axis background/.style={fill=white}
 10	684.819500390604\\
 12	108.725524203832\\
 };
+=======
+4	323.875698228223\\
+5	156.857994810309\\
+6	12.0864052497127\\
+7	472.919889193387\\
+8	52.688296810593\\
+9	-103.73077752169\\
+10	684.819500390623\\
+12	108.725524203832\\
+};
+\addlegendentry{data1}
+
+>>>>>>> master
 \end{axis}
 
 \begin{axis}[%
@@ -172,14 +290,22 @@ ymin=-1000,
 ymax=1000,
 ylabel style={font=\color{white!15!black}},
 ylabel={$u(t)u(t)\delta^1 y(t)$},
+<<<<<<< HEAD
 axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+=======
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
+>>>>>>> master
   table[row sep=crcr]{%
 1	232.026907587515\\
 2	29.9125454934924\\
 3	-2.98491510663366\\
 4	-265.483677748494\\
+<<<<<<< HEAD
 5	90.4080735352426\\
 6	5.45352439440054\\
 7	-890.125415081102\\
@@ -188,5 +314,17 @@ axis background/.style={fill=white}
 10	710.55198925227\\
 12	-13.5080441670541\\
 };
+=======
+5	90.4080735352425\\
+6	5.45352439440054\\
+7	-890.1254150811\\
+8	18.7157995084283\\
+9	-4.2898342246761\\
+10	710.551989252271\\
+12	-13.5080441670541\\
+};
+\addlegendentry{data1}
+
+>>>>>>> master
 \end{axis}
 \end{tikzpicture}%

@@ -17,17 +17,20 @@ ymin=-613.551888249869,
 ymax=0,
 ylabel style={font=\color{white!15!black}},
 ylabel={$y(t)$},
-axis background/.style={fill=white}
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
   table[row sep=crcr]{%
 1	-116.016649579805\\
 2	-134.658682796534\\
 3	-166.591940802671\\
-4	-245.284021062201\\
-5	-488.904425893587\\
+4	-245.2840210622\\
+5	-488.904425893586\\
 7	-613.551888249869\\
 };
+\addlegendentry{data1}
+
 \end{axis}
 
 \begin{axis}[%
@@ -40,20 +43,23 @@ xmax=7,
 xlabel style={font=\color{white!15!black}},
 xlabel={Dataset index},
 ymin=-40,
-ymax=1.14844313253809,
+ymax=1.14844313253806,
 ylabel style={font=\color{white!15!black}},
 ylabel={$y(t)y(t)\delta^1 y(t)$},
-axis background/.style={fill=white}
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
   table[row sep=crcr]{%
 1	-2.37527257252019\\
 2	-4.79289251118935\\
-3	-9.72252287050235\\
+3	-9.72252287050236\\
 4	-19.5116864662176\\
 5	-35.5968709422546\\
-7	1.14844313253809\\
+7	1.14844313253806\\
 };
+\addlegendentry{data1}
+
 \end{axis}
 
 \begin{axis}[%
@@ -69,17 +75,20 @@ ymin=-45.3330701265728,
 ymax=15.0254586995525,
 ylabel style={font=\color{white!15!black}},
 ylabel={$\delta^1 y(t)$},
-axis background/.style={fill=white}
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
   table[row sep=crcr]{%
 1	1.1909567760559\\
-2	3.27765483937857\\
+2	3.27765483937858\\
 3	7.16441267925653\\
 4	12.8531913085002\\
 5	15.0254586995525\\
 7	-45.3330701265728\\
 };
+\addlegendentry{data1}
+
 \end{axis}
 
 \begin{axis}[%
@@ -91,21 +100,24 @@ xmin=0,
 xmax=7,
 xlabel style={font=\color{white!15!black}},
 xlabel={Dataset index},
-ymin=-4.53076465178735,
+ymin=-4.53076465178734,
 ymax=100,
 ylabel style={font=\color{white!15!black}},
 ylabel={$u(t)$},
-axis background/.style={fill=white}
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
   table[row sep=crcr]{%
 1	94.3403121290405\\
-2	94.6400621140968\\
+2	94.6400621140967\\
 3	92.6110071076147\\
 4	96.2958423889968\\
 5	97.8650668994717\\
-7	-4.53076465178735\\
+7	-4.53076465178734\\
 };
+\addlegendentry{data1}
+
 \end{axis}
 
 \begin{axis}[%
@@ -121,17 +133,20 @@ ymin=0,
 ymax=1,
 ylabel style={font=\color{white!15!black}},
 ylabel={$\delta^1 u(t)$},
-axis background/.style={fill=white}
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
   table[row sep=crcr]{%
 1	0.915553413790995\\
-2	0.914706630637848\\
+2	0.914706630637847\\
 3	0.873667871364287\\
 4	0.864147106229999\\
 5	0.459834664403621\\
-7	0.0240320343601744\\
+7	0.0240320343601741\\
 };
+\addlegendentry{data1}
+
 \end{axis}
 
 \begin{axis}[%
@@ -147,17 +162,20 @@ ymin=0,
 ymax=200,
 ylabel style={font=\color{white!15!black}},
 ylabel={$y(t)y(t)y(t)$},
-axis background/.style={fill=white}
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
   table[row sep=crcr]{%
-1	3.11542325676058\\
+1	3.11542325676057\\
 2	8.37336123028173\\
 3	18.4928090306414\\
-4	42.6523976294416\\
+4	42.6523976294415\\
 5	114.293573147897\\
 7	185.578298036344\\
 };
+\addlegendentry{data1}
+
 \end{axis}
 
 \begin{axis}[%
@@ -173,17 +191,20 @@ ymin=-30,
 ymax=0,
 ylabel style={font=\color{white!15!black}},
 ylabel={$y(t)\delta^1 y(t)u(t)$},
-axis background/.style={fill=white}
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
   table[row sep=crcr]{%
 1	-0.251167967226334\\
 2	-0.289643844668637\\
 3	-0.585229119605576\\
-4	-1.95355430220399\\
-5	-0.576207814692705\\
+4	-1.953554302204\\
+5	-0.576207814692703\\
 7	-25.5892141297038\\
 };
+\addlegendentry{data1}
+
 \end{axis}
 
 \begin{axis}[%
@@ -199,16 +220,19 @@ ymin=-0.232628474944238,
 ymax=0.0121488322392307,
 ylabel style={font=\color{white!15!black}},
 ylabel={$y(t)\delta^1 y(t)\delta^1 u(t)$},
-axis background/.style={fill=white}
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black}
 ]
-\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+\addplot [color=mycolor1, line width=2.0pt, draw=none, mark=o, mark options={solid, mycolor1}]
   table[row sep=crcr]{%
-1	0.000534400828479111\\
+1	0.00053440082847911\\
 2	0.00142204858024852\\
 3	0.00488161047376492\\
 4	0.00743342395104201\\
 5	0.0121488322392307\\
 7	-0.232628474944238\\
 };
+\addlegendentry{data1}
+
 \end{axis}
 \end{tikzpicture}%

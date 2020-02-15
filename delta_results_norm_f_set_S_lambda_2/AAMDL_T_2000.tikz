@@ -1,0 +1,172 @@
+% This file was created by matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=5.706cm,
+height=1.059cm,
+at={(0cm,2.941cm)},
+scale only axis,
+xmin=1,
+xmax=31,
+xlabel style={font=\color{white!15!black}},
+xlabel={Number of terms},
+ymin=-0.429433771140034,
+ymax=0.00127750520925408,
+ylabel style={font=\color{white!15!black}},
+ylabel={AAMDL},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	0.00127750520925408\\
+2	-0.0393982480025287\\
+3	-0.126851839342105\\
+4	-0.286792490956701\\
+5	-0.429433771140034\\
+6	-0.428179225773623\\
+7	-0.426906740688297\\
+8	-0.425572211840805\\
+9	-0.424272108463344\\
+10	-0.422941949752557\\
+11	-0.421559364723936\\
+12	-0.420170432302743\\
+13	-0.418758586204635\\
+14	-0.417326917026395\\
+15	-0.415880887292387\\
+16	-0.414508144190187\\
+17	-0.413256641938182\\
+18	-0.411810612204174\\
+19	-0.41047927769617\\
+20	-0.40909520865767\\
+21	-0.407650647405457\\
+22	-0.40627731975263\\
+23	-0.404836457579981\\
+24	-0.403482296117255\\
+25	-0.402167183337615\\
+26	-0.400749595190825\\
+27	-0.399411640479846\\
+28	-0.397980674851794\\
+29	-0.396534645117786\\
+30	-0.395177228746445\\
+31	-0.393772305748151\\
+};
+\addplot [color=mycolor2, line width=5.0pt, draw=none, mark=asterisk, mark options={solid, mycolor2}, forget plot]
+  table[row sep=crcr]{%
+6	-0.428179225773623\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=5.706cm,
+height=1.059cm,
+at={(0cm,1.471cm)},
+scale only axis,
+xmin=1,
+xmax=31,
+xlabel style={font=\color{white!15!black}},
+xlabel={Number of terms},
+ymin=-10000,
+ymax=0,
+ylabel style={font=\color{white!15!black}},
+ylabel={BIC},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	0\\
+2	-785.282117884878\\
+3	-2465.39356518993\\
+4	-5522.90413184089\\
+5	-8251.69204255499\\
+6	-8246.17147617287\\
+7	-8240.31001925192\\
+8	-8233.26960676229\\
+9	-8226.88334705418\\
+10	-8219.92597590223\\
+11	-8211.97239985879\\
+12	-8203.89821066169\\
+13	-8195.38861577585\\
+14	-8186.50234272135\\
+15	-8177.34319038615\\
+16	-8169.57663062856\\
+17	-8164.11388950637\\
+18	-8154.95473717116\\
+19	-8147.97502352048\\
+20	-8139.99324832131\\
+21	-8130.86200007717\\
+22	-8123.08433268857\\
+23	-8114.0233743543\\
+24	-8106.60990291\\
+25	-8099.9384345417\\
+26	-8091.31972924681\\
+27	-8084.2142184992\\
+28	-8075.34131430536\\
+29	-8066.18216197015\\
+30	-8058.70684075235\\
+31	-8050.32879860918\\
+};
+\addplot [color=mycolor2, line width=5.0pt, draw=none, mark=asterisk, mark options={solid, mycolor2}, forget plot]
+  table[row sep=crcr]{%
+6	-8246.17147617287\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=5.706cm,
+height=1.059cm,
+at={(0cm,0cm)},
+scale only axis,
+xmin=1,
+xmax=31,
+xlabel style={font=\color{white!15!black}},
+xlabel={Number of terms},
+ymin=-10000,
+ymax=0,
+ylabel style={font=\color{white!15!black}},
+ylabel={AIC},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, draw=none, mark=o, mark options={solid, mycolor1}, forget plot]
+  table[row sep=crcr]{%
+1	0\\
+2	-799.600422555292\\
+3	-2486.87102219555\\
+4	-5551.54074118172\\
+5	-8287.48780423103\\
+6	-8289.12639018411\\
+7	-8290.42408559837\\
+8	-8290.54282544394\\
+9	-8291.31571807104\\
+10	-8291.5174992543\\
+11	-8290.72307554606\\
+12	-8289.80803868416\\
+13	-8288.45759613354\\
+14	-8286.73047541425\\
+15	-8284.73047541425\\
+16	-8284.12306799186\\
+17	-8285.81947920489\\
+18	-8283.81947920489\\
+19	-8283.99891788941\\
+20	-8283.17629502545\\
+21	-8281.20419911652\\
+22	-8280.58568406312\\
+23	-8278.68387806406\\
+24	-8278.42955895496\\
+25	-8278.91724292187\\
+26	-8277.45768996219\\
+27	-8277.51133154978\\
+28	-8275.79757969115\\
+29	-8273.79757969115\\
+30	-8273.48141080855\\
+31	-8272.26252100059\\
+};
+\addplot [color=mycolor2, line width=5.0pt, draw=none, mark=asterisk, mark options={solid, mycolor2}, forget plot]
+  table[row sep=crcr]{%
+6	-8289.12639018411\\
+};
+\end{axis}
+\end{tikzpicture}%

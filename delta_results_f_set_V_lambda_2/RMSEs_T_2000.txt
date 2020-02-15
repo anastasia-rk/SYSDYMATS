@@ -1,0 +1,1 @@
+RMSE for set 3 is  32.16 

@@ -1,9 +1,8 @@
-my_init
-%% Load estimated thetas
-my_init;
+local_init;
+%%
 foamset = questdlg('Select data folder', ...
     'Data to process',...
-	'foam_2010','foam_2019','');
+	'foam_2010','foam_2019','vdpo','');
 switch foamset
     case 'foam_2010'
         dataset = questdlg('Select data set', ...
@@ -13,6 +12,8 @@ switch foamset
         dataset = questdlg('Select data set', ...
         'Choice of set',...
         'S','Y','Z','');
+    case 'vdpo'
+        dataset = 'V';      
 end
 folder = 'results';                                                     % specify category where to save files
 dFolder = 'dictionaries';
@@ -39,6 +40,17 @@ switch regressors
          if normC ~= 1
             folder = [folder,'_norm'];
             dFolder = [dFolder,'_norm'];
+         end
+        direction = questdlg('Type of delta operator', ...
+        'Causality',...
+        'Forward','Backward','');
+        switch direction
+            case 'Backward'
+                folder = [folder,'_b'];
+                dFolder = [dFolder,'_b'];
+            case 'Forward'
+                folder = [folder,'_f'];
+                dFolder = [dFolder,'_f'];
         end
          names = {'set','lambda'};
          folderName = make_folder(folder,names,dataset,lambda);             % create results folder

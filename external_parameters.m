@@ -1,4 +1,4 @@
-my_init
+local_init;
 %% parameters from foam report
 % Dictionary
 params = {'D_init','D_imposed','L_init','L_imposed','R_imposed',...
@@ -26,7 +26,7 @@ values{1}(:,10) = [2.87,2.56,2.26,1.83,1.64]';
 values{2}(:,10) = [5.8,5.28,4.48,4.2,3.45]';
 values{1}(:,11) = [0.123,0.113,0.104,0.095,0.093]';
 values{2}(:,11) = [0.276,0.255,0.230,0.209,0.193]';
-fileName = 'External_parameters';
+fileName = 'External_parameters_C';
 save(fileName,'params','values');
 %% total number of permutations
 M       = permn(1:L,2);                                                     % get all permutations with repetition
@@ -51,3 +51,4 @@ for i = 1:2
     [rho_max,k_max] = min(rho{i});
     param_select{i} = params(indeces_new{i}(k_max,:));
 end
+

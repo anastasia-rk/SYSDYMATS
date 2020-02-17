@@ -71,9 +71,9 @@ A_imp_all = [values{1}(:, 6);values{2}(:, 6)];
 V_imp_all = [values{1}(:, 7);values{2}(:, 7)];
 
 index = find(Files <=10);
-Files_sub = Files(index);
+Files_sub = les(index);
 x = L_cut_all(Files_sub,1);
-y = D_rlx_all(Files_sub,1);
+y = D_rlx_all(Files_sub,1);Fi
 % x = [3 3 3 5 5 5 7 7 7];
 %% Estimate coefficients via curve fitting
 fo = fitoptions('Method','NonlinearLeastSquares');

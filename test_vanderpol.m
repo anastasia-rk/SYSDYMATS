@@ -55,4 +55,8 @@ xlabel('$t$')
 ylabel('$u(t)$')
 end
 
-
+%% Save external parameters 
+params = 'mu_vanderpol';
+values = mu_array';
+fileName = 'External_parameters_V';
+save(fileName,'params','values');

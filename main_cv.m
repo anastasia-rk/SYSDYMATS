@@ -13,9 +13,9 @@ switch foamset
         'Choice of set',...
         'S','Y','Z','');
     case 'vdpo'
-        dataset = 'V';      
+        dataset = 'V';   
 end
-folder = 'results';                                                     % specify category where to save files
+folder = 'results_cv';                                                     % specify category where to save files
 dFolder = 'dictionaries';
 regressors = questdlg('Select the domain of regressors', ...
     'Domain choice',...
@@ -68,6 +68,7 @@ if length(dict_terms) + 1 < 30                                              % Ma
 else
     maxSign = 30;                                                           
 end
+dict_terms_all = dict_terms;
 %% Block CV with K-folds
 nFolds = 10;
 blockLength = floor(nNarx/nFolds);
@@ -84,31 +85,36 @@ end
 colormap(my_map);
 xlabel('sample index'); ylabel('CV block index');
 %% Create the regression matrix based on the dataset (does not depend on CV parameters)
-x = params(Files,1);
-if size(params,2) > 1
-    y = params(Files,2);
+load(['External_parameters_',dataset]);
+x = values(Files,1);
+if size(values,2) > 1
+    y = values(Files,2);
+else 
+    y = [];
 end
-A = ones(size(x));                                                           % create unit vector for constants 
+A = ones(size(x));                                                          % create unit vector for constants 
 A_symb{1} = '1'
-if ~isempty(y)                                                               % unknown mapping is a surface
-   powers = permn(0:2,2);                                                    % permuntations of all 
+if ~isempty(y)                                                              % unknown mapping is a surface
+   powers = permn(0:2,2);                                                   % permuntations of all 
    powers = powers(2:end,:);    
-   nCols = min(size(powers,1),K);                                            % number of terms in the model shouldn't be higher then K
+   nCols = min(size(powers,1),K);                                           % number of terms in the model shouldn't be higher then K
    for iCol = 1:nCols
        xCol = x.^powers(iCol,1);
        yCol = y.^powers(iCol,2);
        A = [A xCol.*yCol];
        A_symb{iCol+1} = ['$x^',num2str(powers(iCol,1)),'$ $y^',num2str(powers(iCol,2)),'$']; 
    end
-else                                                                         % unknown mapping is a curve
-   for iCol = 1:K-1                                                          % limit order of the model by the number of experimants
+else                                                                        % unknown mapping is a curve
+    nCols = min(3,K);                                                       % number of terms in the model shouldn't be higher then K
+    for iCol = 1:nCols                                                      % limit order of the model by the number of experimants
        A = [A x.^(iCol)];
    end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Structure identification with CV model selection
 for iFold = 1:nFolds - 1                                                    % iterate over the blocks
-%% Select first significant basis vector for all datasets
+    dict_terms = dict_terms_all;                                            % refill the dictionary
+    %% Select first significant basis vector for all datasets
     iTerm = 1;                                                              % the first significant term
     index = timesTrain{iFold};
     index_test  = timesTest{iFold};
@@ -141,12 +147,12 @@ for iFold = 1:nFolds - 1                                                    % it
         BIC_sum  = BIC_sum  +  BIC(residual{iFile}(:,iTerm),nNarx,iTerm);   % BIC for the iFile dataset
         clear File
     end
-    BICL_all(iFold,iTerm) = BIC_sum/K;                                      % average AMDL over all sets
+    BIC_all(iFold,iTerm) = BIC_sum/K;                                      % average AMDL over all sets
     significant_term{iFold,iTerm} =  symb_term{S(iTerm)};
 %% Main loop   
     converged   = false;
     bics        = [];
-    while(iTerm <= maxSign) %&& ~converged                                  % loop over the number of significant terms
+    while(iTerm < maxSign) %&& ~converged                                   % loop over the number of significant terms
         iTerm = iTerm + 1;                                                  % increase the number of significant terms
         AERR{iTerm} = zeros(nTerms,1);                                      % placeholder for AERR criteria
         for iFile=Files                                                     % over all datasets
@@ -165,7 +171,7 @@ for iFold = 1:nFolds - 1                                                    % it
         [AERR_m,iMax] = max(AERR{iTerm});                                   % find the index of the term with the highest criterion across all datasets
         AERR_mm(iTerm,1)   = AERR_m;
         S(iTerm) = iMax;                                                    % save index of the term  
-        ind = find(dict_terms == iMax)
+        ind = find(dict_terms == iMax);
         dict_terms(ind) = [];                                               % Reduce the dictionary of available terms
         BIC_sum  = 0;
         for iFile=Files
@@ -175,23 +181,21 @@ for iFold = 1:nFolds - 1                                                    % it
             phi{iFile}(:,iTerm)   = p{iTerm,iFile}(index,S(iTerm));         % the corresponding basis vector 
             residual{iFile}(:,iTerm) = residual_update(residual{iFile}(:,iTerm-1),...
                                                    phi{iFile}(:,iTerm));    % the corresponding model residual                                 
-            AMDL_sum = AMDL_sum + AMDL(residual{iFile}(:,iTerm),nNarx,iTerm);   % AMDL for the iFile dataset
             BIC_sum  = BIC_sum  +  BIC(residual{iFile}(:,iTerm),nNarx,iTerm);   % BIC for the iFile dataset
-            AIC_sum  = AIC_sum  +  AIC(residual{iFile}(:,iTerm),nNarx,iTerm);   % AIC for the iFile dataset
             clear File
         end
         significant_term{iFold,iTerm} = symb_term{S(iTerm)};
         BIC_all(iFold,iTerm) = BIC_sum/K;                                   % average AMDL over all sets
-        converged_BIC = (abs((BIC_all(iTerm) - BIC_all(iTerm-1))/BIC_all(iTerm-1)) < 0.005); % check convergence
+        converged_BIC = (abs((BIC_all(iFold,iTerm) - BIC_all(iFold,iTerm-1))/BIC_all(iFold,iTerm-1)) < 0.005); % check convergence
         if converged_BIC
             bics  = [bics,iTerm];
         end
     end
     finalTerm = bics(1);
-    BIC_trunc = BIC_all(iFold,1:finalTerm);
+    BIC_trunc = BIC_all(iFold,1:finalTerm)';
     %% Create column of names
     for iTerm=1:finalTerm
-        temp = arrayfun(@char, significant_term{iTerm}, 'uniform', 0);
+        temp = arrayfun(@char, significant_term{iFold,iTerm}, 'uniform', 0);
         if length(temp) > 0
             str = temp{1};
             for iString=2:length(temp)
@@ -236,20 +240,23 @@ for iFold = 1:nFolds - 1                                                    % it
     tableName = [folderName,'/Thetas_Fold_',num2str(iFold)];
     table2latex(foldResults{iFold},tableName);
     clear Tab tableName
-%% Surface fitting - across all parameters
+    clear AERR alpha U phi residual p Theta
+%% Surface fitting - across all datasets
+Phi_bar = [];
+Y_bar   = [];
     for iFile = Files
         fName = [dictFolder,'/',char(fileNames(iFile))];
         File  = matfile(fName,'Writable',true);
-        indSign   = S(1:finalTerm);                                             % select the indeces of significant terms from the ordered set
-        Phi_file  = File.term(index,:);                                         % extract all terms into a vector - cannot reorder directly in files
-        y_file    = File.y_narx(index,:);                                       % extract output
-        Phi       = Phi_file(index,indSign);                                    % select only signficant terms
-        Phi_bar   = blkdiag(Phi_bar,Phi);                                       % diagonal block, size TKxNK
-        Y_bar     = [Y_bar; y_file];                                            % block vector, size TKx1
+        indSign   = S(1:finalTerm);                                         % select the indeces of significant terms from the ordered set
+        Phi_file  = File.term(index,:);                                     % extract all terms into a vector - cannot reorder directly in files
+        y_file    = File.y_narx(index,:);                                   % extract output
+        Phi       = Phi_file(index,indSign);                                % select only signficant terms
+        Phi_bar   = blkdiag(Phi_bar,Phi);                                   % diagonal block, size TKxNK
+        Y_bar     = [Y_bar; y_file];                                        % block vector, size TKx1
     end
-    I = eye(finalTerm);                                                         % unit matrix, size NxN
+    I = eye(finalTerm);                                                     % unit matrix, size NxN
     Kr = kron(A,I);
-    M  = Phi_bar*Kr;                                                            % LS matrix - increased dimension does not guarantee increase in rank
+    M  = Phi_bar*Kr;                                                        % LS matrix - increased dimension does not guarantee increase in rank
     B_bar = M\Y_bar;
     Y_hat = M*B_bar;
 %     R_2 = r_squared(Y_bar,Y_hat);
@@ -259,21 +266,42 @@ for iFold = 1:nFolds - 1                                                    % it
     Step = [1:finalTerm]';
     Tab = table(Step,Terms);
     for iBeta=1:L
-    Parameters = round(Betas(:,iBeta),2);
+    Parameters = round(Betas{iFold}(:,iBeta),2);
     varName = ['$\beta_{',num2str(iBeta-1),'}$'];
     Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
     end
     tableName = [folderName,'/Betas_Fold_',num2str(iFold)];
     table2latex(Tab,tableName);
-%% Validation procedure    
+    clear Terms
+%% Validation procedure  
+    Theta_test{iFold} = Betas{iFold}*A';
     for iFile = Files
         fName = [dictFolder,'/Dict_',dataset,num2str(iFile)];
         File = matfile(fName,'Writable',true);
         indSign = S(1:finalTerm);                                                   % select the indeces of significant terms from the ordered set
         Phi_all = File.term(index_test,:);                                          % extract all terms into a vector
         Phi     = Phi_all(:,indSign);                                               % select only signficant terms
-        y_model = Phi*theta_test{iFile};                                            % model NARMAX output
-        RMSE(iFold,iFile) = sqrt(mean((File.y_narx(index_test,1) - y_model).^2)); % Root Mean Squared Error
+        y_model = Phi*Theta_test{iFold}(:,iFile);                                   % model NARMAX output
+        RMSE(iFold,iFile) = sqrt(mean((File.y_narx(index_test,1) - y_model).^2));   % Root Mean Squared Error
     end
 end
+Folds = [1:nFolds-1];
 
+%% Plots
+[plotFolds,plotFiles] = meshgrid(Folds,Files);                       % create meshgrid
+figure;
+plot3(plotFiles,plotFolds,RMSE);
+xlabel('Files');ylabel('Folds');zlabel('RMSE');
+%%
+[plotFolds,plotFiles] = meshgrid(Folds,[1:maxSign]);                      % create meshgrid
+figure;
+plot3(plotFolds,plotFiles,BIC_all);
+xlabel('Folds');ylabel('Files');zlabel('BIC');
+
+%% individual plots
+plotFold = 2;
+iFold = plotFold;
+figure;
+plot(Files,RMSE(iFold,:));
+figure;
+plot([1:maxSign],BIC_all(iFold,:));

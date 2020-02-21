@@ -84,6 +84,11 @@ for iFold=1:nFolds-1
 end
 colormap(my_map);
 xlabel('sample index'); ylabel('CV block index');
+tikzName = [folderName,'/Block_folds.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '6cm', 'width','6cm','checkForUpdates',false);
+
 %% Create the regression matrix based on the dataset (does not depend on CV parameters)
 load(['External_parameters_',dataset]);
 x = values(Files,1);
@@ -186,12 +191,16 @@ for iFold = 1:nFolds - 1                                                    % it
         end
         significant_term{iFold,iTerm} = symb_term{S(iTerm)};
         BIC_all(iFold,iTerm) = BIC_sum/K;                                   % average AMDL over all sets
-        converged_BIC = (abs((BIC_all(iFold,iTerm) - BIC_all(iFold,iTerm-1))/BIC_all(iFold,iTerm-1)) < 0.005); % check convergence
+        converged_BIC = (abs((BIC_all(iFold,iTerm) - BIC_all(iFold,iTerm-1))/BIC_all(iFold,iTerm)) < 0.002); % check convergence
         if converged_BIC
             bics  = [bics,iTerm];
         end
     end
+    if isempty(bics)
+    finalTerm = 20;
+    else
     finalTerm = bics(1);
+    end
     BIC_trunc = BIC_all(iFold,1:finalTerm)';
     %% Create column of names
     for iTerm=1:finalTerm
@@ -240,7 +249,7 @@ for iFold = 1:nFolds - 1                                                    % it
     tableName = [folderName,'/Thetas_Fold_',num2str(iFold)];
     table2latex(foldResults{iFold},tableName);
     clear Tab tableName
-    clear AERR alpha U phi residual p Theta
+    clear AERR alpha U phi residual p Theta g
 %% Surface fitting - across all datasets
 Phi_bar = [];
 Y_bar   = [];
@@ -275,6 +284,7 @@ Y_bar   = [];
     clear Terms
 %% Validation procedure  
     Theta_test{iFold} = Betas{iFold}*A';
+    iRMSE = 0;
     for iFile = Files
         fName = [dictFolder,'/Dict_',dataset,num2str(iFile)];
         File = matfile(fName,'Writable',true);
@@ -282,8 +292,10 @@ Y_bar   = [];
         Phi_all = File.term(index_test,:);                                          % extract all terms into a vector
         Phi     = Phi_all(:,indSign);                                               % select only signficant terms
         y_model = Phi*Theta_test{iFold}(:,iFile);                                   % model NARMAX output
-        RMSE(iFold,iFile) = sqrt(mean((File.y_narx(index_test,1) - y_model).^2));   % Root Mean Squared Error
+        iRMSE = iRMSE + 1;
+        RMSE(iFold,iRMSE) = sqrt(mean((File.y_narx(index_test,1) - y_model).^2));   % Root Mean Squared Error
     end
+    MRMSE(iFold) = mean(RMSE(iFold,:));
 end
 Folds = [1:nFolds-1];
 
@@ -296,12 +308,37 @@ xlabel('Files');ylabel('Folds');zlabel('RMSE');
 [plotFolds,plotFiles] = meshgrid(Folds,[1:maxSign]);                      % create meshgrid
 figure;
 plot3(plotFolds,plotFiles,BIC_all);
-xlabel('Folds');ylabel('Files');zlabel('BIC');
+xlabel('Folds');ylabel('Terms');zlabel('BIC');
 
 %% individual plots
-plotFold = 2;
-iFold = plotFold;
 figure;
-plot(Files,RMSE(iFold,:));
+for iFold = Folds
+plot(Files,RMSE(iFold,:));hold on;
+end
+xlabel('Files');ylabel('RMSE');
+tikzName = [folderName,'/RMSE_all_folds.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '6cm', 'width','6cm','checkForUpdates',false);
+
 figure;
-plot([1:maxSign],BIC_all(iFold,:));
+for iFold = Folds
+plot([1:maxSign],BIC_all(iFold,:)); hold on;
+end
+xlabel('Terms');ylabel('BIC');
+
+tikzName = [folderName,'/BIC_all_folds.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '6cm', 'width','6cm','checkForUpdates',false);
+
+
+[MRMSE_min,i_min] = min(MRMSE);
+figure;
+plot(MRMSE); hold on;
+plot(i_min, MRMSE_min, '*');
+tikzName = [folderName,'/RMSE_min.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '6cm', 'width','6cm','checkForUpdates',false);
+

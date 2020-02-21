@@ -1,0 +1,119 @@
+% This file was created by matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+\definecolor{mycolor3}{rgb}{0.92900,0.69400,0.12500}%
+\definecolor{mycolor4}{rgb}{0.49400,0.18400,0.55600}%
+\definecolor{mycolor5}{rgb}{0.46600,0.67400,0.18800}%
+\definecolor{mycolor6}{rgb}{0.30100,0.74500,0.93300}%
+\definecolor{mycolor7}{rgb}{0.63500,0.07800,0.18400}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=5.865cm,
+height=6cm,
+at={(0cm,0cm)},
+scale only axis,
+xmin=1,
+xmax=7,
+xlabel style={font=\color{white!15!black}},
+xlabel={Files},
+ymin=0,
+ymax=2000,
+ylabel style={font=\color{white!15!black}},
+ylabel={RMSE},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+1	25.5073429523333\\
+2	22.8618519764979\\
+3	36.1215182262544\\
+4	104.112018039076\\
+5	328.776041074774\\
+6	829.250874259382\\
+7	1836.44392413706\\
+};
+\addplot [color=mycolor2, forget plot]
+  table[row sep=crcr]{%
+1	21.8663912667674\\
+2	21.7707508671267\\
+3	36.6596009928466\\
+4	92.0209357084398\\
+5	314.216063541636\\
+6	769.075200807047\\
+7	1218.17234594634\\
+};
+\addplot [color=mycolor3, forget plot]
+  table[row sep=crcr]{%
+1	20.3264686894206\\
+2	18.5849954297909\\
+3	36.1040890049107\\
+4	93.7268570901529\\
+5	312.068841233843\\
+6	803.837465324293\\
+7	1228.58259550218\\
+};
+\addplot [color=mycolor4, forget plot]
+  table[row sep=crcr]{%
+1	22.2189938721965\\
+2	21.987369963527\\
+3	37.0280489290072\\
+4	93.7208143378817\\
+5	327.513369904749\\
+6	758.103796480215\\
+7	1253.38189454077\\
+};
+\addplot [color=mycolor5, forget plot]
+  table[row sep=crcr]{%
+1	19.8035882819665\\
+2	19.3466380511895\\
+3	35.0839582696963\\
+4	96.1682020818786\\
+5	316.261941206205\\
+6	832.000274470512\\
+7	1287.60773927022\\
+};
+\addplot [color=mycolor6, forget plot]
+  table[row sep=crcr]{%
+1	21.2905176702492\\
+2	21.2408365972382\\
+3	38.2609874060413\\
+4	91.3896165340931\\
+5	307.911003024423\\
+6	833.46399857956\\
+7	1268.20608052983\\
+};
+\addplot [color=mycolor7, forget plot]
+  table[row sep=crcr]{%
+1	19.0598697735781\\
+2	20.1859513720444\\
+3	33.3450023202264\\
+4	88.9608525678062\\
+5	319.875662988387\\
+6	803.86094104035\\
+7	1386.13668997687\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+1	18.0092615824451\\
+2	20.2282251140821\\
+3	37.4443644328864\\
+4	91.3344449688193\\
+5	323.774646640408\\
+6	806.034895257285\\
+7	1230.72909340118\\
+};
+\addplot [color=mycolor2, forget plot]
+  table[row sep=crcr]{%
+1	14.7713077578031\\
+2	20.1795135467905\\
+3	35.025477865736\\
+4	89.1712964763279\\
+5	307.882203672315\\
+6	810.29685911585\\
+7	1361.17604991492\\
+};
+\end{axis}
+\end{tikzpicture}%

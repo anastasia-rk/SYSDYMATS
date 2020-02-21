@@ -1,0 +1,36 @@
+% This file was created by matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=5.706cm,
+height=6cm,
+at={(0cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=10,
+ymin=340,
+ymax=460,
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+1	454.72479580934\\
+2	353.3973270186\\
+3	359.033044610656\\
+4	359.136326861192\\
+5	372.324620233095\\
+6	368.823291477347\\
+7	381.632138577038\\
+8	361.079275913872\\
+9	376.928958335678\\
+};
+\addplot [color=mycolor2, draw=none, mark=asterisk, mark options={solid, mycolor2}, forget plot]
+  table[row sep=crcr]{%
+2	353.3973270186\\
+};
+\end{axis}
+\end{tikzpicture}%

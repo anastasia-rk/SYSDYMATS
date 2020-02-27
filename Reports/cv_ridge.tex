@@ -145,7 +145,7 @@
 \begin{equation}
 	\mathbfit{y}(t) = f\big( \{y(t - k)\}^{n_y}_{k=1}, \{u(t - k + n_y + 1)\}^{n_y + n_u}_{k= n_y + 1} \big),
 \end{equation}
-there can be established an equivalent representation with $\delta$-operator, where the output of the NARX model is the highest order derivative of the registered output, $\delta^{n} y(t)\delta t^{n} y(t)$, and input vector takes the following form:
+there can be established an equivalent representation with $\delta$-operator, where the output of the NARX model is the highest order derivative of the registered output, $\delta^{n} y(t)$, and input vector takes the following form:
 \begin{equation}
 \mathbfit{x}(t) = \left[\begin{array}{cccccccc}
 \delta^{n-1} y(t) & \dots & \delta y(t) & y(t) & \delta^{n-1}u(t-1) & \dots  & \delta u(t) & u(t)

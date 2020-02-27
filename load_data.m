@@ -1,4 +1,4 @@
-my_init;
+local_init;
 %% Load files
 folderName = 'foam_2010';
 addpath(folderName);

@@ -9,7 +9,7 @@ phase(1) = 0;                                                               % in
 w(1) = 2*rand;                                                              % initial frequency
 d = 50; ak = 0.2;                                                           % excitation signal parameters
 extract = [1:2000];                                                         % extract from the array for the plot
-mu_array = [0.25 0.5 1 2 4 8 16];
+mu_array = [0.0625 0.125 0.25 0.3 0.5 0.8 1];
 samp_f = 10;
 t0 = [tspan(1):1/samp_f:tspan(end)]';
 for iMu = 1:length(mu_array)

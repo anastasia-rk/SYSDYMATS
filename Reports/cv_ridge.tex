@@ -1,0 +1,394 @@
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
+
+\documentclass[a4paper,11pt,twoside]{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% A generic report compiler for publishing rables and plots for a partcular choise of lags in the NARX system
+% A path to media corresponding to the setting is defined below, as well as chosen parameter settings
+\makeatletter
+\def\input@path{{../delta_results_cv_f_set_V_lambda_2/}}
+\def\dataset{C}
+\def\ny{4}
+\def\nu{4}
+\def\order{3}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Packages
+\usepackage[final]{pdfpages}
+\usepackage{verbatim}
+\usepackage{inputenc}
+\usepackage{graphicx} 
+\usepackage{amsmath,amssymb,mathrsfs,amsfonts}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{calrsfs}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{eucal}    
+\usepackage{amssymb}  
+\usepackage{pifont}
+\usepackage{color} 
+\usepackage{cancel}
+\usepackage[toc,page]{appendix}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest,every axis/.append style={line width=0.5pt},x label style={font={\small},at={(axis description cs:0.5,-0.15)},anchor=north},y label style={font={\small},at={(axis description cs:-0.15,0.5)},anchor=south},z label style={font={\small},at={(axis description cs:-0.25,0.5)},anchor=north},label style={font=\small},tick label style={font=\small},title style={font=\small}}
+\usetikzlibrary{shapes,shadows,arrows,backgrounds,patterns,positioning,automata,calc,decorations.markings,decorations.pathreplacing,bayesnet,arrows.meta} 
+\usepackage{varwidth}
+\usepackage{lscape}
+\usepackage{array} 
+\usepackage[colorlinks=false,pdfborder={0 0 0}]{hyperref}
+\usepackage{tabularx}
+\usepackage{textcomp}
+\usepackage{multicol} 
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage[font=small,labelfont=bf]{caption}                                                           
+\usepackage{textcase}
+\usepackage{bbm} 
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{soul}
+\usepackage{wrapfig}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Geometry
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.5em}
+\renewcommand{\baselinestretch}{1.2}
+\usepackage[left=2cm, right=2cm, top=2.5cm, bottom=3cm, headheight=13.6pt]{geometry}
+\allowdisplaybreaks 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Bibliography
+\usepackage[backend=bibtex,style=ieee,sorting=none]{biblatex} 
+\bibliography{bibliography_ridge}
+\renewcommand*{\bibfont}{\scriptsize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Custom commands and operators
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\newcommand{\ie}{\textit{i.e.} }
+\newcommand{\eg}{\textit{e.g.} }
+\newcommand\id{\ensuremath{\mathbbm{1}}} 
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\E}{\mathbb{E}}
+\DeclareMathOperator{\eye}{\mathbb{I}}
+\DeclareMathOperator{\zeros}{\mathbb{O}}
+\DeclareMathOperator{\tr}{\textrm{tr}}
+\DeclareMathOperator{\vvec}{\textrm{vec}}
+\DeclareMathOperator{\ik}{\mathrm{k}}
+\DeclareMathOperator{\ip}{\mathrm{p}}
+\DeclareMathOperator{\inn}{\mathrm{n}}
+\DeclareMathOperator{\im}{\mathrm{m}}
+\DeclareMathOperator{\td}{\mathrm{t}}
+\DeclareMathOperator{\kd}{\mathrm{k}}
+\DeclareMathOperator{\T}{\mathrm{T}}
+\DeclareMathOperator{\K}{\mathrm{K}}
+\DeclareMathOperator{\rk}{\mathrm{rk}}
+\DeclareMathOperator{\vc}{\mathrm{vec}}
+\DeclareSymbolFontAlphabet{\mathcal} {symbols}
+\DeclareSymbolFont{symbols}{OMS}{cm}{m}{n}
+\DeclareMathAlphabet{\mathbfit}{OML}{cmm}{b}{it}
+\makeatother
+% Number equations
+%\numberwithin{equation}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Theorems
+\newtheoremstyle{mytheoremstyle} % name
+{.5em}                    % Space above
+{.8em}                    % Space below
+{\itshape}                % Body font
+{1em}                           % Indent amount
+{\bfseries}                   % Theorem head font
+{:}                          % Punctuation after theorem head
+{.5em}                       % Space after theorem head
+{}  % Theorem head spec (can be left empty, meaning ‘normal’)
+
+\theoremstyle{mytheoremstyle}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{condition}{Condition}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{property}{Property}[section]
+\newtheorem{corollary}{Corollary}[section]
+\renewcommand\qedsymbol{$\blacksquare$}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nomenclature
+\usepackage[intoc]{nomencl}
+\makenomenclature
+
+\usepackage[ruled]{algorithm}
+\usepackage{float}
+
+\usepackage{algorithmic}
+\algsetup{linenosize=\scriptsize}
+\usepackage{etoolbox}
+\AtBeginEnvironment{algorithmic}{\scriptsize}
+\renewcommand{\thealgorithm}{\thechapter.\arabic{algorithm}} 
+%\usepackage{chngcntr}
+%\counterwithin{algorithm}{section}
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[explicit]{titlesec}
+\usepackage{titletoc}
+\interfootnotelinepenalty=10000
+
+\title{Constrained parameter estimation of $\delta$-domain models}
+
+\begin{document}
+	\maketitle
+\par This report demonstrates the performance of the $\delta$-domain identification framework on a simulation example.
+\section{Model structure identification}
+\par Equivalence between the lag models and $\delta$-domain models was established in \cite{ANDERSON20071859}. For a input-output model with a defined lags
+\begin{equation}
+	\mathbfit{y}(t) = f\big( \{y(t - k)\}^{n_y}_{k=1}, \{u(t - k + n_y + 1)\}^{n_y + n_u}_{k= n_y + 1} \big),
+\end{equation}
+there can be established an equivalent representation with $\delta$-operator, where the output of the NARX model is the highest order derivative of the registered output, $\delta^{n} y(t)\delta t^{n} y(t)$, and input vector takes the following form:
+\begin{equation}
+\mathbfit{x}(t) = \left[\begin{array}{cccccccc}
+\delta^{n-1} y(t) & \dots & \delta y(t) & y(t) & \delta^{n-1}u(t-1) & \dots  & \delta u(t) & u(t)
+\end{array}\right]^{\top}.
+\end{equation}
+The unknown model is approximated with a sum of polynomial basis functions up to second degree ($\lambda = \order$), rendering the following structure
+\begin{equation}\label{eq:narx}
+	\mathbfit{y}(t) = \theta^0 + \sum_{i=1}^{d} \theta_i x_i(t) + \sum_{i=1}^{d} \sum_{j=i}^{d} \theta_{i,j} x_i(t) x_j(t) +  \sum_{i=1}^{d} \sum_{j=i}^{d} \sum_{k=j}^{d} \theta_{i,j} x_i(t) x_j(t) x_k(t) + e(t).
+\end{equation}
+\par The performance of $\delta$-domain identification framework is tested on a simulated data for Van-der-Pol oscillator (VDPO) with varying damping strength. The dynamics of VDPO is described by a non-linear second-order ODE:
+\begin{equation}
+\frac{\delta^2}{\delta t^2} y(t) = \mu(1 - y^2(t))\frac{\delta}{\delta t} y(t) - y(t) + u(t),
+\end{equation} 
+where $u(t)$ is an excitation signal (in this case, sum of sinusoids). The damping coefficient $\mu$ was assigned the following values for the MC simulations
+\begin{equation*}
+\mu = \left[\begin{array}{ccccccc}0.0625 & 0.125 & 0.25 & 0.3 & 0.5 & 0.8 & 1.
+\end{array}\right]
+\end{equation*}
+\par The number and order of significant terms are identified within the EFOR-CMSS truncated using Bayesian information criteria 
+\begin{figure}[!h]
+	\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+	\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+	\centering
+	\input{BIC_all_folds.tikz}
+	\resizebox{!}{0cm}{
+		\begin{minipage}{\textwidth}
+			\begin{tikzpicture}	
+			\begin{axis}[width=2cm,height=2cm]
+			\addplot [color=mycolor2,line width=5.0pt,only marks,mark=asterisk,mark options={solid},forget plot]
+			table[row sep=crcr]{%
+				8	-3.00104696019893\\
+			};\label{tikz:nterms}
+			\end{axis}
+			\end{tikzpicture}%
+	\end{minipage}}
+	\caption{Evolution of BIC with growing number of parameters in the model}\label{fig:bic}
+\end{figure}	
+\par The significant terms identified by the algorithm are presented in Table \ref{tab:thetas_all}
+\begin{table}[!h]
+	\centering
+	\caption{Significant terms and corresponding coefficients identified in EFOR-CMSS algorithm.}\label{tab:theetas_all}
+	\small
+	\input{Thetas_overall.tex}
+\end{table} 
+\section{Direct estimation of external model parameters}
+\par In order to link the external and internal parameters, an arbitrary polynomial function is formed from either a single parameter vector or a pair of vectors. The number of unknown parameters is defined by the number of avaliable datasets. This section demonstrates the direct estimation procedure and the justification for selecting polynomial terms for curve fitting.
+\par Model structure for $K$ datasets:
+\begin{equation}\label{eq:batchtimeser}
+\underbrace{\bar{\mathbf{Y}}}_{\T K\times 1} = \underbrace{\bar{\Phi}}_{\T K \times NK} \underbrace{\bar{\Theta}}_{NK \times 1},
+\end{equation}
+where the block matrices have the following structure:
+\begin{equation}
+\underbrace{\bar{\mathbf{Y}}}_{\T K\times 1} = \left[\begin{array}{c} 
+\underbrace{\mathbfit{y}^1}_{\T\times 1} \\
+\underbrace{\mathbfit{y}^2}_{\T\times 1} \\
+\vdots \\
+\underbrace{\mathbfit{y}^K}_{\T\times 1}
+\end{array}\right]; \quad 
+\underbrace{\bar{\Phi}}_{\T K \times NK} = \left[\begin{array}{cccc} 
+\underbrace{\Phi^1}_{\T \times N} & \dots & \dots & \zeros \\
+\zeros & \underbrace{\Phi^2}_{\T \times N} & \dots & \zeros \\
+\vdots & \vdots & \vdots & \vdots  \\
+\zeros & \dots & \dots & \underbrace{\Phi^K}_{\T \times N}
+\end{array}\right]; \quad 
+\underbrace{\bar{\Theta}}_{NK \times 1} = \left[\begin{array}{c} 
+\underbrace{\theta^1}_{N \times 1} \\
+\underbrace{\theta^2}_{N \times 1} \\
+\vdots \\
+\underbrace{\theta^K}_{N \times 1}
+\end{array}\right].
+\end{equation}
+\par The relationship of the design parameters known from the experiments and the internal parameters of NARMAX model  is defined by the following linear function:
+\begin{equation}
+\underbrace{\Theta}_{N \times K} = \underbrace{B}_{N \times L} \underbrace{A}_{L \times K},
+\end{equation}
+where $A$ is the matrix where each row is a function of the vector of design parameters. The example structure is
+\begin{equation}
+A = \left[\begin{array}{cccccc}
+\eye_{K \times 1} & L_{K \times 1} & D_{K \times 1} & L D_{K \times 1} &  L^{2}_{K \times 1} & D^{2}_{K \times 1} 
+\end{array}\right]^{\top},
+\end{equation} 
+and where $B$ denotes the matrix of unknown coefficients of a hypersurface of order $L$ that maps a point in external parameter space, $\xi^k = (L_k, D_k)$, onto the point in the space of internal parameters, $\theta^k$.
+In can be seen that $\bar{\Theta} = \text{vec}(\Theta)$, then
+\begin{equation}
+\underbrace{\bar{\Theta}}_{NK \times 1} = \text{vec}\left(\underbrace{B}_{N \times L} \underbrace{A}_{L \times K}\right).
+\end{equation}
+This vectorisation can be obtained using Kronecker product:
+\begin{equation}
+\text{vec}\left(\underbrace{B}_{N \times L} \underbrace{A}_{L \times K}\right) = (\underbrace{A^{\top}}_{K \times L} \otimes \underbrace{\eye}_{N \times N}) \underbrace{\text{vec}(B)}_{NL \times 1}.
+\end{equation}
+Denoting the result of Kronecker product as $\underbrace{\mathbf{Kr}}_{NK \times NL} \triangleq (\underbrace{A^{\top}}_{K \times L} \otimes \underbrace{\eye}_{N \times N})$ and vectorised coefficient matrix as $\underbrace{\bar{\mathbf{B}}}_{NL \times 1} \triangleq \text{vec}(B)$  yields the following:
+\begin{equation}\label{eq:BtoTheta}
+\underbrace{\bar{\Theta}}_{NK \times 1} = \underbrace{\mathbf{Kr}}_{KN \times NL} \underbrace{\bar{\mathbf{B}}}_{NL \times 1}.
+\end{equation}
+Substituting the above expression into \eqref{eq:batchtimeser} renders an expression that directly links the design parameters and the timeseries data
+\begin{equation}\label{eq:BtoY}
+\underbrace{\bar{\mathbf{Y}}}_{\T K\times 1} = \underbrace{\bar{\Phi}}_{\T K \times NK} \underbrace{\mathbf{Kr}}_{KN \times NL} \underbrace{\bar{\mathbf{B}}}_{NL \times 1},
+\end{equation}
+where $\bar{\mathbf{B}}$ is the unknown vector and all other factors are known form the experiments or defined prior to structure identification. 
+\par The representation \eqref{eq:BtoY} allows estimating the coefficients in  $\bar{\mathbf{B}}$ directly from the timeseries data bypassing the intermediate estimation of the internal coefficients in NARX model.
+\par The following condition must be satisfied:
+\begin{equation}\label{eq:rankcond}
+\rk(\bar{\Phi}\mathbf{Kr}) \geq NL.
+\end{equation}
+The rank of the linear system \eqref{eq:BtoY} satisfies the following:
+\begin{equation}
+\rk (\bar{\Phi}\mathbf{Kr}) \leq \min\left(\rk(\bar{\Phi}), \rk(\mathbf{Kr})\right),
+\end{equation}
+where the rank of Kronecker product can be found as
+\begin{equation}
+\rk(\mathbf{Kr}) = \rk(\underbrace{A^{\top}}_{K \times L})\rk(\underbrace{\eye}_{N \times N}),
+\end{equation}
+thus the matrix $A$ composed of by-element combinations of external parameter vector(s) must be of rank $K$.
+\section{Constrained estimation}
+\par A common treatment for models that suffer from bad generalisation is to introduce a constrained LS problem, where the constraint is normally posed on the unknown parameter vector:
+\begin{equation}\label{eq:rls_const}
+\hat{\mathbf{\beta}}^i = \arg \min \norm{ \biggl(\bar{\theta}^i - X \mathbf{\beta}^i \biggr) }^2, \quad f_R(\mathbf{\beta}^i) < \gamma.
+\end{equation}
+where $\lambda$ is a pre-specified parameter that defines the size of the constraint in the parameter space $\Xi$.
+Lagrangian formulation of the constrained problem is called regularised Least Squares (RLS),
+\begin{equation}
+\mathbf{\beta}^i = \arg \min \Biggl \{\norm{ \biggl(\bar{\theta}^i - X \mathbf{\beta}^i \biggr) }^2 + \lambda f_R(\mathbf{\beta}^i)\Biggr\}
+\end{equation}
+where the regularisation coefficient $\lambda$ is directly linked to  $\gamma$ in \eqref{eq:rls_const}. Different types of the constraint function are be considered depending on the problem.
+\subsection{Tikhonov regularisation}
+Innovation regularisation  constrains the 2-norm of the parameter vector
+\begin{equation}
+f_{R}(\mathbf{\beta}^i) = \norm{\mathbf{\beta}^i}^{2}_{2}.
+\end{equation}
+This is the only RLS formulation that has a closed form solution that is usually obtained for the normalised data. 
+\begin{equation}\label{eq:ridge}
+\hat{\mathbf{\beta}}^{i}_{RLS} = (\mathbf{R}^{*}_{aa} + \lambda \eye_M)^{-1} (\mathbf{A}^{\star})^{\top}\bar{\theta}^i,  
+\end{equation}
+This solution is referred to as ridge regression, because increasing $\lambda$ shrinks the coefficients $\beta_j$. The shrinkage is shown is best interpreted via singular values decomposition (SVD) of the normalised data matrix. Denote the SVD of $\mathbf{A}^{\star}$ as
+\begin{equation}
+\underbrace{\mathbf{A}^{\star}}_{K \times M} = \underbrace{\mathbf{U}}_{K \times M}\underbrace{\mathbf{D}}_{M \times M}\underbrace{\mathbf{V}^{\top}}_{M \times M},
+\end{equation}
+where columns of $\mathbf{U}$ are principal components of $\mathbf{A}^{\star}$, diagonal elements of  $\mathbf{D}$ are the singular values, and where $\mathbf{V}$ is the rotation. All orthonormality assumption are the same as in the general case. The ridge regression \eqref{eq:ridge} then takes form
+\begin{equation}
+\hat{\mathbf{\beta}}^{i}_{RLS} = \left( \mathbf{V}\mathbf{D}\mathbf{U}^{\top}\mathbf{U}\mathbf{D}\mathbf{V}^{\top}  + \lambda \eye_M\right)^{-1} \left( \mathbf{U}\mathbf{D}\mathbf{V}^{\top}\right)^{\top}\bar{\theta}^i.
+\end{equation}
+Simple linear algebra yields the following
+\begin{equation}
+\hat{\mathbf{\beta}}^{i}_{RLS} =  \mathbf{V}\left(\mathbf{D}^2  + \lambda \eye_M\right)^{-1}\mathbf{V}^{\top} \mathbf{V}\mathbf{D}\mathbf{U}^{\top}\bar{\theta}^i.
+\end{equation}
+The finale expression is
+\begin{equation}\label{eq:rls_svd}
+\hat{\mathbf{\beta}}^{i}_{RLS} = \mathbf{V}\left(\mathbf{D}^2  + \lambda \eye_M\right)^{-1}\mathbf{D}\mathbf{U}^{\top}\bar{\theta}^i,
+\end{equation}
+which can be compared to the SVD of OLS regression:
+\begin{equation}\label{eq:ols_svd}
+\hat{\mathbf{\beta}}^{i}_{OLS} = \mathbf{V}\mathbf{D}^{-1}\mathbf{U}^{\top}\bar{\theta}^i \qquad \left( \approx (\mathbf{A}^{\star})^{-1}\bar{\theta}^i\right).
+\end{equation}
+It can be seen from \eqref{eq:rls_svd}-\eqref{eq:ols_svd} that in Tikhonov regularisation the inverse of the diagonal matrix is obtained as $\mathbf{D} / (\mathbf{D}^2  + \lambda \eye_M)$ where $\lambda$ is non-negative. Increasing regularisation coefficient thus leads to shrinkage of the singular values, and the estimates asymptotically approach zero. This shows that in Tikhonov regularisation $\lambda$ quantifies the trade-off between the bias and the variance in the estimates. Small regularisation coefficient leads to near-OLS solution that overfits the model to the training data, while large value leads to biased estimates and drives all coefficients to near-zero values.
+\subsection{LASSO regularisation}
+\par While in the ridge regression LSEs asymptotically approach zero, none of the parameters can be zeroed-out explicitly if the model structure is overly detailed. Another formulation of RLS, called Least absolute shrinkage and selection operator (LASSO) regression, performs variable selection and the regularisation simultaneously by imposing the $l_1$ penalty: 
+\begin{equation}
+f_{R}(\mathbf{\beta}^i) = \norm{\mathbf{\beta}^i}_{1}.
+\end{equation}
+The Lagrangian optimisation problem then takes for of basis pursuit de-noising that can be solved numerically using quadratic programming or convex techniques. This report uses the shooting algorithm proposed in \cite{Fu1998} because of its relative simplicity. The results of ridge estimation are used as the initial point in convex optimisation searching for the LASSO solution.
+\subsection{Selection of the regularisation coefficient}
+\par The important stage of solving RLS problem is selecting the regularisation parameter that will result into a interpretable but parsimonious model. The constraint $\gamma$ in \eqref{eq:rls_constr} is often selected arbitrary since the shape of the parameter space is unknown. As a result, finding $\lambda$ relies on iterative schemes most of which do not guarantee convergence [CITE MANY]. For the lack of universal approach for selecting the optimal value of $\lambda$, the choice of the method remains application-specific.
+\par In this report, ridge estimation is applied to a fixed model structure, hence Aikaike’s information criterion (AIC) may be used
+\begin{equation}
+\text{AIC}_{\lambda} = 2 p - 2\log p(\bar{\theta}^i \mid \mathbf{\beta}^i, \lambda),
+\end{equation}
+where the first term quantifies model complexity and the second term is the log-likelihood of the selected model fitting the data. The model complexity is determined as simply the trace of the hat matrix of the ridge estimator
+\begin{equation}
+p = \tr(\mathbf{H}_{RLS}) = \tr((\mathbf{A}^{\top})(\mathbf{R}_{aa} + \lambda \eye_M)^{-1} \mathbf{A}^{\top})
+\end{equation}.
+Bayesian information criterion (BIC), assigns a larger penalty to the model complexity 
+\begin{equation}
+\text{BIC}_{\lambda} = 2\log(n) p - 2\log p(\bar{\theta}^i \mid \mathbf{\beta}^i, \lambda),
+\end{equation}
+where $n$ is the number of data points used for parameter estimation. Both AIC and BIC are aim to estimate 
+
+\par When it comes to finding a parsimonious model, it may be more reasonable to access model's prediction performance instead of explicitly penalising its complexity. Cross-validation procedure  
+This work 
+\par Selcting regularisation coefficient for LASSO regression is more nuanced as different model structure may arise for different values of $\lambda$. The most popular approach described in the literature uses cross-validation. Both the data matrix and the response vector are partitioned into pairs. Then each pair is exuded from the 
+\section{Results}
+The estimated coefficients are presented in Table \ref{tab:betas_all}, and the surface fitting results for each internal parameter are illustrated in Figure \ref{fig:surfaces_all}
+
+\begin{table}[!h]
+	\centering
+	\caption{Polynomial coefficients estimated via ordinary LS.}\label{tab:betas_all}
+	\small
+	\input{Betas_ls_10.tex}
+\end{table} 
+\begin{table}[!h]
+	\centering
+	\caption{Polynomial coefficients estimated via Tikhonov regularisation.}\label{tab:betas_tikh}
+	\small
+	\input{Betas_tikhonov_10.tex}
+\end{table}
+
+\begin{table}[!h]
+	\centering
+	\caption{Polynomial coefficients estimated via LASSO regularisation.}\label{tab:betas_lass}
+	\small
+	\input{Betas_tikhonov_10.tex}
+\end{table}
+%The figure also shows values of the internal parameters computed for the external settings of experiments \dataset3 and \dataset8. The obtained internal parameters are substituted in the modified version of model \eqref{eq:narx} that only includes the identified significant  polynomial terms to validate the identified model structure. The simulation results are compared with true system outputs for \dataset3 and \dataset8 in Figure \ref{fig:c3all} and Figure \ref{fig:c8all}, respectively. Computed RMSEs for both lengths of the sample are presented in Table \ref{tab:RMSEs}.
+%\begin{table}[!h]
+%	\centering
+%	\caption{RMSE of the system output generated by the identified model.}\label{tab:RMSEs}
+%		\begin{tabular}{cc}
+%			Sample size 2000 & Sample size 4000 \\
+%			\hline	
+%			\begin{minipage}{2in} \verbatiminput{RMSEs_T_2000.txt}\end{minipage}& 
+%			\begin{minipage}{2in} \vspace{0.5cm}\verbatiminput{RMSEs_T_4000.txt}\end{minipage}\\
+%			\hline
+%		\end{tabular}
+%\end{table}
+
+%\begin{figure}[!t]
+%	\centering
+%	\resizebox{!}{0cm}{
+%		\begin{minipage}{\textwidth}
+%		\input{surf_labels.tikz}
+%	\end{minipage}}
+%	\input{Theta_surfaces_T_2000.tikz}
+%	\caption{The quantitative relationship between external parameters ($L_{cut}, D_{rlx}$) and internal parameters $\theta$ is obtained by fitting a polynomial surface to the internal parameter values estimated for the sets \dataset1-\dataset5 (\ref{tikz:thetas1}) and sets \dataset6-\dataset10 (\ref{tikz:thetas2}). The fitted surfaces (\ref{tikz:theta_surf}) are then used to compute the internal model parameters corresponding to the settings of choice (\ref{tikz:thetaidentified}).}\label{fig:surfaces_all}
+%\end{figure}
+%\begin{figure}[!t]
+%	\centering
+%	\subfloat[\dataset3]{\input{C3_gen_y_T_2000.tikz}\label{fig:c3all}}\\
+%	\subfloat[\dataset8]{\input{C8_gen_y_T_2000.tikz}\label{fig:c8all}}
+%	\caption{Samples of the output obtained experimentally and the output generated by the identified model.}\label{fig:Callout}
+%\end{figure}
+%
+%\begin{figure}[!t]
+%	\centering
+%	\input{Regressions_yt_T_2000.tikz}
+%	\caption{Scatter plots of the AR(0) term $y(t-1)$ for training datasets. Correlation coefficient with the output signal is shown for each figure.}\label{fig:regr_y}
+%\end{figure}
+%\begin{figure}[!t]
+%	\centering
+%	\input{Regressions_ut_T_2000.tikz}
+%	\caption{Scatter plots of the input term $u(t)$ for training datasets. Correlation coefficient with the output signal is shown for each figure.}\label{fig:regr_u}
+%\end{figure}
+%\begin{figure}[!t]
+%	\centering
+%	\input{Regressions_first_sign_T_2000.tikz}
+%	\caption{Scatter plots of the identified significant term $y(t-1)u(t)$ for training datasets. Correlation coefficient with the output signal is shown for each figure.}\label{fig:regr_first}
+%\end{figure}
+\end{document}

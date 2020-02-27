@@ -60,7 +60,7 @@ switch regressors
          d = lambda*2;
 end
 
-T = 2000;
+T = 4000;
 dict_set = ['dict_',dataset];                                   
 fileNames = sym(dict_set,[1 K]);                                            % vector of filenames
 d       = n_y + n_u;                                                        % size of input vector x
@@ -357,5 +357,6 @@ cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
             false, 'height', '6cm', 'width','12cm','checkForUpdates',false);
 %% Store data in table
+T
 workspaceName = [folderName,'/OLS_results_T_',num2str(T),'.mat'];
 save(workspaceName,'Theta','Terms','Files','finalTerm','T','n_y','n_u','S');

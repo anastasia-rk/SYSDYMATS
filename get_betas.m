@@ -1,5 +1,5 @@
 local_init;
-%%
+%% Load dataset
 foamset = questdlg('Select data folder', ...
     'Data to process',...
 	'foam_2010','foam_2019','vdpo','');
@@ -59,53 +59,39 @@ switch regressors
          n_y = 1;
          d = lambda*2;
 end
-T = 2000;
-% folder = 'Results';                                                         % specify category where to save files
+T = 4000;
 fileName = [folderName,'/OLS_results_T_',num2str(T),'.mat'];
 load(fileName);
-%% Create matrices for fitting
-load('External_parameters');
-L_cut_all = [values{1}(:, 9);values{2}(:, 9)];
-D_rlx_all = [values{1}(:,11);values{2}(:,11)];
-A_imp_all = [values{1}(:, 6);values{2}(:, 6)];
-V_imp_all = [values{1}(:, 7);values{2}(:, 7)];
-
-index = find(Files <=10);
-Files_sub = les(index);
-x = L_cut_all(Files_sub,1);
-y = D_rlx_all(Files_sub,1);Fi
-% x = [3 3 3 5 5 5 7 7 7];
-%% Estimate coefficients via curve fitting
-fo = fitoptions('Method','NonlinearLeastSquares');
-if length(x) >= 6
-g = fittype(@(b0,b1,b2,b3,b4,b5,x,y) b0 + b1*x + b2*y + b3*x.*y + b4*x.^2 + b5*y.^2, 'independent',{'x','y'},'dependent','z','options',fo); % ); % 
-else
-g = fittype(@(b0,b1,b2,b3,x,y) b0 + b1*x + b2*y + b3*x.*y, 'independent',{'x','y'},'dependent','z','options',fo); % ); %   
+%% Load external parameters
+load(['External_parameters_',dataset]);
+x = values(Files,1);
+if size(values,2) > 1
+    y = values(Files,2);
+else 
+    y = [];
 end
-clear cfs
-for iTerm = 1:finalTerm
-z = Theta(iTerm,Files_sub)';
-[ft{iTerm},gof{iTerm},outp{iTerm}]= fit([x,y],z,g);
-cfs(iTerm,:) = coeffvalues(ft{iTerm});
+A = ones(size(x));                                                          % create unit vector for constants 
+A_symb{1} = '1'
+if ~isempty(y)                                                              % unknown mapping is a surface
+   powers = permn(0:2,2);                                                   % permuntations of all 
+   powers = powers(2:end,:);    
+   nCols = min(size(powers,1),K);                                           % number of terms in the model shouldn't be higher then K
+   for iCol = 1:nCols
+       xCol = x.^powers(iCol,1);
+       yCol = y.^powers(iCol,2);
+       A = [A xCol.*yCol];
+       A_symb{iCol+1} = ['$x^',num2str(powers(iCol,1)),'$ $y^',num2str(powers(iCol,2)),'$']; 
+   end
+else                                                                        % unknown mapping is a curve
+    nCols = min(4,K);                                                       % number of terms in the model shouldn't be higher then K
+    for iCol = 1:nCols                                                      % limit order of the model by the number of experimants
+       A = [A x.^(iCol)];
+   end
 end
-% Tab = table(Terms);
-% for iCoeff = 1:size(cfs,2)
-%     Parameters = round(cfs(:,iCoeff),2);
-%     varName = ['$\beta_',num2str(iCoeff-1),'$'];
-%     Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
-% end
-% Table_coeffs_nls = Tab
 %% Estimate coefficients with LS
-id = ones(size(x));                                                         % create unit vector for constants
-A = [id x y x.*y x.^2 y.^2];                                                % create the matrix for ls
-if length(x) <= 4
-    A = A(:,1:4);
-end
-clear beta
-B = Theta(:,Files_sub)';
+B = Theta(:,Files)';
 beta = A\B; 
 beta = beta';
-
 Tab = table(Terms);
 for iCoeff = 1:size(beta,2)
     Parameters = round(beta(:,iCoeff),2);
@@ -113,47 +99,38 @@ for iCoeff = 1:size(beta,2)
     Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
 end
 Table_coeffs_ls = Tab
-%% Save table to tex
 tableName = [folderName,'/Betas_T_',num2str(T)];
 table2latex(Table_coeffs_ls,tableName);
+%% Validation procedure 
+testFiles  = Files(end) - 1;
+index_test = 1:1000; 
+Theta_test = beta*A';
+iRMSE = 0;
+for iFile   = testFiles
+    fName   = [dictFolder,'/Dict_',dataset,num2str(iFile)];
+    File    = matfile(fName,'Writable',true);
+    indSign = S(1:finalTerm);                                               % select the indeces of significant terms from the ordered set
+    Phi_all = File.term(index_test,:);                                      % extract all terms into a vector
+    Phi     = Phi_all(:,indSign);                                           % select only signficant terms
+    y_model = Phi*Theta_test(:,iFile);                                      % model NARMAX output
+    iRMSE   = iRMSE + 1;
+    RMSE(iRMSE) = sqrt(mean((File.y_narx(index_test,1) - y_model).^2));     % Root Mean Squared Error
+% Compare outputs
+    figName = ['Outputs k=',num2str(iFile)];
+    figure('Name',figName,'NumberTitle','off');
+    plot(index_test+File.t_0,File.y_narx(index_test,1)); hold on;
+    plot(index_test+File.t_0,y_model(index_test,1),'--'); hold on;
+    legend('True output','Generated output');
+    xlabel('Sample index'); ylabel(['$',y_str,'$']);
 
-%% Compute parameters for validation
-testFiles   = [3 8];
-TextName    = [folderName,'/RMSEs_T_',num2str(T),'.txt'];
-TextSpec    = 'RMSE for set %d is  %3.2f \n';
-TextFile    = fopen(TextName,'w');
-for iFile = testFiles
-L_test = L_cut_all(iFile,1);
-D_test = D_rlx_all(iFile,1);
-for iTerm = 1:finalTerm
-    theta_test{iFile}(iTerm,1) = g(cfs(iTerm,1),cfs(iTerm,2),cfs(iTerm,3),cfs(iTerm,4),cfs(iTerm,5),cfs(iTerm,6),L_test,D_test);
+% tikzName = [folderName,'/',dataset,num2str(iFile),'_Gen_y_T_',num2str(T),'.tikz'];
+% cleanfigure;
+% matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+%             false, 'height', '4cm', 'width','15cm','checkForUpdates',false);
+%         
+ clear File Phi_all Phi y_model
 end
-fName = [dictFolder,'/Dict_',dataset,num2str(iFile)];
-File = matfile(fName,'Writable',true);
-indSign = S(1:finalTerm);                                                   % select the indeces of significant terms from the ordered set
-Phi_all = File.term;                                                        % extract all terms into a vector
-Phi     = Phi_all(:,indSign);                                               % select only signficant terms
-y_model = Phi*theta_test{iFile};                                            % model NARMAX output
-RMSE(iFile) = sqrt(mean((File.y_narx - y_model).^2));                       % Root Mean Squared Error
-fprintf(TextFile,TextSpec,[iFile, RMSE(iFile)]);
-%% Compare outputs
-indPlot = [1:500];
-figure('Name','Modelled output','NumberTitle','off');
-colormap(my_map);
-plot(indPlot+File.t_0,File.y_narx(indPlot,1)); hold on;
-plot(indPlot+File.t_0,y_model(indPlot,1),'--'); hold on;
-legend('True output','Generated output');
-
-tikzName = [folderName,'/',dataset,num2str(iFile),'_Gen_y_T_',num2str(T),'.tikz'];
-cleanfigure;
-matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-            false, 'height', '4cm', 'width','15cm','checkForUpdates',false);
-        
-clear File Phi_all Phi y_model
-end
-%%
-index1 = find(Files <=5);
-index2 = find(Files > 5);
+%% Plot surfaces/curves
 az = -140;
 el =   50;
 figure('Name','Parameter surfaces','NumberTitle','off');

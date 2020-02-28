@@ -66,6 +66,7 @@ for it=n_u:-1:1
       x_str{iStr} = ['u(t-',num2str(it),')'];
       iStr = iStr + 1;
 end
+y_str = 'y(t)';
 % x_str{iStr} = ['u(t)'];   
 %% Identify difference in lag
 df = n_u - n_y;                                                           % difference between lags
@@ -159,6 +160,6 @@ dictFolder = folderName;                                                    % fo
 nTerms = iTerm;                                                             % total number of regressors in the polynomial
 dict_terms = [1:nTerms];                                                    % dictionary of all terms
 fileMeta = ['Meta_',dataset];
-save(fileMeta,'dictFolder','nTerms','nNarx','symb_term','dict_terms','indeces','lambda','n_y','n_u','K','normC','-v7.3');   % save metadata
+save(fileMeta,'dictFolder','nTerms','nNarx','x_str','y_str','symb_term','dict_terms','indeces','lambda','n_y','n_u','K','normC','-v7.3');   % save metadata
 fileMeta = [folderName,'/Meta_',dataset];
-save(fileMeta,'dictFolder','nTerms','nNarx','symb_term','dict_terms','indeces','lambda','n_y','n_u','K','normC','-v7.3');
+save(fileMeta,'dictFolder','nTerms','nNarx','x_str','y_str','symb_term','dict_terms','indeces','lambda','n_y','n_u','K','normC','-v7.3');

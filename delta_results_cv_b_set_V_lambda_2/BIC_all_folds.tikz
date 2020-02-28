@@ -1,0 +1,54 @@
+% This file was created by matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=5.986cm,
+height=6cm,
+at={(0cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=25,
+xlabel style={font=\color{white!15!black}},
+xlabel={Terms},
+ymin=-50000,
+ymax=0,
+ylabel style={font=\color{white!15!black}},
+ylabel={BIC},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+1	0\\
+2	-46249.9293952455\\
+3	-47313.1785545196\\
+4	-47657.1819846709\\
+5	-47687.2958577504\\
+6	-47683.7289655208\\
+7	-47678.2949149853\\
+8	-47672.5571265516\\
+9	-47665.9647782809\\
+10	-47657.9136710176\\
+11	-47649.5389669121\\
+12	-47641.2313122236\\
+13	-47632.7818833552\\
+14	-47624.063866548\\
+15	-47615.3848729482\\
+16	-47607.2239116368\\
+17	-47598.0647593016\\
+18	-47589.39510097\\
+19	-47580.5913948774\\
+20	-47571.613448152\\
+21	-47562.4542958168\\
+22	-47553.4714882956\\
+23	-47544.7153087765\\
+};
+\addplot [color=mycolor2, draw=none, mark=asterisk, mark options={solid, mycolor2}, forget plot]
+  table[row sep=crcr]{%
+5	-47687.2958577504\\
+};
+\end{axis}
+\end{tikzpicture}%

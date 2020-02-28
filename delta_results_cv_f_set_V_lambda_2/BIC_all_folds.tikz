@@ -6,8 +6,8 @@
 \begin{tikzpicture}
 
 \begin{axis}[%
-width=10.979cm,
-height=4cm,
+width=5.979cm,
+height=6cm,
 at={(0cm,0cm)},
 scale only axis,
 xmin=0,
@@ -18,9 +18,7 @@ ymin=-20000,
 ymax=0,
 ylabel style={font=\color{white!15!black}},
 ylabel={BIC},
-axis background/.style={fill=white},
-%x tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={},},
-%y tick label style={/pgf/number format/.cd,fixed,precision=3, set thousands separator={},}
+axis background/.style={fill=white}
 ]
 \addplot [color=mycolor1, forget plot]
   table[row sep=crcr]{%

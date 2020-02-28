@@ -63,8 +63,8 @@ dict_set = ['dict_',dataset];
 fileNames = sym(dict_set,[1 K]);                                            % vector of filenames
 Files =  1:K;                                                               % ids of the sample files
 % Set maximum number of covariates
-if length(dict_terms) + 1 < 30                                              % Maximum significant terms (if the algorithm is not terminated by the criterion)
-    maxSign = length(dict_terms) + 1;
+if length(dict_terms) < 30                                                  % Maximum significant terms (if the algorithm is not terminated by the criterion)
+    maxSign = length(dict_terms);
 else
     maxSign = 30;                                                           
 end
@@ -459,23 +459,32 @@ for iBeta=1:L
     varName = ['$\beta_{',num2str(iBeta-1),'}$'];
     Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
 end
-tableName = [folderName,'/Betas_tikhonov_',num2str(iFold)];
+tableName = [folderName,'/Betas_tikhonov'];
 table2latex(Tab,tableName);
- clear Tab
+clear Tab
 Tab = table(Step,Terms);
 for iBeta=1:L
-    Parameters = round(Betas_tikh_opt(:,iBeta),2);
+    Parameters = round(Betas_lasso_opt(:,iBeta),2);
     varName = ['$\beta_{',num2str(iBeta-1),'}$'];
     Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
 end
-tableName = [folderName,'/Betas_ls_',num2str(iFold)];
+tableName = [folderName,'/Betas_lasso'];
+table2latex(Tab,tableName);
+clear Tab
+Tab = table(Step,Terms);
+for iBeta=1:L
+    Parameters = round(Betas_opt(:,iBeta),2);
+    varName = ['$\beta_{',num2str(iBeta-1),'}$'];
+    Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
+end
+tableName = [folderName,'/Betas_ols'];
 table2latex(Tab,tableName);
 %% Validate Tikhonov reg
 testFiles   = Files;
-Theta_test  = Betas_opt*A';
+Theta_test  = Betas_tikh_opt*A';
 iRMSE       = 0;
 figure('Name','Outputs','NumberTitle','off');
-L2 = 4;
+L2 = round(length(testFiles)/2);
 index_test  = 1000:3000;
 for iFile = testFiles
     fName   = [dictFolder,'/Dict_',dataset,num2str(iFile)];
@@ -487,10 +496,10 @@ for iFile = testFiles
     iRMSE   = iRMSE + 1;
     RMSE(iRMSE) = sqrt(mean((File.y_narx(index_test,1) - y_model).^2));     % Root Mean Squared Error
 % Compare outputs
-    subplot(L2,2,iFile);
+    subplot(L2,2,iRMSE);
     plot(index_test(1:500)+File.t_0,File.y_narx(index_test(1:500),1)); hold on;
     plot(index_test(1:500)+File.t_0,y_model(index_test(1:500),1),'--'); hold on;
-    legend('True output','Generated output');
+%     legend('True output','Generated output');
     xlabel('Sample index'); ylabel(['$',y_str,'$']);
     title(['File ',num2str(iFile),', RMSE = ',num2str(RMSE(iRMSE))]);
        
@@ -505,7 +514,6 @@ matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
 Theta_test  = Betas_lasso_opt*A';
 iRMSE       = 0;
 figure('Name','Outputs','NumberTitle','off');
-L = 4;
 for iFile = testFiles
     fName   = [dictFolder,'/Dict_',dataset,num2str(iFile)];
     File    = matfile(fName,'Writable',true);
@@ -519,7 +527,7 @@ for iFile = testFiles
     subplot(L2,2,iFile);
     plot(index_test(1:500),File.y_narx(index_test(1:500),1)); hold on;
     plot(index_test(1:500),y_model(index_test(1:500),1),'--'); hold on;
-    legend('True output','Generated output');
+%     legend('True output','Generated output');
     xlabel('Sample index'); ylabel(['$',y_str,'$']);
     title(['File ',num2str(iFile),', RMSE = ',num2str(RMSE(iRMSE))]);
  clear File Phi_all Phi y_model

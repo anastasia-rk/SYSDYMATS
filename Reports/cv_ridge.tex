@@ -164,7 +164,13 @@ where $u(t)$ is an excitation signal (in this case, sum of sinusoids). The dampi
 \mu = \left[\begin{array}{ccccccc}0.0625 & 0.125 & 0.25 & 0.3 & 0.5 & 0.8 & 1.
 \end{array}\right]
 \end{equation*}
-\par The number and order of significant terms are identified within the EFOR-CMSS truncated using Bayesian information criteria 
+\par The number and order of significant terms are identified within the EFOR-CMSS method.
+The is assessed through the Bayesian information criteria which quantified the discrepancy between the distribution of the collected data and the the distribution defined by a given model structure
+\begin{equation}
+\text{BIC}_{\lambda} = 2\log(n) p - 2\log p(\bar{\theta}^i \mid \mathbf{\beta}^i, \lambda),
+\end{equation}
+where $n$ is the number of data points used for parameter estimation and where $\log p(\bar{\theta}^i \mid \mathbf{\beta}^i, \lambda)$ is the profile likelihood of the model ($\sigma^2$ is profiled out). Evolution of BIC with the increasing number of model terms is presented in Figure  
+
 \begin{figure}[!h]
 	\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
 	\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
@@ -307,7 +313,7 @@ f_{R}(\mathbf{\beta}^i) = \norm{\mathbf{\beta}^i}_{1}.
 \end{equation}
 The Lagrangian optimisation problem then takes for of basis pursuit de-noising that can be solved numerically using quadratic programming or convex techniques. This report uses the shooting algorithm proposed in \cite{Fu1998} because of its relative simplicity. The results of ridge estimation are used as the initial point in convex optimisation searching for the LASSO solution.
 \subsection{Selection of the regularisation coefficient}
-\par The important stage of solving RLS problem is selecting the regularisation parameter that will result into a interpretable but parsimonious model. The constraint $\gamma$ in \eqref{eq:rls_constr} is often selected arbitrary since the shape of the parameter space is unknown. As a result, finding $\lambda$ relies on iterative schemes most of which do not guarantee convergence [CITE MANY]. For the lack of universal approach for selecting the optimal value of $\lambda$, the choice of the method remains application-specific.
+\par The important stage of solving RLS problem is selecting the regularisation parameter that will result into a interpretable but parsimonious model. The constraint $\lambda$ in \eqref{eq:rls_constr} is often selected arbitrary since the shape of the parameter space is unknown. As a result, finding $\lambda$ relies on iterative schemes most of which do not guarantee convergence [CITE MANY]. Selecting regularisation coefficient for LASSO regression is more nuanced as different model structure may arise for different penalties. For the lack of universal approach for selecting the optimal value of $\lambda$, the choice of the method remains application-specific. 
 \par In this report, ridge estimation is applied to a fixed model structure, hence Aikaike’s information criterion (AIC) may be used
 \begin{equation}
 \text{AIC}_{\lambda} = 2 p - 2\log p(\bar{\theta}^i \mid \mathbf{\beta}^i, \lambda),
@@ -316,36 +322,31 @@ where the first term quantifies model complexity and the second term is the log-
 \begin{equation}
 p = \tr(\mathbf{H}_{RLS}) = \tr((\mathbf{A}^{\top})(\mathbf{R}_{aa} + \lambda \eye_M)^{-1} \mathbf{A}^{\top})
 \end{equation}.
-Bayesian information criterion (BIC), assigns a larger penalty to the model complexity 
-\begin{equation}
-\text{BIC}_{\lambda} = 2\log(n) p - 2\log p(\bar{\theta}^i \mid \mathbf{\beta}^i, \lambda),
-\end{equation}
-where $n$ is the number of data points used for parameter estimation. Both AIC and BIC are aim to estimate 
+Bayesian information criterion presented earlier in EQ assigns a larger penalty to the model complexity. Both AIC and BIC are aim to estimate 
+\par When it comes to finding a parsimonious model, it may be more reasonable to access model's prediction performance instead of explicitly penalising its complexity. Cross-validation procedure is commonly used to quantify predicting capabilities of a model.
+\par  The most popular approach described in the literature uses cross-validation.
 
-\par When it comes to finding a parsimonious model, it may be more reasonable to access model's prediction performance instead of explicitly penalising its complexity. Cross-validation procedure  
-This work 
-\par Selcting regularisation coefficient for LASSO regression is more nuanced as different model structure may arise for different values of $\lambda$. The most popular approach described in the literature uses cross-validation. Both the data matrix and the response vector are partitioned into pairs. Then each pair is exuded from the 
+ Both the data matrix and the response vector are partitioned into pairs. Then each pair is exuded from the 
 \section{Results}
-The estimated coefficients are presented in Table \ref{tab:betas_all}, and the surface fitting results for each internal parameter are illustrated in Figure \ref{fig:surfaces_all}
-
+The estimated coefficients are presented in Table \ref{tab:betas_all}.
 \begin{table}[!h]
 	\centering
 	\caption{Polynomial coefficients estimated via ordinary LS.}\label{tab:betas_all}
 	\small
-	\input{Betas_ls_10.tex}
+	\input{Betas_ols.tex}
 \end{table} 
 \begin{table}[!h]
 	\centering
 	\caption{Polynomial coefficients estimated via Tikhonov regularisation.}\label{tab:betas_tikh}
 	\small
-	\input{Betas_tikhonov_10.tex}
+	\input{Betas_tikhonov.tex}
 \end{table}
 
 \begin{table}[!h]
 	\centering
 	\caption{Polynomial coefficients estimated via LASSO regularisation.}\label{tab:betas_lass}
 	\small
-	\input{Betas_tikhonov_10.tex}
+	\input{Betas_lasso.tex}
 \end{table}
 %The figure also shows values of the internal parameters computed for the external settings of experiments \dataset3 and \dataset8. The obtained internal parameters are substituted in the modified version of model \eqref{eq:narx} that only includes the identified significant  polynomial terms to validate the identified model structure. The simulation results are compared with true system outputs for \dataset3 and \dataset8 in Figure \ref{fig:c3all} and Figure \ref{fig:c8all}, respectively. Computed RMSEs for both lengths of the sample are presented in Table \ref{tab:RMSEs}.
 %\begin{table}[!h]

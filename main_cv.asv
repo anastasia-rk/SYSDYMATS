@@ -63,8 +63,8 @@ end
 dict_set = ['dict_',dataset];                                   
 fileNames = sym(dict_set,[1 K]);                                            % vector of filenames
 Files_all =  1:K;                                                           % ids of the sample files
-Files = Files_all(2:end);
-testFiles   = 1;
+Files = Files_all(2:end-1);
+testFiles   = [1 K];
 K = length(Files);
 % Set maximum number of covariates
 if length(dict_terms) < 30                                                  % Maximum significant terms (if the algorithm is not terminated by the criterion)
@@ -75,19 +75,22 @@ end
 dict_terms_all = dict_terms;
 %% Create the regression matrix based on the dataset (does not depend on CV parameters)
 load(['External_parameters_',dataset]);
-x = values(Files,1);
+x = values(Files,1);                                                        % design parameter values for training
+x_valid = values(testFiles,1);                                              % design parameter values for validation
 % x_m = mean(x);
 % x_s = sqrt((x-x_m)'*(x-x_m));
 % x   = x/x_s;
 if size(values,2) > 1
     y = values(Files,2);
+    y_valid = values(testFiles,2);
 %     y_m = mean(y);
 %     y_s = sqrt((y-y_m)'*(y-y_m));
 %     y   = y/y_s;
 else 
     y = [];
 end
-A = ones(size(x));                                                          % create unit vector for constants 
+A = ones(size(x));                                                          % create unit vector for constants in design matrix
+A_valid = ones(size(x_valid));                                              % create unit vector for constants in validation matrix
 A_symb{1} = '1';
 if ~isempty(y)                                                              % unknown mapping is a surface
    powers = permn(0:2,2);                                                   % permuntations of all 
@@ -97,12 +100,16 @@ if ~isempty(y)                                                              % un
        xCol = x.^powers(iCol,1);
        yCol = y.^powers(iCol,2);
        A = [A xCol.*yCol];
+       xvCol = x_valid.^powers(iCol,1);
+       yvCol = y_valid.^powers(iCol,2);
+       A_valid = [A_valid xvCol.*yvCol];
        A_symb{iCol+1} = ['$x^',num2str(powers(iCol,1)),'$ $y^',num2str(powers(iCol,2)),'$']; 
    end
 else                                                                        % unknown mapping is a curve
-    nCols =  min(3,K);                                                       % number of terms in the model shouldn't be higher then K
+    nCols =  min(3,K);                                                      % number of terms in the model shouldn't be higher then K
     for iCol = 1:nCols                                                      % limit order of the model by the number of experimants
        A = [A x.^(iCol)];
+       A_valid = [A_valid x_valid.^(iCol)];
    end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -274,13 +281,16 @@ for iFile = Files
     Phi_bar   = blkdiag(Phi_bar,Phi);                                       % diagonal block, size TKxNK
     Y_all     = [Y_all; y_file];                                            % block vector, size TKx1
 end
-M_all  = Phi_bar*Kr;                                                        % LS matrix - increased dimension does not guarantee increase in rank
+M_all  = Phi_bar*Kr;  
+[Q_all,R_all] = mgson(M_all);
+% LS matrix - increased dimension does not guarantee increase in rank
 M_group = [];
 for iGroup = 1:finalTerm
     indGroup  = find(p_sparesgroup == iGroup);                              % form groups for CVX sparse group lasso
     block_g   = M_all(:,indGroup);
     M_group   = [M_group block_g];
 end
+[Q_group,R_group] = mgson(M_group);
 %% Block CV with K-folds
 nFolds = 5;
 Folds = [1:nFolds];
@@ -291,16 +301,17 @@ for iFold = nFolds
     timesTest{iFold}  = times(cvpart.test(iFold));
     Y_train{iFold}    = Y_all(timesTrain{iFold},:);
     Y_test{iFold}     = Y_all(timesTest{iFold},:);
-    M_train{iFold}    = M_all(timesTrain{iFold},:);
-    M_test{iFold}     = M_all(timesTest{iFold},:);
-    M_g{iFold}        = M_group(timesTrain{iFold},:);
+    M_train{iFold}    = Q_all(timesTrain{iFold},:); %M_all(timesTrain{iFold},:);
+    M_test{iFold}     = Q_all(timesTest{iFold},:); %M_all(timesTest{iFold},:);
+    M_g{iFold}        = Q_group(timesTrain{iFold},:); %M_group(timesTrain{iFold},:);
+    M_gtest{iFold}    = Q_group(timesTest{iFold},:); %M_group(timesTest{iFold},:);
     nData(iFold)      = cvpart.TestSize(iFold);
 end
 %% Regularised LS (joint) + CV across all datasets
 addpath('LASSO_Shmidt')                                                     % for lasso library
-log_max = 0; log_min = -6; vec = [0:1/10:1];
+log_max = 0; log_min = -6; vec = [0:1/20:1];
 Coeffs = sort(10.^(log_min + (log_max-log_min)*vec));
-coeffs_sp = 0:0.2:1;  % for group lasso
+coeffs_sp = 0:0.1:1;  % for group lasso
 iLambda = 0;
 for iFold = nFolds                                                          % across folds 
     rho = 1;                                                                % augmented lagrangian coeff for the ADMM solution in group lasso
@@ -318,10 +329,12 @@ for iFold = nFolds                                                          % ac
             iSpl = iSpl + 1;
             B_gl   = group_lasso(M_g{iFold}, Y_train{iFold}, lambda, p_group, rho, 1+lambda_g);    % group lasso
             B_spl  = SPLAsso(Y_train{iFold}, M_train{iFold}, p_sparesgroup, (1-lambda_g)*lambda, lambda_g*lambda); % sparse group lasso
-            Betas_group{iLambda,iSpl,iFold}    = reshape(B_gl,[finalTerm,L]);
-            Betas_spgroup{iLambda,iSpl,iFold}  = reshape(B_spl,[finalTerm,L]);
+%             B_gl   = linsolve(R_all,g_gl,struct('UT', true)); 
+%             B_spl   = linsolve(R_all,g_spl,struct('UT', true)); 
+%             Betas_group{iLambda,iSpl,iFold}    = reshape(B_gl,[finalTerm,L]);
+%             Betas_spgroup{iLambda,iSpl,iFold}  = reshape(B_spl,[finalTerm,L]);
 % validation for two argumented problems
-            Y_gl   = M_test{iFold}*B_gl;
+            Y_gl   = M_gtest{iFold}*B_gl;
             Y_spl  = M_test{iFold}*B_spl;
             PE_gl  = Y_test{iFold} - Y_gl;
             PE_spl = Y_test{iFold} - Y_spl;
@@ -354,17 +367,25 @@ end
 % find optimal regularisation coefficients
 [PRESS_min,i_min] = min(PRESS);
 [PRESS_min_l,i_min_l] = min(PRESS_lasso);
+[min_val_spl,idx]=min(PRESS_spl(:));
+[row_spl,col_spl]=ind2sub(size(PRESS_spl),idx);
+[min_val_gl,idx]=min(PRESS_gl(:));
+[row_gl,col_gl]=ind2sub(size(PRESS_gl),idx);
 %% Plots
 [plotAlphas,plotCoeffs] = meshgrid(coeffs_sp,Coeffs);                              % create meshgrid
-figure('Name','RSS all','NumberTitle','off','visible',visFlag);
+figure('Name','PRESS group','NumberTitle','off','visible',visFlag);
 subplot(1,2,1)
-plot3(plotCoeffs,plotAlphas,PRESS_gl);
+plot3(plotCoeffs,plotAlphas,PRESS_gl); hold on;
+plot3(plotCoeffs(row_gl,col_gl),plotAlphas(row_gl,col_gl),min_val_gl,'*','Linewidth',4);
 set(gca,'XScale','log')
 xlabel('$\lambda$');ylabel('$\alpha$');zlabel('PRESS');
+title('Group lasso');
 subplot(1,2,2)
-plot3(plotCoeffs,plotAlphas,PRESS_spl);
+plot3(plotCoeffs,plotAlphas,PRESS_spl); hold on;
+plot3(plotCoeffs(row_spl,col_spl),plotAlphas(row_spl,col_spl),min_val_spl,'*','Linewidth',4);
 set(gca,'XScale','log')
 xlabel('$\lambda$');ylabel('$\alpha$');zlabel('PRESS');
+title('Sparse group lasso');
 tikzName = [folderName,'/PRESS_groups.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
@@ -389,19 +410,35 @@ cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
             false, 'height', '5cm', 'width','12cm','checkForUpdates',false);
 %% Estimating with optimal regularisation coefficient
+g_bar   = Q_all\Y_all;
+B_bar   = linsolve(R_all,g_bar,struct('UT', true)); 
+L       = size(A,2);
+Betas_nonreg_opt  = reshape(B_bar,[finalTerm,L])
+%% simple regularisation
 lambda_opt = Coeffs(i_min);
 lambda_lasso_opt = Coeffs(i_min_l);
-R_mm    = M'*M;
-gain    = inv(R_mm + lambda_opt*eye(size(R_mm)))*M';                        % RLS gain
-B_tikh  = gain*Y_bar;
-B_bar   = M\Y_bar;
-B_lasso =  LassoShooting(M,Y_bar,lambda_lasso_opt,'verbose',0);
-B_gl   = group_lasso(M_g{iFold}, Y_train{iFold}, lambda, p_group, rho, 1+lambda_g);    % group lasso
-B_spl  = SPLAsso(Y_train{iFold}, M_train{iFold}, p_sparesgroup, (1-lambda_g)*lambda, lambda_g*lambda); % sparse group lasso
-L       = size(A,2);
-Betas_opt       = reshape(B_bar,[finalTerm,L])
+R_mm    = Q_all'*Q_all;
+gain    = inv(R_mm + lambda_opt*eye(size(R_mm)))*Q_all';                    % RLS gain
+g_tikh  = gain*Y_all;
+B_tikh   = linsolve(R_all,g_tikh,struct('UT', true)); 
+g_lasso =  LassoShooting(Q_all,Y_all,lambda_lasso_opt,'verbose',0);
+B_lasso   = linsolve(R_all,g_lasso,struct('UT', true)); 
 Betas_tikh_opt  = reshape(B_tikh,[finalTerm,L])
 Betas_lasso_opt = reshape(B_lasso,[finalTerm,L])
+%% group lasso
+lambda_gl_opt = Coeffs(row_gl); alpha_gl_opt = coeffs_sp(col_gl); 
+g_gl   = group_lasso(M_group, Y_all, lambda_gl_opt, p_group, rho, 1+alpha_gl_opt); 
+B_gl   = linsolve(R_group,g_gl,struct('UT', true)); 
+Betas_gl_opt  = reshape(B_gl,[finalTerm,L])
+%% sparse group lasso
+lambda_spl_opt = Coeffs(row_spl); 
+alpha_spl_opt = coeffs_sp(col_spl); 
+g_spl  = SPLAsso(Y_all, Q_all, p_sparesgroup, (1-alpha_spl_opt)*lambda_spl_opt, alpha_spl_opt*lambda_spl_opt); 
+B_spl   = linsolve(R_all,g_spl,struct('UT', true)); 
+Betas_spl_opt = reshape(B_spl,[finalTerm,L])
+%% sparse group non-orthogonal
+B_nonort_spl  = SPLAsso(Y_all, M_all, p_sparesgroup, (1-alpha_spl_opt)*lambda_spl_opt, alpha_spl_opt*lambda_spl_opt); 
+Betas_nonortspl_opt = reshape(B_spl,[finalTerm,L])
 %% Saving external parameters to table
 Tab = table(Step,Terms);
 for iBeta=1:L
@@ -430,27 +467,33 @@ end
 tableName = [folderName,'/Betas_ols'];
 table2latex(Tab,tableName);
 %% Validate Tikhonov reg
-Theta_test  = Betas_opt*A';
-iRMSE       = 0;
-figure('Name','Outputs','NumberTitle','off','visible',visFlag);
-L2 = round(length(testFiles)/2);
+Theta_test  = Betas_tikh_opt*A_valid';
+if length(testFiles) > 1
+    L2 = 2;
+else
+    L1 = 1;
+end
+L2 = round(length(testFiles)/L1);
 index_test  = 1000:3000;
+index_plot  = 1:length(index_test);
+iTheta = 0;
+figure('Name','Outputs','NumberTitle','off','visible',visFlag);
 for iFile = testFiles
     fName   = [dictFolder,'/Dict_',dataset,num2str(iFile)];
     File    = matfile(fName,'Writable',true);
     indSign = S(1:finalTerm);                                               % select the indeces of significant terms from the ordered set
     Phi_all = File.term(index_test,:);                                      % extract all terms into a vector
     Phi     = Phi_all(:,indSign);                                           % select only signficant terms
-    y_model = Phi*Theta_test(:,iFile);                                      % model NARMAX output
-    iRMSE   = iRMSE + 1;
-    RMSE(iRMSE) = sqrt(mean((File.y_narx(index_test,1) - y_model).^2));     % Root Mean Squared Error
+    iTheta  = iTheta + 1;
+    y_model = Phi*Theta_test(:,iTheta);                                     % model NARMAX output
+    RMSE(iTheta) = sqrt(mean((File.y_narx(index_test,1) - y_model).^2));     % Root Mean Squared Error
 % Compare outputs
-    subplot(L2,2,iRMSE);
-    plot(index_test(1:500)+File.t_0,File.y_narx(index_test(1:500),1)); hold on;
-    plot(index_test(1:500)+File.t_0,y_model(index_test(1:500),1),'--'); hold on;
+    subplot(L2,L1,iTheta);
+    plot(index_test(index_plot)+File.t_0,File.y_narx(index_test(index_plot),1)); hold on;
+    plot(index_test(index_plot)+File.t_0,y_model(index_plot,1),'--'); hold on;
 %     legend('True output','Generated output');
     xlabel('Sample index'); ylabel(['$',y_str,'$']);
-    title(['File ',num2str(iFile),', RMSE = ',num2str(RMSE(iRMSE))]);
+    title(['File ',num2str(iFile),', RMSE = ',num2str(RMSE(iTheta))]);
        
  clear File Phi_all Phi y_model
 end
@@ -460,8 +503,8 @@ matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
             false, 'height', '4cm', 'width','15cm','checkForUpdates',false);
  
 %% Validate lasso reg
-Theta_test  = Betas_lasso_opt*A';
-iRMSE       = 0;
+Theta_test  = Betas_lasso_opt*A_valid';
+iTheta      = 0;
 figure('Name','Outputs','NumberTitle','off','visible',visFlag);
 for iFile = testFiles
     fName   = [dictFolder,'/Dict_',dataset,num2str(iFile)];
@@ -469,20 +512,48 @@ for iFile = testFiles
     indSign = S(1:finalTerm);                                               % select the indeces of significant terms from the ordered set
     Phi_all = File.term(index_test,:);                                      % extract all terms into a vector
     Phi     = Phi_all(:,indSign);                                           % select only signficant terms
-    y_model = Phi*Theta_test(:,iFile);                                      % model NARMAX output
-    iRMSE   = iRMSE + 1;
-    RMSE(iRMSE) = sqrt(mean((File.y_narx(index_test,1) - y_model).^2));     % Root Mean Squared Error
+    iTheta  = iTheta + 1;
+    y_model = Phi*Theta_test(:,iTheta);                                     % model NARMAX output
+    RMSE(iTheta) = sqrt(mean((File.y_narx(index_test,1) - y_model).^2));     % Root Mean Squared Error
 % Compare outputs
-    subplot(L2,2,iFile);
-    plot(index_test(1:500),File.y_narx(index_test(1:500),1)); hold on;
-    plot(index_test(1:500),y_model(index_test(1:500),1),'--'); hold on;
+    subplot(L2,L1,iTheta);
+    plot(index_test(index_plot)+File.t_0,File.y_narx(index_test(index_plot),1)); hold on;
+    plot(index_test(index_plot)+File.t_0,y_model(index_plot,1),'--'); hold on;
 %     legend('True output','Generated output');
     xlabel('Sample index'); ylabel(['$',y_str,'$']);
-    title(['File ',num2str(iFile),', RMSE = ',num2str(RMSE(iRMSE))]);
+    title(['File ',num2str(iFile),', RMSE = ',num2str(RMSE(iTheta))]);
  clear File Phi_all Phi y_model
 end
 tikzName = [folderName,'/','LASSO_validation.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
             false, 'height', '4cm', 'width','15cm','checkForUpdates',false);
-
+%% Validate sparse group lasso
+Theta_test  = Betas_spl_opt*A_valid';
+iRMSE       = 0;
+iTheta      = 0;
+figure('Name','Outputs','NumberTitle','off','visible',visFlag);
+index_test  = 1000:3000;
+for iFile = testFiles
+    fName   = [dictFolder,'/Dict_',dataset,num2str(iFile)];
+    File    = matfile(fName,'Writable',true);
+    indSign = S(1:finalTerm);                                               % select the indeces of significant terms from the ordered set
+    Phi_all = File.term(index_test,:);                                      % extract all terms into a vector
+    Phi     = Phi_all(:,indSign);                                           % select only signficant terms
+    iTheta  = iTheta + 1;
+    y_model = Phi*Theta_test(:,iTheta);                                     % model NARMAX output
+    RMSE(iTheta) = sqrt(mean((File.y_narx(index_test,1) - y_model).^2));     % Root Mean Squared Error
+% Compare outputs
+    subplot(L2,L1,iTheta);
+    plot(index_test(index_plot)+File.t_0,File.y_narx(index_test(index_plot),1)); hold on;
+    plot(index_test(index_plot)+File.t_0,y_model(index_plot,1),'--'); hold on;
+%     legend('True output','Generated output');
+    xlabel('Sample index'); ylabel(['$',y_str,'$']);
+    title(['File ',num2str(iFile),', RMSE = ',num2str(RMSE(iTheta))]);
+       
+ clear File Phi_all Phi y_model
+end
+tikzName = [folderName,'/','Sparse_lasso_validation.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '4cm', 'width','15cm','checkForUpdates',false);

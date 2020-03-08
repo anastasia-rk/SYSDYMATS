@@ -26,7 +26,7 @@ switch foamset
     case 'vdpo'
         input_i  = 2;                                                       % input column index
         output_i = 3;                                                       % output column index
-        K        = 7;                                                       % number of datasets
+        K        = 10;                                                      % number of datasets
         normC    = 1;
         dataset = 'V';                                                      % testing dataset for delta-domain
 end

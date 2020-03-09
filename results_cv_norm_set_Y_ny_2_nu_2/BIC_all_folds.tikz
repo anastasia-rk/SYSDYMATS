@@ -1,0 +1,61 @@
+% This file was created by matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=5.979cm,
+height=6cm,
+at={(0cm,0cm)},
+scale only axis,
+xmin=0,
+xmax=30,
+xlabel style={font=\color{white!15!black}},
+xlabel={Terms},
+ymin=-82000,
+ymax=-70000,
+ylabel style={font=\color{white!15!black}},
+ylabel={BIC},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+1	-71568.5202887971\\
+2	-73366.9240847257\\
+3	-77643.3026574031\\
+4	-81505.9712224508\\
+5	-81676.6303567833\\
+6	-81669.5734968973\\
+7	-81661.2648580322\\
+8	-81652.9920122105\\
+9	-81644.8229982441\\
+10	-81636.6097450062\\
+11	-81628.2330354979\\
+12	-81621.6588458351\\
+13	-81613.2378602621\\
+14	-81604.6557992448\\
+15	-81596.1110774229\\
+16	-81587.7485996238\\
+17	-81579.1944312676\\
+18	-81571.0709838372\\
+19	-81562.3800876\\
+20	-81553.6099882681\\
+21	-81544.9722211673\\
+22	-81536.233502858\\
+23	-81527.5965023329\\
+24	-81519.3574558604\\
+25	-81510.7188703968\\
+26	-81501.8923354283\\
+27	-81492.8530104815\\
+28	-81483.8849763613\\
+29	-81474.8823059852\\
+30	-81465.9022072011\\
+};
+\addplot [color=mycolor2, draw=none, mark=asterisk, mark options={solid, mycolor2}, forget plot]
+  table[row sep=crcr]{%
+5	-81676.6303567833\\
+};
+\end{axis}
+\end{tikzpicture}%

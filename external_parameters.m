@@ -48,7 +48,8 @@ save(fileName,'params','values');
 clear values params
 %% Dataset S-Z
 params = {'Cut'};
-values = [3 5 7 0]';
+values = [3 3 3 5 5 5 7 7 7 0 0 0]';
+% values = [values_cut; values_cut; values_cut; values_cut]
 fileName = 'External_parameters_S';
 save(fileName,'params','values');
 fileName = 'External_parameters_Z';

@@ -374,15 +374,17 @@ end
 %% Plots
 [plotAlphas,plotCoeffs] = meshgrid(coeffs_sp,Coeffs);                              % create meshgrid
 figure('Name','PRESS group','NumberTitle','off','visible',visFlag);
-subplot(1,2,1)
-plot3(plotCoeffs,plotAlphas,PRESS_gl); hold on;
-plot3(plotCoeffs(row_gl,col_gl),plotAlphas(row_gl,col_gl),min_val_gl,'*','Linewidth',4);
-set(gca,'XScale','log')
-xlabel('$\lambda$');ylabel('$\alpha$');zlabel('PRESS');
-title('Group lasso');
-subplot(1,2,2)
+% subplot(1,2,1)
+% plot3(plotCoeffs,plotAlphas,PRESS_gl); hold on;
+% colormap(my_map)
+% plot3(plotCoeffs(row_gl,col_gl),plotAlphas(row_gl,col_gl),min_val_gl,'*b','Linewidth',5);
+% set(gca,'XScale','log')
+% xlabel('$\lambda$');ylabel('$\alpha$');zlabel('PRESS');
+% title('Group lasso');
+% subplot(1,2,2)
 plot3(plotCoeffs,plotAlphas,PRESS_spl); hold on;
-plot3(plotCoeffs(row_spl,col_spl),plotAlphas(row_spl,col_spl),min_val_spl,'*','Linewidth',4);
+colormap(my_map)
+plot3(plotCoeffs(row_spl,col_spl),plotAlphas(row_spl,col_spl),min_val_spl,'*b','Linewidth',5);
 set(gca,'XScale','log')
 xlabel('$\lambda$');ylabel('$\alpha$');zlabel('PRESS');
 title('Sparse group lasso');
@@ -390,7 +392,7 @@ tikzName = [folderName,'/PRESS_groups.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
             false, 'height', '5cm', 'width','12cm','checkForUpdates',false);
-        
+%%        
 figure('Name','PRESS','NumberTitle','off','visible',visFlag);
 subplot(1,2,1);
 plot(Coeffs,PRESS,'linewidth',2); hold on;
@@ -437,9 +439,10 @@ g_spl  = SPLAsso(Y_all, Q_all, p_sparesgroup, (1-alpha_spl_opt)*lambda_spl_opt, 
 B_spl   = linsolve(R_all,g_spl,struct('UT', true)); 
 Betas_spl_opt = reshape(B_spl,[finalTerm,L])
 %% sparse group non-orthogonal
-B_nonort_spl  = SPLAsso(Y_all, M_all, p_sparesgroup, (1-alpha_spl_opt)*lambda_spl_opt, alpha_spl_opt*lambda_spl_opt); 
-Betas_nonortspl_opt = reshape(B_spl,[finalTerm,L])
+% B_nonort_spl  = SPLAsso(Y_all, M_all, p_sparesgroup, (1-alpha_spl_opt)*lambda_spl_opt, alpha_spl_opt*lambda_spl_opt); 
+% Betas_nonortspl_opt = reshape(B_spl,[finalTerm,L])
 %% Saving external parameters to table
+clear Tab
 Tab = table(Step,Terms);
 for iBeta=1:L
     Parameters = round(Betas_tikh_opt(:,iBeta),2);
@@ -451,25 +454,43 @@ table2latex(Tab,tableName);
 clear Tab
 Tab = table(Step,Terms);
 for iBeta=1:L
+    Parameters = round(Betas_spl_opt(:,iBeta),2);
+    varName = ['$\beta_{',num2str(iBeta-1),'}$'];
+    Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
+end
+tableName = [folderName,'/Betas_sparse_group'];
+table2latex(Tab,tableName);
+clear Tab
+Tab = table(Step,Terms);
+for iBeta=1:L
+    Parameters = round(Betas_nonreg_opt(:,iBeta),2);
+    varName = ['$\beta_{',num2str(iBeta-1),'}$'];
+    Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
+end
+tableName = [folderName,'/Betas_ols'];
+table2latex(Tab,tableName);
+clear Tab
+Tab = table(Step,Terms);
+for iBeta=1:L
+    Parameters = round(Betas_gl_opt(:,iBeta),2);
+    varName = ['$\beta_{',num2str(iBeta-1),'}$'];
+    Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
+end
+tableName = [folderName,'/Betas_group'];
+table2latex(Tab,tableName);
+clear Tab
+Tab = table(Step,Terms);
+for iBeta=1:L
     Parameters = round(Betas_lasso_opt(:,iBeta),2);
     varName = ['$\beta_{',num2str(iBeta-1),'}$'];
     Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
 end
 tableName = [folderName,'/Betas_lasso'];
 table2latex(Tab,tableName);
-clear Tab
-Tab = table(Step,Terms);
-for iBeta=1:L
-    Parameters = round(Betas_opt(:,iBeta),2);
-    varName = ['$\beta_{',num2str(iBeta-1),'}$'];
-    Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
-end
-tableName = [folderName,'/Betas_ols'];
-table2latex(Tab,tableName);
 %% Validate Tikhonov reg
 Theta_test  = Betas_tikh_opt*A_valid';
 if length(testFiles) > 1
-    L2 = 2;
+    L1 = 2;
 else
     L1 = 1;
 end
@@ -488,7 +509,7 @@ for iFile = testFiles
     y_model = Phi*Theta_test(:,iTheta);                                     % model NARMAX output
     RMSE(iTheta) = sqrt(mean((File.y_narx(index_test,1) - y_model).^2));     % Root Mean Squared Error
 % Compare outputs
-    subplot(L2,L1,iTheta);
+    subplot(L1,L2,iTheta);
     plot(index_test(index_plot)+File.t_0,File.y_narx(index_test(index_plot),1)); hold on;
     plot(index_test(index_plot)+File.t_0,y_model(index_plot,1),'--'); hold on;
 %     legend('True output','Generated output');
@@ -516,7 +537,7 @@ for iFile = testFiles
     y_model = Phi*Theta_test(:,iTheta);                                     % model NARMAX output
     RMSE(iTheta) = sqrt(mean((File.y_narx(index_test,1) - y_model).^2));     % Root Mean Squared Error
 % Compare outputs
-    subplot(L2,L1,iTheta);
+    subplot(L1,L2,iTheta);
     plot(index_test(index_plot)+File.t_0,File.y_narx(index_test(index_plot),1)); hold on;
     plot(index_test(index_plot)+File.t_0,y_model(index_plot,1),'--'); hold on;
 %     legend('True output','Generated output');
@@ -530,7 +551,6 @@ matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
             false, 'height', '4cm', 'width','15cm','checkForUpdates',false);
 %% Validate sparse group lasso
 Theta_test  = Betas_spl_opt*A_valid';
-iRMSE       = 0;
 iTheta      = 0;
 figure('Name','Outputs','NumberTitle','off','visible',visFlag);
 index_test  = 1000:3000;
@@ -557,3 +577,35 @@ tikzName = [folderName,'/','Sparse_lasso_validation.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
             false, 'height', '4cm', 'width','15cm','checkForUpdates',false);
+%% Validate group lasso
+Theta_test  = Betas_gl_opt*A_valid';
+iTheta      = 0;
+figure('Name','Outputs','NumberTitle','off','visible',visFlag);
+index_test  = 1000:3000;
+for iFile = testFiles
+    fName   = [dictFolder,'/Dict_',dataset,num2str(iFile)];
+    File    = matfile(fName,'Writable',true);
+    indSign = S(1:finalTerm);                                               % select the indeces of significant terms from the ordered set
+    Phi_all = File.term(index_test,:);                                      % extract all terms into a vector
+    Phi     = Phi_all(:,indSign);                                           % select only signficant terms
+    iTheta  = iTheta + 1;
+    y_model = Phi*Theta_test(:,iTheta);                                     % model NARMAX output
+    RMSE(iTheta) = sqrt(mean((File.y_narx(index_test,1) - y_model).^2));     % Root Mean Squared Error
+% Compare outputs
+    subplot(L2,L1,iTheta);
+    plot(index_test(index_plot)+File.t_0,File.y_narx(index_test(index_plot),1)); hold on;
+    plot(index_test(index_plot)+File.t_0,y_model(index_plot,1),'--'); hold on;
+%     legend('True output','Generated output');
+    xlabel('Sample index'); ylabel(['$',y_str,'$']);
+    title(['File ',num2str(iFile),', RMSE = ',num2str(RMSE(iTheta))]);
+       
+ clear File Phi_all Phi y_model
+end
+tikzName = [folderName,'/','Group_lasso_validation.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '4cm', 'width','15cm','checkForUpdates',false);
+%% Save all workspace
+foName
+fiName = [folderName,'/','Contrained_estimation_resullts'];
+save(fiName);

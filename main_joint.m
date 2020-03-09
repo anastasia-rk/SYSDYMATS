@@ -1,5 +1,6 @@
 local_init;
-
+%%
+visFlag = 'on';
 foamset = questdlg('Select data folder', ...
     'Data to process',...
 	'foam_2010','foam_2019','vdpo','');
@@ -12,10 +13,12 @@ switch foamset
         dataset = questdlg('Select data set', ...
         'Choice of set',...
         'S','Y','Z','');
+        index_test = [3 6 9 12];
+    
     case 'vdpo'
-        dataset = 'V';      
+        dataset = 'V';   
 end
-folder = 'results';                                                     % specify category where to save files
+folder = 'results_cv';                                                     % specify category where to save files
 dFolder = 'dictionaries';
 regressors = questdlg('Select the domain of regressors', ...
     'Domain choice',...
@@ -59,278 +62,282 @@ switch regressors
          n_y = 1;
          d = lambda*2;
 end
-        dataset = questdlg('Select data set', ...
-        'Choice of set',...
-        'S','Y','Z','');
-endmetaFileName = ['Meta_',dataset];
-load(metaFileName);
-d           = n_y + n_u;                                                    % size of input vector x
-dict_set    = ['dict_',dataset];
-fileNames   = sym(dict_set,[1 K]);                                          % vector of filenames
-if normC == 1
-    folder = 'Results';                                                     % specify category where to save files
-else
-    folder = 'Results_norm';
-end
-T = 2000;
-%% Select first significant basis vector for all datasets
-index = (1:T);                                                              % length of the sample
-Files =  [1 2 4 5 6 7 9 10]; % 1:K; %                                       % id of the sample
+dict_set = ['dict_',dataset];                                   
+fileNames = sym(dict_set,[1 K]);                                            % vector of filenames
+Files_all =  1:K;                                                           % ids of the sample files
+Files = Files_all(index_test);
+testFiles   = [2 4 10];
 K = length(Files);
-iTerm = 1;                                                                  % the first significant term
-AEER{iTerm} = zeros(nTerms,1);                                              % placeholder for AERR criteria
-for iFile=Files                                                             % over all datasets
-    fName = [dictFolder,'/',char(fileNames(iFile))];
-    File  = matfile(fName,'Writable',true);
-    residual_init{iFile} =  File.y_narx(index,1);                           % initial residual
-    for jTerm = dict_terms                                                  % over all polynomial terms in the dictionary
-        term0 = File.term(index,jTerm);
-        cf(iFile,jTerm) = cor_sqr(residual_init{iFile},term0);              % squared correlation coefficient for the dataset and the polynomial term
-        AEER{iTerm}(jTerm) = AEER{iTerm}(jTerm) + cf(iFile,jTerm);          % Average error reduction ration over all datasets
-        clear term0
-    end
-    clear File
-end
-AEER{iTerm}(:,:) = AEER{iTerm}(:,:)/K;
-[AEER_m,iMax] = max(AEER{iTerm});                                           % find the index of the term with the highest criterion across all datasets
-AEER_mm(iTerm,1) = AEER_m;
-S(iTerm) = iMax;                                                            % save index of the term
-dict_terms(iMax) = [];                                                      % reduce the dictionary of available terms
-AMDL_sum = 0;
-for iFile=Files                                                             % over all datasets
-    fName = [dictFolder,'/',char(fileNames(iFile))];
-    File  = matfile(fName,'Writable',true);
-    alpha{iFile}(:,iTerm)    = File.term(index,iMax);                       % the corresponding basis candidate term    
-    phi  {iFile}(:,iTerm)    = File.term(index,iMax);                       % the corresponding basis vector 
-    residual{iFile}(:,iTerm) = residual_update(residual_init{iFile},...     % the corresponding model residual
-                                               phi{iFile}(:,iTerm));                                                        
-    AMDL_sum = AMDL_sum + AMDL(residual{iFile}(:,iTerm),nNarx,iTerm);       % AMDL for the iFile dataset 
-    clear File
-end
-AAMDL_all(iTerm) = AMDL_sum/K;                                              % average AMDL over all sets
-significant_term{iTerm} =  symb_term{S(iTerm)};
-disp(['Significant term ', num2str(iTerm),':'])
-significant_term{iTerm}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Main loop - forward selection
-
-if length(dict_terms) + 1 < 30                                              % Maximum significant terms (if the algorithm is not terminated by the criterion)
-    maxSign = length(dict_terms) + 1;
+% Set maximum number of covariates
+if length(dict_terms) < 30                                                  % Maximum significant terms (if the algorithm is not terminated by the criterion)
+    maxSign = length(dict_terms);
 else
-    maxSign     = 30;                                                           
+    maxSign = 30;                                                           
 end
-converged   = false;
-iTerm       = 1;
-while(iTerm <= maxSign) && ~converged                                       % loop over the number of significant terms
-    iTerm = iTerm + 1;                                                      % increase the number of significant terms
-    AEER{iTerm} = zeros(nTerms,1);                                          % placeholder for AERR criteria
-    for iFile=Files                                                         % over all datasets
+dict_terms_all = dict_terms;
+%% Create the regression matrix based on the dataset (does not depend on CV parameters)
+load(['External_parameters_',dataset]);
+x = values(Files,1);                                                        % design parameter values for training
+x_valid = values(testFiles,1);                                              % design parameter values for validation
+% x_m = mean(x);
+% x_s = sqrt((x-x_m)'*(x-x_m));
+% x   = x/x_s;
+if size(values,2) > 1
+    y = values(Files,2);
+    y_valid = values(testFiles,2);
+%     y_m = mean(y);
+%     y_s = sqrt((y-y_m)'*(y-y_m));
+%     y   = y/y_s;
+else 
+    y = [];
+end
+A = ones(size(x));                                                          % create unit vector for constants in design matrix
+A_valid = ones(size(x_valid));                                              % create unit vector for constants in validation matrix
+A_symb{1} = '1';
+if ~isempty(y)                                                              % unknown mapping is a surface
+   powers = permn(0:2,2);                                                   % permuntations of all 
+   powers = powers(2:end,:);    
+   nCols = min(size(powers,1),K);                                           % number of terms in the model shouldn't be higher then K
+   for iCol = 1:nCols-1
+       xCol = x.^powers(iCol,1);
+       yCol = y.^powers(iCol,2);
+       A = [A xCol.*yCol];
+       xvCol = x_valid.^powers(iCol,1);
+       yvCol = y_valid.^powers(iCol,2);
+       A_valid = [A_valid xvCol.*yvCol];
+       A_symb{iCol+1} = ['$x^',num2str(powers(iCol,1)),'$ $y^',num2str(powers(iCol,2)),'$']; 
+   end
+else                                                                        % unknown mapping is a curve
+    nCols =  min(3,K);                                                      % number of terms in the model shouldn't be higher then K
+    for iCol = 1:nCols                                                      % limit order of the model by the number of experimants
+       A = [A x.^(iCol)];
+       A_valid = [A_valid x_valid.^(iCol)];
+   end
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Structure identification with CV model selection
+    index       = 1:nNarx;                                                  % structure id over all times
+    dict_terms  = dict_terms_all;                                           % refill the dictionary
+    %% Select first significant basis vector for all datasets
+    iTerm = 1;                                                              % the first significant term
+    AERR{iTerm} = zeros(nTerms,1);                                          % placeholder for AERR criteria
+    for iFile = Files                                                       % over all datasets
+        fName   = [dictFolder,'/',char(fileNames(iFile))];
+        File    = matfile(fName,'Writable',true);
+        y_n     = File.y_narx(:,1);
+        residual_init{iFile} =  y_n(index,1);                               % initial residual
+        for jTerm = dict_terms                                              % over all polynomial terms in the dictionary
+            term_all    = File.term(:,jTerm);
+            term0       = term_all(index,:);
+            cf(iFile,jTerm)     = cor_sqr(residual_init{iFile},term0);      % squared correlation coefficient for the dataset and the polynomial term
+            AERR{iTerm}(jTerm)  = AERR{iTerm}(jTerm) + cf(iFile,jTerm);     % Average error reduction ration over all datasets
+            clear term0 term_all
+        end
+        clear File y_n 
+    end
+    AERR{iTerm}(:,:)    = AERR{iTerm}(:,:)/K;
+    [AERR_m,iMax]       = max(AERR{iTerm});                                 % find the index of the term with the highest criterion across all datasets
+    AERR_mm(iTerm,1)    = AERR_m;
+    S(iTerm)            = iMax;                                             % save index of the term
+    dict_terms(iMax)    = [];                                               % reduce the dictionary of available term
+    BIC_sum             = 0;
+    for iFile = Files                                                       % over all datasets
         fName = [dictFolder,'/',char(fileNames(iFile))];
         File  = matfile(fName,'Writable',true);
-        for jTerm = dict_terms                                              % over all polynomial terms in the dictionary
-            p{iTerm,iFile}(:,jTerm) = orthogonalise(File.term(index,jTerm),...
+        term_all    = File.term(:,iMax);
+        alpha{iFile}(:,iTerm)    = term_all(index,:);                       % the corresponding basis candidate term    
+        phi  {iFile}(:,iTerm)    = term_all(index,:);                       % the corresponding basis vector 
+        residual{iFile}(:,iTerm) = residual_update(residual_init{iFile},... % the corresponding model residual
+                                               phi{iFile}(:,iTerm));                                                        
+        BIC_sum  = BIC_sum  +  BIC(residual{iFile}(:,iTerm),nNarx,iTerm);   % BIC for the iFile dataset
+        clear File term_all
+    end
+    BIC_all(iTerm)            = BIC_sum/K;                                  % average AMDL over all sets
+    significant_term{iTerm}   = symb_term{S(iTerm)};
+%% Main loop   
+    converged   = false;
+    bics        = [];
+    while(iTerm < maxSign) %&& ~converged                                   % loop over the number of significant terms
+        iTerm = iTerm + 1;                                                  % increase the number of significant terms
+        AERR{iTerm} = zeros(nTerms,1);                                      % placeholder for AERR criteria
+        for iFile = Files                                                   % over all datasets
+            fName   = [dictFolder,'/',char(fileNames(iFile))];
+            File    = matfile(fName,'Writable',true);
+            for jTerm = dict_terms                                          % over all polynomial terms in the dictionary
+                term_all    = File.term(:,jTerm);
+                p{iTerm,iFile}(:,jTerm) = orthogonalise(term_all(index,:),...
                                                     phi{iFile},iTerm);      % orthogonalise basis
-            cf(iFile,jTerm)         = cor_sqr(residual_init{iFile},...
+                cf(iFile,jTerm)         = cor_sqr(residual_init{iFile},...
                                               p{iTerm,iFile}(:,jTerm));     % squared correlation coefficient for the dataset and the polynomial term
-            AEER{iTerm}(jTerm) = AEER{iTerm}(jTerm) + cf(iFile,jTerm);      % Average error reduction ration over all datasets
+                AERR{iTerm}(jTerm) = AERR{iTerm}(jTerm) + cf(iFile,jTerm);  % average error reduction ration over all datasets
+            end
+            clear File
         end
-        clear File
-    end
-    AEER{iTerm}(:,:) = AEER{iTerm}(:,:)/K;
-    [AEER_m,iMax] = max(AEER{iTerm});                                       % Find the index of the term with the highest criterion across all datasets
-    AEER_mm(iTerm,1)   = AEER_m;
-    S(iTerm) = iMax;                                                        % Save index of the term  
-    ind = find(dict_terms == iMax);
-    dict_terms(ind) = [];                                                   % Reduce the dictionary of available terms
-    AMDL_sum = 0;
-    for iFile=Files
-        fName = [dictFolder,'/',char(fileNames(iFile))];
-        File = matfile(fName,'Writable',true);
-        alpha{iFile}(:,iTerm) = File.term(index,S(iTerm));                  % the corresponding basis candidate term    
-        phi{iFile}(:,iTerm)   = p{iTerm,iFile}(index,S(iTerm));             % the corresponding basis vector 
-        residual{iFile}(:,iTerm) = residual_update(residual{iFile}(:,iTerm-1),...
+        AERR{iTerm}(:,:)    = AERR{iTerm}(:,:)/K;
+        [AERR_m,iMax]       = max(AERR{iTerm});                             % find the index of the term with the highest criterion across all datasets
+        AERR_mm(iTerm,1)    = AERR_m;
+        S(iTerm)            = iMax;                                         % save index of the term  
+        ind = find(dict_terms == iMax);
+        dict_terms(ind) = [];                                               % Reduce the dictionary of available terms
+        BIC_sum         = 0;
+        for iFile = Files
+            fName   = [dictFolder,'/',char(fileNames(iFile))];
+            File    = matfile(fName,'Writable',true);
+            alpha{iFile}(:,iTerm) = File.term(index,S(iTerm));              % the corresponding basis candidate term    
+            phi{iFile}(:,iTerm)   = p{iTerm,iFile}(:,S(iTerm));             % the corresponding basis vector 
+            residual{iFile}(:,iTerm) = residual_update(residual{iFile}(:,iTerm-1),...
                                                    phi{iFile}(:,iTerm));    % the corresponding model residual                                 
-        AMDL_sum = AMDL_sum + AMDL(residual{iFile}(:,iTerm),nNarx,iTerm);   % AMDL for the iFile dataset
-        clear File
-    end
-    significant_term{iTerm} = symb_term{S(iTerm)};
-    disp(['Significant term ', num2str(iTerm),':'])
-    significant_term{iTerm}
-    BIC_all(iTerm) = BIC_sum/K;                                             % average AMDL over all sets
-    AIC_all(iTerm) = AIC_sum/K;                                             % average AMDL over all sets
-    converged_BIC = (abs((BIC_all(iTerm) - BIC_all(iTerm-1))/BIC_all(iTerm-1)) < 0.005); % check convergence
-    converged_AIC = (abs((AIC_all(iTerm) - AIC_all(iTerm-1))/AIC_all(iTerm-1)) < 0.005); % check convergence
-    converged_AAMDL = (abs((AAMDL_all(iTerm) - AAMDL_all(iTerm-1))/AAMDL_all(iTerm-1)) < 0.005); % check convergence
-    if converged_BIC
-        bics  = [bics,iTerm];
-    end
-    if converged_AIC
-        aics  = [aics,iTerm];
+            BIC_sum  = BIC_sum  +  BIC(residual{iFile}(:,iTerm),nNarx,iTerm); % BIC for the iFile dataset
+            clear File x_n
         end
-    if converged_AAMDL
-        amdls  = [amdls,iTerm];
+        significant_term{iTerm} = symb_term{S(iTerm)};
+        BIC_all(iTerm) = BIC_sum/K;                                         % average AMDL over all sets
+        converged_BIC = (abs((BIC_all(iTerm) - BIC_all(iTerm-1))/BIC_all(iTerm)) < 0.005); % check convergence
+        if converged_BIC
+            bics  = [bics,iTerm];
+        end
     end
+if isempty(bics)
+    [m_b,i_b] = min(BIC_all);
+    finalTerm = min(20,i_b);
+else
+    finalTerm = bics(1);
 end
-clear AEER
-figure('Name','AAMDL','NumberTitle','off');
-subplot(3,1,1);
-plot(AAMDL_all,'o'); hold on;
-plot(amdls(1),AAMDL_all(amdls(1)),'*','LineWidth',5);
-xlim([1 iTerm])
-xlabel('Number of terms');
-ylabel('AAMDL')
-subplot(3,1,2);
-plot(BIC_all,'o'); hold on;
-plot(bics(1),BIC_all(bics(1)),'*','LineWidth',5);
-xlim([1 iTerm])
-xlabel('Number of terms');
-ylabel('BIC')
-subplot(3,1,3);
-plot(AIC_all,'o'); hold on;
-plot(aics(1),AIC_all(aics(1)),'*','LineWidth',5);
-xlim([1 iTerm])
-xlabel('Number of terms');
-ylabel('AIC')
-finalTerm = bics(1);
-%% Direct estimation of polynomial coefficients
-times = [1:T];
+    BIC_trunc = BIC_all(1:finalTerm);
+figure;
+plot([1:maxSign],BIC_all); hold on;
+plot(finalTerm,BIC_trunc(end),'*');
+xlabel('Terms');ylabel('BIC');
+
+tikzName = [folderName,'/BIC_all_folds.tikz'];
+cleanfigure;
+matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
+            false, 'height', '6cm', 'width','6cm','checkForUpdates',false);
+    
+    %% Create column of names
+    for iTerm=1:finalTerm
+        temp = arrayfun(@char, significant_term{iTerm}, 'uniform', 0);
+        if length(temp) > 0
+            str = temp{1};
+            for iString=2:length(temp)
+                str = [str,temp{iString}];
+            end
+        end
+        Terms{iTerm,1} = strcat('$',str,'$');
+        clear temp
+    end
+    Step = [1:finalTerm]';
+    Tab = table(Step,Terms);
+    clear AERR
+    AERR  = round(AERR_mm(1:finalTerm,1)*100,3);
+%% Parameter estimation
+    for iFile=Files
+        U{iFile} = zeros(finalTerm,finalTerm);                              % placeholder for upper-trig unit matrix
+        iTerm = 1;                                                          % for the first term
+        g{iFile}(iTerm) = (residual_init{iFile}'*phi{iFile}(:,iTerm))/...
+                          (phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));       % top raw of the rotation matrix
+        for jTerm =iTerm:finalTerm
+            U{iFile}(iTerm,jTerm) = alpha{iFile}(:,jTerm)'*phi{iFile}(:,iTerm)/...
+                                (phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));
+        end
+        for iTerm = 2:finalTerm                                             % loop over significant terms
+            g{iFile}(iTerm,1) = (residual{iFile}(:,iTerm-1)'*phi{iFile}...
+                    (:,iTerm))/(phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));  % righthand side (normalised)
+            for jTerm =iTerm:finalTerm
+                U{iFile}(iTerm,jTerm) = alpha{iFile}(:,jTerm)'*phi{iFile}...
+                     (:,iTerm)/(phi{iFile}(:,iTerm)'*phi{iFile}(:,iTerm));  % upper triangular unit matrix
+            end
+        end
+        Dets = det(U{iFile});
+        Theta(:,iFile) = linsolve(U{iFile},g{iFile},struct('UT', true));    % solve upper triangular system via backward substitution
+        Parameters = round(Theta(:,iFile),2);
+        varName = [dataset,num2str(iFile)];
+        Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
+    end
+%% Save internal parameters to table
+    Tab   = addvars(Tab,AERR,'NewVariableNames',{'AERR($\%$)'});
+    internalParams = addvars(Tab,BIC_trunc','NewVariableNames',{'BIC'})
+    tableName = [folderName,'/Thetas_overall'];
+    table2latex(internalParams,tableName);
+    clear Tab tableName
+    clear AERR alpha U phi residual p Theta g
+
+%% Form regression matrices - for all time points
+% vectorisation for joint estimation
+I   = eye(finalTerm);                                                       % unit matrix, size NxN
+Kr  = kron(A,I);
+L   = size(A,2);
 Phi_bar = [];
-Y_bar   = [];
+Y_all   = [];
 for iFile = Files
-    fName = [dictFolder,'/',char(fileNames(iFile))];
-    File  = matfile(fName,'Writable',true);
+    fName     = [dictFolder,'/',char(fileNames(iFile))];
+    File      = matfile(fName,'Writable',true);
     indSign   = S(1:finalTerm);                                             % select the indeces of significant terms from the ordered set
-    Phi_file  = File.term(times,:);                                         % extract all terms into a vector - cannot reorder directly in files
-    y_file    = File.y_narx(times,:);                                       % extract output
-    Phi       = Phi_file(times,indSign);                                    % select only signficant terms
+    Phi_file  = File.term(:,:);                                             % extract all terms into a vector - cannot reorder directly in files
+    y_file    = File.y_narx(:,:);                                           % extract output
+    Phi       = Phi_file(:,indSign);                                        % select only signficant terms
     Phi_bar   = blkdiag(Phi_bar,Phi);                                       % diagonal block, size TKxNK
-    Y_bar     = [Y_bar; y_file];                                            % block vector, size TKx1
+    Y_all     = [Y_all; y_file];                                            % block vector, size TKx1
 end
-% Crate the matrix of external design parameters
-load('External_parameters');
-L_cut_all = [values{1}(:, 9);values{2}(:, 9)];
-D_rlx_all = [values{1}(:,11);values{2}(:,11)];
-A_imp_all = [values{1}(:, 6);values{2}(:, 6)];
-V_imp_all = [values{1}(:, 7);values{2}(:, 7)];
-x = L_cut_all(Files,1);
-y = D_rlx_all(Files,1);
-id = ones(size(x));
-% Matrix A should have dimension KxL where L < N
-A = [id x y x.*y x.^2 y.^2];                                                % rectangular matrix, size KxL
-I = eye(finalTerm);                                                         % unit matrix, size NxN
-% \Theta(NxK) = B(NxL) A'(LxK)), vectorise using Kronecker product
-Kr = kron(A,I);
-M  = Phi_bar*Kr;                                                            % LS matrix - increased dimension does not guarantee increase in rank
-B_bar = M\Y_bar;
-Y_hat = M*B_bar;
-R_2 = r_squared(Y_bar,Y_hat);
-L = size(A,2);
-Betas = reshape(B_bar,[finalTerm,L]);
-%% Create column of names
-for iTerm=1:finalTerm
-     temp = arrayfun(@char, significant_term{iTerm}, 'uniform', 0);
-    if length(temp) > 0
-        str = temp{1};
-        for iString=2:length(temp)
-            str = [str,',',temp{iString}];
-        end
-    end
-    Terms{iTerm,1} = strcat('$',str,'$');
-    clear temp
-end
-%% Store to table
-Step = [1:finalTerm]';
+M_all  = Phi_bar*Kr;  
+[Q_all,R_all] = mgson(M_all);
+%% Estimating with optimal regularisation coefficient
+g_bar   = Q_all\Y_all;
+B_bar   = linsolve(R_all,g_bar,struct('UT', true)); 
+L       = size(A,2);
+Betas_opt  = reshape(B_bar,[finalTerm,L])
+%% Saving external parameters to table
+clear Tab
 Tab = table(Step,Terms);
 for iBeta=1:L
-    Parameters = round(Betas(:,iBeta),2);
+    Parameters = round(Betas_opt(:,iBeta),2);
     varName = ['$\beta_{',num2str(iBeta-1),'}$'];
     Tab = addvars(Tab,Parameters,'NewVariableNames',varName);
 end
-Table_all = Tab
-tableName = [folderName,'/Betas_direct_T_',num2str(T)];
-table2latex(Table_all,tableName);
-%% Validate the model
-testFiles = [3 8];
-for iFile = testFiles
-x  = L_cut_all(iFile,1);
-y  = D_rlx_all(iFile,1);
-id = ones(size(x));
-% Matrix A should have dimension KxL where L < N
-A_k         = [id x y x.*y x.^2 y.^2]';                                             % vector
-% fileName  = ['Dict_',dataset,num2str(iFile)];
-% File      = matfile(fileName,'Writable',true);
-fName       = [dictFolder,'/',char(fileNames(iFile))];
-File        = matfile(fName,'Writable',true);
-indSign     = S(1:finalTerm);                                                 % select the indeces of significant terms from the ordered set
-Phi_file    = File.term(times,:);                                             % extract all terms into a vector - cannot reorder directly in files
-Phi         = Phi_file(times,indSign);                                        % select only signficant terms
-y_file      = File.y_narx(times,:);                                           % extract output
-y_model     = Phi*Betas*A_k;                                                  % model NARMAX output
-RMSE(iFile) = sqrt(mean((y_file - y_model).^2));                            % Root Mean Squared Error
-%% Compare outputs
-indPlot = [1:500];
-figure('Name','Modelled output','NumberTitle','off');
-colormap(my_map);
-plot(indPlot+File.t_0,File.y_narx(indPlot,1)); hold on;
-plot(indPlot+File.t_0,y_model(indPlot,1),'--'); hold on;
-legend('True output','Generated output');
+tableName = [folderName,'/Betas_ols'];
+table2latex(Tab,tableName);
+clear Tab
 
-tikzName = [folderName,'/',dataset,num2str(iFile),'_gen_y_direct_T_',num2str(T),'.tikz'];
+%% Validate Tikhonov reg
+Theta_test  = Betas_opt*A_valid';
+if length(testFiles) > 1
+    L1 = 2;
+else
+    L1 = 1;
+end
+L2 = round(length(testFiles)/L1);
+index_test  = 1000:3000;
+index_plot  = 1:500; %length(index_test);
+iTheta = 0;
+figure('Name','Outputs','NumberTitle','off','visible',visFlag);
+for iFile = testFiles
+    fName   = [dictFolder,'/Dict_',dataset,num2str(iFile)];
+    File    = matfile(fName,'Writable',true);
+    indSign = S(1:finalTerm);                                               % select the indeces of significant terms from the ordered set
+    Phi_all = File.term(index_test,:);                                      % extract all terms into a vector
+    Phi     = Phi_all(:,indSign);                                           % select only signficant terms
+    iTheta  = iTheta + 1;
+    y_model = Phi*Theta_test(:,iTheta);                                     % model NARMAX output
+    RMSE(iTheta) = sqrt(mean((File.y_narx(index_test,1) - y_model).^2));     % Root Mean Squared Error
+    c = mean(File.y_narx(index_test,1) - y_model);
+% Compare outputs
+    subplot(L1,L2,iTheta);
+    plot(index_test(index_plot)+File.t_0,File.y_narx(index_test(index_plot),1)); hold on;
+    plot(index_test(index_plot)+File.t_0,y_model(index_plot,1)+c,'--'); hold on;
+%     legend('True output','Generated output');
+    xlabel('Sample index'); ylabel(['$',y_str,'$']);
+    title(['File ',num2str(iFile),', RMSE = ',num2str(RMSE(iTheta))]);
+       
+ clear File Phi_all Phi y_model
+end
+tikzName = [folderName,'/','ols_validation.tikz'];
 cleanfigure;
 matlab2tikz(tikzName, 'showInfo', false,'parseStrings',false,'standalone', ...
-            false, 'height', '6cm', 'width','12cm','checkForUpdates',false);
-        
-clear File Phi_all Phi y_model
-end
-
-%% Ridge estimation
-% Normalise M
-% Normalise data matrix
-A_2 = [x y];
-for j=1:2 %size(A_2,2)
-    m(j) = mean(A_2(:,j));
-    c(j) = sqrt(sum((A_2(:,j) - m(j)).^2));
-    d_norm(:,j) = (A_2(:,j)- m(j))/c(j);
-    d_scale(:,j) = (A_2(:,j))/c(j);
-end
-A_n = [id d_norm d_norm(:,1).*d_norm(:,2) d_norm(:,1).^2 d_norm(:,2).^2];                                               % create the matrix for ls
-A_s = [id d_scale d_scale(:,1).*d_scale(:,2) d_scale(:,1).^2 d_scale(:,2).^2]; 
-A_norm = [d_norm d_norm(:,1).*d_norm(:,2) d_norm(:,1).^2 d_norm(:,2).^2];  
-n = size(A,1)
-R_a2 = A_norm'*A_norm;
-R_22 = R_a2(2:end,2:end);
-O = zeros(size(A_norm,2),1);
-for j = 2:size(A_norm,2)
-r(j-1,1) = A_norm(:,1)'*A_norm(:,j);
-end
-R_new = [1 r'; r R_22];
-R_norm = [n O'; O R_new];
-R_nn = A_n'*A_n;
-Kr_norm = kron(A,I);
-M_norm  = Phi_bar*Kr_norm;                                                            % LS matrix - increased dimension does not guarantee increase in rank
-R_mm    = M_norm'*M_norm;
-log_max = 0;
-log_min = -6;
-vec = [0:1/50:1];
-coeffs = sort(10.^(log_min + (log_max-log_min)*vec));
-I_k = eye(size(R_mm));
-ik = 0;
-for k = coeffs
-    ik = ik + 1;
-%     betas_rls(:,ik)     = pinv(R_norm + k*I_k)*M_norm'*Y_bar;
-    betas_rls_raw(:,ik) = inv(R_mm + k*I_k)*M'*Y_bar;
-%             betas_lasso{iTheta}(:,ik) =  LassoShooting(A_s,B(:,iTheta),k,'verbose',0);
-%             betas_lasso_raw{iTheta}(:,ik) = LassoShooting(A,B(:,iTheta),k,'verbose',0);
-end
-% Betas_rls = reshape(betas_rls_raw,[finalTerm,L]);
-
-
-figure;
-for ib = 1:6
-            h1 = semilogx(coeffs,betas_rls_raw(ib,:),'-o','MarkerSize',5); hold on;
-            set(h1, 'markerfacecolor', get(h1, 'color')); 
-end
-title('Tikhonov normalised')
-xlabel('$\gamma$');
-ylabel('Standardised estimate')
-
+            false, 'height', '4cm', 'width','15cm','checkForUpdates',false);
+ 
+%% Save all workspace
+% addpath('../../Google Drive/')
+% foName = ['SYSDYMATS_results/',folderName]
+% make_folder(foName)
+% fiName = [foName,'/','Direct_estimation_resullts'];
+% save(fiName);

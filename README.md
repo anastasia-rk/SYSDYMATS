@@ -1,1 +1,1 @@
-SYSDYMATS
+Working repo for the SYSDYMATS repo - messy. Everything works for the VDPO data as an example. Automated generation of .tex reports is added that summarises the leared structure, parameters, and model predicted output for a pre-set NARX dictionary with defied lags ny and nu.
